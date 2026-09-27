@@ -1,0 +1,31 @@
+<!-- libs/auth/src/lib/login-page/login-page.component.html -->
+<div class="page">
+  <div class="card">
+    <h1 class="title">Double Star</h1>
+    <p class="subtitle">Sign in to your account</p>
+
+    <form [formGroup]="form" (ngSubmit)="submit()" class="form">
+      <div class="field">
+        <label class="label">Email or phone</label>
+        <input type="text" formControlName="emailOrPhone" class="input" />
+      </div>
+
+      <div class="field">
+        <label class="label">Password</label>
+        <input type="password" formControlName="password" class="input" />
+      </div>
+
+      @if (errorMessage()) {
+        <p class="error">{{ errorMessage() }}</p>
+      }
+
+      <button type="submit" [disabled]="form.invalid || isSubmitting()" class="submit-button">
+        {{ isSubmitting() ? 'Signing in...' : 'Sign in' }}
+      </button>
+    </form>
+
+    <p class="footer-text">
+      New customer? <a routerLink="/register" class="footer-link">Create an account</a>
+    </p>
+  </div>
+</div>

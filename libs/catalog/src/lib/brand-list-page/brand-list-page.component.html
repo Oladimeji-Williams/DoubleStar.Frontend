@@ -1,0 +1,17 @@
+<!-- libs/catalog/src/lib/brand-list-page/brand-list-page.component.html -->
+<div class="page">
+  <h1 class="page-title">Brands</h1>
+
+  <div class="card">
+    <div class="add-row">
+      <input [ngModel]="newName()" (ngModelChange)="newName.set($event)" placeholder="New brand name" class="input" />
+      <button (click)="add()" [disabled]="isBusy() || !newName().trim()" class="add-button">Add</button>
+    </div>
+
+    <ul class="list">
+      @for (brand of brands(); track brand.id) {
+        <li class="list-item">{{ brand.name }}</li>
+      }
+    </ul>
+  </div>
+</div>

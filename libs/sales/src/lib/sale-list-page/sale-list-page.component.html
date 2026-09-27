@@ -1,0 +1,32 @@
+<!-- libs/sales/src/lib/sale-list-page/sale-list-page.component.html -->
+<div class="page">
+  <div class="page-header">
+    <h1 class="page-title">Sales</h1>
+    <a routerLink="/sales/new" class="primary-button">New sale</a>
+  </div>
+
+  @if (isLoading()) {
+    <p>Loading...</p>
+  } @else if (sales().length === 0) {
+    <p class="empty-state">No sales yet.</p>
+  } @else {
+    <table class="sales-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Status</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (sale of sales(); track sale.id) {
+          <tr>
+            <td>{{ sale.id }}</td>
+            <td>{{ sale.status }}</td>
+            <td>{{ sale.totalKobo | koboCurrency }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+</div>

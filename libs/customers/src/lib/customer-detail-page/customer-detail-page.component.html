@@ -1,0 +1,42 @@
+<!-- libs/customers/src/lib/customer-detail-page/customer-detail-page.component.html -->
+<div class="page">
+  @if (isLoading()) {
+    <p>Loading...</p>
+  } @else if (customer(); as c) {
+    <h1 class="page-title">{{ c.name }}</h1>
+    <p class="subtitle">{{ c.hasAccount ? 'Has an online account' : 'Walk-in customer' }}</p>
+
+    <div class="card">
+      <div class="field">
+        <label class="label">Name</label>
+        <input [ngModel]="name()" (ngModelChange)="name.set($event)" class="input" />
+      </div>
+
+      <div class="field">
+        <label class="label">Phone</label>
+        <input [ngModel]="phone()" (ngModelChange)="phone.set($event)" class="input" />
+      </div>
+
+      <div class="field">
+        <label class="label">Email</label>
+        <input type="email" [ngModel]="email()" (ngModelChange)="email.set($event)" class="input" />
+      </div>
+
+      <div class="field">
+        <label class="label">Address</label>
+        <input [ngModel]="address()" (ngModelChange)="address.set($event)" class="input" />
+      </div>
+
+      @if (errorMessage()) {
+        <p class="error">{{ errorMessage() }}</p>
+      }
+      @if (successMessage()) {
+        <p class="success">{{ successMessage() }}</p>
+      }
+
+      <button (click)="save()" [disabled]="isSaving() || !name().trim()" class="primary-button">
+        {{ isSaving() ? 'Saving...' : 'Save changes' }}
+      </button>
+    </div>
+  }
+</div>

@@ -1,0 +1,32 @@
+<!-- libs/repairs/src/lib/repair-ticket-list-page/repair-ticket-list-page.component.html -->
+<div class="page">
+  <div class="page-header">
+    <h1 class="page-title">Repairs</h1>
+    <a routerLink="/repairs/new" class="primary-button">New ticket</a>
+  </div>
+
+  @if (isLoading()) {
+    <p>Loading...</p>
+  } @else if (tickets().length === 0) {
+    <p class="empty-state">No repair tickets yet.</p>
+  } @else {
+    <table class="tickets-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Device</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (ticket of tickets(); track ticket.id) {
+          <tr [routerLink]="['/repairs', ticket.id]" class="ticket-row">
+            <td>{{ ticket.id }}</td>
+            <td>{{ ticket.deviceDescription }}</td>
+            <td><span class="status-badge" [attr.data-status]="ticket.status">{{ ticket.status }}</span></td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+</div>

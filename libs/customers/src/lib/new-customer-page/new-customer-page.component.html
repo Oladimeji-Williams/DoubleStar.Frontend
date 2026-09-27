@@ -1,0 +1,29 @@
+<!-- libs/customers/src/lib/new-customer-page/new-customer-page.component.html -->
+<div class="page">
+  <h1 class="page-title">New customer</h1>
+
+  <div class="card">
+    <div class="field">
+      <label class="label">Name</label>
+      <input [ngModel]="name()" (ngModelChange)="name.set($event)" class="input" />
+    </div>
+
+    <div class="field">
+      <label class="label">Phone (optional)</label>
+      <input [ngModel]="phone()" (ngModelChange)="phone.set($event)" class="input" />
+    </div>
+
+    <div class="field">
+      <label class="label">Email (optional)</label>
+      <input type="email" [ngModel]="email()" (ngModelChange)="email.set($event)" class="input" />
+    </div>
+
+    @if (errorMessage()) {
+      <p class="error">{{ errorMessage() }}</p>
+    }
+
+    <button (click)="submit()" [disabled]="isBusy() || !name().trim()" class="primary-button">
+      {{ isBusy() ? 'Creating...' : 'Create customer' }}
+    </button>
+  </div>
+</div>

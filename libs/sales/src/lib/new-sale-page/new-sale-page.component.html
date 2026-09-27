@@ -1,0 +1,109 @@
+<!-- libs/sales/src/lib/new-sale-page/new-sale-page.component.html -->
+<div class="page">
+  <h1 class="page-title">New sale</h1>
+
+  @if (!sale()) {
+    <div class="card">
+      <h2 class="card-title">Customer</h2>
+
+      <div class="field">
+        <label class="label">Name</label>
+        <input [ngModel]="walkInName()" (ngModelChange)="walkInName.set($event)" class="input" />
+      </div>
+
+      <div class="field">
+        <label class="label">Phone (optional)</label>
+        <input [ngModel]="walkInPhone()" (ngModelChange)="walkInPhone.set($event)" class="input" />
+      </div>
+
+      @if (errorMessage()) {
+        <p class="error">{{ errorMessage() }}</p>
+      }
+
+      <button (click)="startSale()" [disabled]="isBusy() || !walkInName().trim()" class="primary-button">
+        {{ isBusy() ? 'Starting...' : 'Start sale' }}
+      </button>
+    </div>
+  } @else {
+    <div class="card">
+      <h2 class="card-title">Sale #{{ sale()!.id }} — {{ sale()!.status }}</h2>
+
+      @if (sale()!.status === 'Draft') {
+        <div class="field">
+          <label class="label">Search products</label>
+          <input
+            [ngModel]="searchTerm()"
+            (ngModelChange)="onSearchInput($event)"
+            placeholder="Search by name or SKU"
+            class="input"
+          />
+        </div>
+
+        @if (searchResults().length > 0) {
+          <ul class="search-results">
+            @for (product of searchResults(); track product.id) {
+              <li class="search-result">
+                <div class="search-result-info">
+                  <span class="product-name">{{ product.name }}</span>
+                  <span class="product-price">{{ product.unitPriceKobo | koboCurrency }}</span>
+                </div>
+
+                @if (product.trackingMode === 1) {
+                  <input
+                    ngModel
+                    placeholder="Serial number"
+                    (ngModelChange)="setSerial(product.id, $event)"
+                    class="serial-input"
+                  />
+                } @else {
+                  <input
+                    type="number"
+                    min="1"
+                    [ngModel]="quantityFor(product.id)"
+                    (ngModelChange)="setQuantity(product.id, $event)"
+                    class="quantity-input"
+                  />
+                }
+
+                <button (click)="addProduct(product)" [disabled]="isBusy()" class="add-button">Add</button>
+              </li>
+            }
+          </ul>
+        }
+      }
+
+      @if (errorMessage()) {
+        <p class="error">{{ errorMessage() }}</p>
+      }
+
+      <table class="lines-table">
+        <thead>
+          <tr>
+            <th>Product</th>
+            <th>Qty</th>
+            <th>Unit price</th>
+            <th>Line total</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (line of sale()!.lines; track line.id) {
+            <tr>
+              <td>{{ line.serialNumber ?? ('Product #' + line.productId) }}</td>
+              <td>{{ line.quantity }}</td>
+              <td>{{ line.unitPriceKobo | koboCurrency }}</td>
+              <td>{{ line.lineTotalKobo | koboCurrency }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+
+      <p class="sale-total">Total: {{ sale()!.totalKobo | koboCurrency }}</p>
+
+      @if (sale()!.status === 'Draft') {
+        <button (click)="completeSale()" [disabled]="isBusy() || sale()!.lines.length === 0" class="primary-button">
+          {{ isBusy() ? 'Completing...' : 'Complete sale' }}
+        </button>
+      }
+    </div>
+  }
+</div>

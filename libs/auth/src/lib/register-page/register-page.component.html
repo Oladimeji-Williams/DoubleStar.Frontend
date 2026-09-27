@@ -1,0 +1,51 @@
+<!-- libs/auth/src/lib/register-page/register-page.component.html -->
+<div class="page">
+  <div class="card">
+    <h1 class="title">Create an account</h1>
+    <p class="subtitle">Track your repairs and orders with Double Star</p>
+
+    <form [formGroup]="form" (ngSubmit)="submit()" class="form">
+      <div class="name-row">
+        <div class="field">
+          <label class="label">First name</label>
+          <input formControlName="firstName" class="input" />
+        </div>
+        <div class="field">
+          <label class="label">Last name</label>
+          <input formControlName="lastName" class="input" />
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="label">Email</label>
+        <input type="email" formControlName="email" class="input" />
+      </div>
+
+      <div class="field">
+        <label class="label">Phone (optional)</label>
+        <input formControlName="phone" class="input" />
+      </div>
+
+      <div class="field">
+        <label class="label">Password</label>
+        <input type="password" formControlName="password" class="input" />
+        <p class="hint">At least 12 characters, with upper/lowercase, a number and a symbol.</p>
+      </div>
+
+      @if (errorMessage()) {
+        <p class="error">{{ errorMessage() }}</p>
+      }
+      @if (successMessage()) {
+        <p class="success">{{ successMessage() }}</p>
+      }
+
+      <button type="submit" [disabled]="form.invalid || isSubmitting()" class="submit-button">
+        {{ isSubmitting() ? 'Creating account...' : 'Create account' }}
+      </button>
+    </form>
+
+    <p class="footer-text">
+      Already have an account? <a routerLink="/login" class="footer-link">Sign in</a>
+    </p>
+  </div>
+</div>

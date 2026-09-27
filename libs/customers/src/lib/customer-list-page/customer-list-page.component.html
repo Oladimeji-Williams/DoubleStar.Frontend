@@ -1,0 +1,41 @@
+<!-- libs/customers/src/lib/customer-list-page/customer-list-page.component.html -->
+<div class="page">
+  <div class="page-header">
+    <h1 class="page-title">Customers</h1>
+    <a routerLink="/customers/new" class="primary-button">New customer</a>
+  </div>
+
+  <input
+    [ngModel]="searchTerm()"
+    (ngModelChange)="onSearchInput($event)"
+    placeholder="Search by name or phone"
+    class="search-input"
+  />
+
+  @if (isLoading()) {
+    <p>Loading...</p>
+  } @else if (customers().length === 0) {
+    <p class="empty-state">No customers found.</p>
+  } @else {
+    <table class="customers-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Phone</th>
+          <th>Email</th>
+          <th>Account</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (customer of customers(); track customer.id) {
+          <tr [routerLink]="['/customers', customer.id]" class="customer-row">
+            <td>{{ customer.name }}</td>
+            <td>{{ customer.phone || '—' }}</td>
+            <td>{{ customer.email || '—' }}</td>
+            <td>{{ customer.hasAccount ? 'Yes' : 'Walk-in' }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+</div>

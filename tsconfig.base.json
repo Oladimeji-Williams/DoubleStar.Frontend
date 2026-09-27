@@ -14,7 +14,16 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "strict": false,
-    "paths": {}
+    "paths": {
+      "@doublestar/shared": ["./libs/shared/src/index.ts"],
+      "@doublestar/auth": ["./libs/auth/src/index.ts"],
+      "@doublestar/shell": ["./libs/shell/src/index.ts"],
+      "@doublestar/catalog": ["./libs/catalog/src/index.ts"],
+      "@doublestar/sales": ["./libs/sales/src/index.ts"],
+      "@doublestar/repairs": ["./libs/repairs/src/index.ts"],
+      "@doublestar/payments": ["./libs/payments/src/index.ts"],
+      "@doublestar/customers": ["./libs/customers/src/index.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }

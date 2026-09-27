@@ -1,0 +1,106 @@
+<!-- libs/repairs/src/lib/repair-ticket-detail-page/repair-ticket-detail-page.component.html -->
+<div class="page">
+  @if (isLoading()) {
+    <p>Loading...</p>
+  } @else if (ticket(); as t) {
+    <div class="page-header">
+      <h1 class="page-title">Ticket #{{ t.id }} — {{ t.status }}</h1>
+      @if (t.status !== 'Collected' && t.status !== 'Cancelled') {
+        <button (click)="cancel()" [disabled]="isBusy()" class="cancel-button">Cancel ticket</button>
+      }
+    </div>
+
+    <div class="card">
+      <h2 class="card-title">Device</h2>
+      <p class="detail-line">{{ t.deviceDescription }}</p>
+      @if (t.imeiOrSerial) {
+        <p class="detail-line muted">IMEI/Serial: {{ t.imeiOrSerial }}</p>
+      }
+      <p class="detail-line muted">Fault: {{ t.faultDescription }}</p>
+
+      @if (t.diagnosisNotes) {
+        <h2 class="card-title">Diagnosis</h2>
+        <p class="detail-line">{{ t.diagnosisNotes }}</p>
+        <p class="detail-line muted">Quoted: {{ t.quotedPriceKobo | koboCurrency }}</p>
+      }
+
+      @if (t.parts.length > 0) {
+        <h2 class="card-title">Parts used</h2>
+        <table class="parts-table">
+          <thead>
+            <tr>
+              <th>Product</th>
+              <th>Qty</th>
+              <th>Cost</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (part of t.parts; track part.id) {
+              <tr>
+                <td>Product #{{ part.productId }}</td>
+                <td>{{ part.quantity }}</td>
+                <td>{{ part.totalCostKobo | koboCurrency }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      }
+
+      @if (errorMessage()) {
+        <p class="error">{{ errorMessage() }}</p>
+      }
+
+      @switch (t.status) {
+        @case ('Received') {
+          <h2 class="card-title">Record diagnosis</h2>
+          <div class="field">
+            <label class="label">Diagnosis notes</label>
+            <textarea [ngModel]="diagnosisNotes()" (ngModelChange)="diagnosisNotes.set($event)" rows="3" class="input"></textarea>
+          </div>
+          <div class="field">
+            <label class="label">Quoted price (₦)</label>
+            <input
+              type="number"
+              min="0"
+              [ngModel]="quotedPriceNaira()"
+              (ngModelChange)="quotedPriceNaira.set($event)"
+              class="input"
+            />
+          </div>
+          <button (click)="submitDiagnosis()" [disabled]="isBusy()" class="primary-button">Submit diagnosis</button>
+        }
+
+        @case ('AwaitingApproval') {
+          <button (click)="approveQuote()" [disabled]="isBusy()" class="primary-button">Approve quote</button>
+        }
+
+        @case ('InRepair') {
+          <h2 class="card-title">Log a part used</h2>
+          <div class="part-form">
+            <input
+              type="number"
+              placeholder="Product ID"
+              [ngModel]="partProductId()"
+              (ngModelChange)="partProductId.set($event)"
+              class="input small"
+            />
+            <input
+              type="number"
+              min="1"
+              placeholder="Qty"
+              [ngModel]="partQuantity()"
+              (ngModelChange)="partQuantity.set($event)"
+              class="input small"
+            />
+            <button (click)="submitPart()" [disabled]="isBusy()" class="add-button">Add part</button>
+          </div>
+          <button (click)="markReady()" [disabled]="isBusy()" class="primary-button">Mark ready for collection</button>
+        }
+
+        @case ('Ready') {
+          <button (click)="collect()" [disabled]="isBusy()" class="primary-button">Confirm collected</button>
+        }
+      }
+    </div>
+  }
+</div>
