@@ -1,0 +1,79 @@
+<!-- libs/payments/src/lib/payment-lookup-page/payment-lookup-page.component.html -->
+<div class="page">
+  <h1 class="page-title">Payments</h1>
+
+  <div class="card">
+    <h2 class="card-title">Look up a source</h2>
+
+    <div class="lookup-row">
+      <select [ngModel]="sourceType()" (ngModelChange)="sourceType.set($event)" class="select">
+        <option value="Sale">Sale</option>
+        <option value="RepairJob">Repair</option>
+      </select>
+
+      <input
+        type="number"
+        placeholder="ID"
+        [ngModel]="sourceId()"
+        (ngModelChange)="sourceId.set($event)"
+        class="input small"
+      />
+
+      <button (click)="lookup()" [disabled]="isLoading() || sourceId() === null" class="primary-button">
+        {{ isLoading() ? 'Looking up...' : 'Look up' }}
+      </button>
+    </div>
+
+    @if (errorMessage()) {
+      <p class="error">{{ errorMessage() }}</p>
+    }
+
+    @if (payments(); as list) {
+      @if (list.length === 0) {
+        <p class="empty-state">No payments recorded for this source yet.</p>
+      } @else {
+        <table class="payments-table">
+          <thead>
+            <tr>
+              <th>Method</th>
+              <th>Status</th>
+              <th>Amount</th>
+              <th>Refunded</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (payment of list; track payment.id) {
+              <tr>
+                <td>{{ payment.method }}</td>
+                <td>{{ payment.status }}</td>
+                <td>{{ payment.amountKobo | koboCurrency }}</td>
+                <td>{{ payment.totalRefundedKobo | koboCurrency }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      }
+
+      <h2 class="card-title">Record a payment</h2>
+      <div class="record-row">
+        <input
+          type="number"
+          placeholder="Amount (₦)"
+          [ngModel]="amountNaira()"
+          (ngModelChange)="amountNaira.set($event)"
+          class="input small"
+        />
+
+        <select [ngModel]="method()" (ngModelChange)="method.set($event)" class="select">
+          <option value="Cash">Cash</option>
+          <option value="Transfer">Transfer</option>
+          <option value="Card">Card</option>
+        </select>
+
+        <button (click)="recordPayment()" [disabled]="isRecording()" class="add-button">
+          {{ isRecording() ? 'Recording...' : 'Record payment' }}
+        </button>
+      </div>
+    }
+  </div>
+</div>

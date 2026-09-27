@@ -1,0 +1,72 @@
+<!-- libs/catalog/src/lib/new-product-page/new-product-page.component.html -->
+<div class="page">
+  <h1 class="page-title">New product</h1>
+
+  <div class="card">
+    <div class="field">
+      <label class="label">Name</label>
+      <input [ngModel]="name()" (ngModelChange)="name.set($event)" class="input" />
+    </div>
+
+    <div class="field">
+      <label class="label">SKU</label>
+      <input [ngModel]="sku()" (ngModelChange)="sku.set($event)" class="input" />
+    </div>
+
+    <div class="field">
+      <label class="label">Description (optional)</label>
+      <textarea [ngModel]="description()" (ngModelChange)="description.set($event)" rows="2" class="input"></textarea>
+    </div>
+
+    <div class="field-row">
+      <div class="field">
+        <label class="label">Category (optional)</label>
+        <select [ngModel]="categoryId()" (ngModelChange)="categoryId.set($event)" class="select">
+          <option [ngValue]="null">None</option>
+          @for (category of categories(); track category.id) {
+            <option [ngValue]="category.id">{{ category.name }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="field">
+        <label class="label">Brand (optional)</label>
+        <select [ngModel]="brandId()" (ngModelChange)="brandId.set($event)" class="select">
+          <option [ngValue]="null">None</option>
+          @for (brand of brands(); track brand.id) {
+            <option [ngValue]="brand.id">{{ brand.name }}</option>
+          }
+        </select>
+      </div>
+    </div>
+
+    <div class="field-row">
+      <div class="field">
+        <label class="label">Price (₦)</label>
+        <input
+          type="number"
+          min="0"
+          [ngModel]="priceNaira()"
+          (ngModelChange)="priceNaira.set($event)"
+          class="input"
+        />
+      </div>
+
+      <div class="field">
+        <label class="label">Stock tracking</label>
+        <select [ngModel]="trackingMode()" (ngModelChange)="trackingMode.set($event)" class="select">
+          <option [ngValue]="0">Bulk (quantity)</option>
+          <option [ngValue]="1">Serialized (IMEI/serial)</option>
+        </select>
+      </div>
+    </div>
+
+    @if (errorMessage()) {
+      <p class="error">{{ errorMessage() }}</p>
+    }
+
+    <button (click)="submit()" [disabled]="isBusy() || !canSubmit()" class="primary-button">
+      {{ isBusy() ? 'Creating...' : 'Create product' }}
+    </button>
+  </div>
+</div>

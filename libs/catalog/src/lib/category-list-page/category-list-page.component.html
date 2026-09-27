@@ -1,0 +1,22 @@
+<!-- libs/catalog/src/lib/category-list-page/category-list-page.component.html -->
+<div class="page">
+  <h1 class="page-title">Categories</h1>
+
+  <div class="card">
+    <div class="add-row">
+      <input
+        [ngModel]="newName()"
+        (ngModelChange)="newName.set($event)"
+        placeholder="New category name"
+        class="input"
+      />
+      <button (click)="add()" [disabled]="isBusy() || !newName().trim()" class="add-button">Add</button>
+    </div>
+
+    <ul class="list">
+      @for (category of categories(); track category.id) {
+        <li class="list-item">{{ category.name }}</li>
+      }
+    </ul>
+  </div>
+</div>

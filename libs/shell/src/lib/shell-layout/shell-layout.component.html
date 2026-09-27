@@ -1,0 +1,23 @@
+<!-- libs/shell/src/lib/shell-layout/shell-layout.component.html -->
+<div class="shell">
+  <aside class="sidebar">
+    <div class="brand">Double Star</div>
+
+    <nav class="nav">
+      @for (item of visibleNavItems(); track item.path) {
+        <a [routerLink]="item.path" routerLinkActive="nav-link-active" class="nav-link">
+          {{ item.label }}
+        </a>
+      }
+    </nav>
+
+    <div class="user-panel">
+      <p class="user-name">{{ currentUserStore.currentUser()?.displayName }}</p>
+      <button (click)="logout()" class="logout-button">Sign out</button>
+    </div>
+  </aside>
+
+  <main class="content">
+    <router-outlet />
+  </main>
+</div>

@@ -1,0 +1,42 @@
+<!-- libs/catalog/src/lib/product-list-page/product-list-page.component.html -->
+<div class="page">
+  <div class="page-header">
+    <h1 class="page-title">Products</h1>
+    <div class="header-actions">
+      <a routerLink="/catalog/categories" class="secondary-button">Categories</a>
+      <a routerLink="/catalog/brands" class="secondary-button">Brands</a>
+      <a routerLink="/catalog/products/new" class="primary-button">New product</a>
+    </div>
+  </div>
+
+  @if (isLoading()) {
+    <p>Loading...</p>
+  } @else if (products().length === 0) {
+    <p class="empty-state">No products yet.</p>
+  } @else {
+    <table class="products-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>SKU</th>
+          <th>Price</th>
+          <th>Tracking</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (product of products(); track product.id) {
+          <tr>
+            <td>{{ product.name }}</td>
+            <td>{{ product.sku }}</td>
+            <td>{{ product.unitPriceKobo | koboCurrency }}</td>
+            <td>{{ product.trackingMode === 1 ? 'Serialized' : 'Bulk' }}</td>
+            <td>
+              <button (click)="archive(product)" class="archive-button">Archive</button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+</div>

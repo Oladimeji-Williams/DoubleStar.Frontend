@@ -1,0 +1,78 @@
+// libs/shell/src/lib/shell-layout/shell-layout.component.scss
+.shell {
+  min-height: 100vh;
+  display: flex;
+  background-color: #f8fafc;
+}
+
+.sidebar {
+  width: 14rem;
+  flex-shrink: 0;
+  background-color: #0f172a;
+  color: #e2e8f0;
+  display: flex;
+  flex-direction: column;
+}
+
+.brand {
+  padding: 1.25rem 1rem;
+  font-size: 1.125rem;
+  font-weight: 600;
+  border-bottom: 1px solid #1e293b;
+}
+
+.nav {
+  flex: 1;
+  padding: 1rem 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.nav-link {
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  color: #cbd5e1;
+  text-decoration: none;
+
+  &:hover {
+    background-color: #1e293b;
+    color: white;
+  }
+}
+
+.nav-link-active {
+  background-color: #1e293b;
+  color: white;
+}
+
+.user-panel {
+  padding: 1rem;
+  border-top: 1px solid #1e293b;
+}
+
+.user-name {
+  font-size: 0.875rem;
+  color: #cbd5e1;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.logout-button {
+  font-size: 0.75rem;
+  color: #94a3b8;
+  background: none;
+  border: none;
+  padding: 0.25rem 0;
+  cursor: pointer;
+
+  &:hover {
+    color: white;
+  }
+}
+
+.content {
+  flex: 1;
+  padding: 1.5rem;
+}
