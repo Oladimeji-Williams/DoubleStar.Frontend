@@ -14,6 +14,7 @@ export interface RepairPart {
   quantity: number;
   unitCostKobo: number;
   totalCostKobo: number;
+  productName: string;
 }
 
 export interface RepairTicket {

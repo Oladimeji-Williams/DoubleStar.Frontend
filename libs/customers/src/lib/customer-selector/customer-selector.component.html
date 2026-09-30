@@ -1,0 +1,60 @@
+<!-- libs/customers/src/lib/customer-selector/customer-selector.component.html -->
+<div class="selector">
+  <div class="mode-toggle">
+    <button
+      type="button"
+      class="mode-button"
+      [class.active]="mode() === 'walkin'"
+      (click)="setMode('walkin')"
+    >
+      Walk-in
+    </button>
+    <button
+      type="button"
+      class="mode-button"
+      [class.active]="mode() === 'registered'"
+      (click)="setMode('registered')"
+    >
+      Existing customer
+    </button>
+  </div>
+
+  @if (mode() === 'walkin') {
+    <div class="field">
+      <label class="label">Name</label>
+      <input [ngModel]="walkInName()" (ngModelChange)="onWalkInNameChange($event)" class="input" />
+    </div>
+
+    <div class="field">
+      <label class="label">Phone (optional)</label>
+      <input [ngModel]="walkInPhone()" (ngModelChange)="onWalkInPhoneChange($event)" class="input" />
+    </div>
+  } @else {
+    @if (selected(); as customer) {
+      <div class="selected">
+        <span>{{ customer.name }}{{ customer.phone ? ' · ' + customer.phone : '' }}</span>
+        <button type="button" (click)="clearSelection()" class="clear-button">Change</button>
+      </div>
+    } @else {
+      <input
+        [ngModel]="searchTerm()"
+        (ngModelChange)="onSearchInput($event)"
+        placeholder="Search by name or phone"
+        class="input"
+      />
+
+      @if (results().length > 0) {
+        <ul class="results">
+          @for (customer of results(); track customer.id) {
+            <li>
+              <button type="button" (click)="select(customer)" class="result-button">
+                <span>{{ customer.name }}</span>
+                <span class="meta">{{ customer.phone || customer.email || '' }}</span>
+              </button>
+            </li>
+          }
+        </ul>
+      }
+    }
+  }
+</div>

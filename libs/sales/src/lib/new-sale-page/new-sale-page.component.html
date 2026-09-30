@@ -6,21 +6,13 @@
     <div class="card">
       <h2 class="card-title">Customer</h2>
 
-      <div class="field">
-        <label class="label">Name</label>
-        <input [ngModel]="walkInName()" (ngModelChange)="walkInName.set($event)" class="input" />
-      </div>
-
-      <div class="field">
-        <label class="label">Phone (optional)</label>
-        <input [ngModel]="walkInPhone()" (ngModelChange)="walkInPhone.set($event)" class="input" />
-      </div>
+      <app-customer-selector (selectionChange)="customer.set($event)" />
 
       @if (errorMessage()) {
         <p class="error">{{ errorMessage() }}</p>
       }
 
-      <button (click)="startSale()" [disabled]="isBusy() || !walkInName().trim()" class="primary-button">
+      <button (click)="startSale()" [disabled]="isBusy() || !customer()" class="primary-button">
         {{ isBusy() ? 'Starting...' : 'Start sale' }}
       </button>
     </div>
@@ -48,7 +40,7 @@
                   <span class="product-price">{{ product.unitPriceKobo | koboCurrency }}</span>
                 </div>
 
-                @if (product.trackingMode === 1) {
+                @if (product.trackingMode === 'Serialized') {
                   <input
                     ngModel
                     placeholder="Serial number"
@@ -88,6 +80,7 @@
         <tbody>
           @for (line of sale()!.lines; track line.id) {
             <tr>
+              <td>{{ line.productName }}{{ line.serialNumber ? ' — ' + line.serialNumber : '' }}</td>
               <td>{{ line.serialNumber ?? ('Product #' + line.productId) }}</td>
               <td>{{ line.quantity }}</td>
               <td>{{ line.unitPriceKobo | koboCurrency }}</td>

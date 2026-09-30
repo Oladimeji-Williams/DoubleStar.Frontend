@@ -2,15 +2,16 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ApiException, KoboCurrencyPipe } from '@doublestar/shared';
 import { RepairsApiService } from '../repairs-api.service';
 import { RepairTicket } from '../models/repair-ticket.model';
+import { ProductSearchInputComponent, Product } from '@doublestar/catalog';
 
 @Component({
   selector: 'app-repair-ticket-detail-page',
   standalone: true,
-  imports: [CommonModule, FormsModule, KoboCurrencyPipe],
+  imports: [CommonModule, FormsModule, RouterLink, KoboCurrencyPipe, ProductSearchInputComponent],
   templateUrl: './repair-ticket-detail-page.component.html',
   styleUrl: './repair-ticket-detail-page.component.scss',
 })
@@ -92,5 +93,9 @@ export class RepairTicketDetailPageComponent implements OnInit {
         this.errorMessage.set(error instanceof ApiException ? error.message : 'Something went wrong.');
       },
     });
+  }
+
+  protected startDiagnosis(): void {
+    this.runAction(this.repairsApi.startDiagnosis(this.ticketId));
   }
 }

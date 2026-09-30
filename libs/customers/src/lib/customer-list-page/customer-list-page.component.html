@@ -11,6 +11,10 @@
     placeholder="Search by name or phone"
     class="search-input"
   />
+  
+    @if (errorMessage()) {
+    <p class="error">{{ errorMessage() }}</p>
+    }
 
   @if (isLoading()) {
     <p>Loading...</p>

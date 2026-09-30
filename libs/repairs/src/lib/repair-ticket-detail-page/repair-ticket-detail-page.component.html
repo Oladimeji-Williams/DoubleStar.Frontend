@@ -8,6 +8,9 @@
       @if (t.status !== 'Collected' && t.status !== 'Cancelled') {
         <button (click)="cancel()" [disabled]="isBusy()" class="cancel-button">Cancel ticket</button>
       }
+      <a [routerLink]="['/payments']" [queryParams]="{ sourceType: 'RepairJob', sourceId: t.id }" class="payments-link">
+        View payments
+      </a>
     </div>
 
     <div class="card">
@@ -37,6 +40,7 @@
           <tbody>
             @for (part of t.parts; track part.id) {
               <tr>
+                <td>{{ part.productName }}</td>
                 <td>Product #{{ part.productId }}</td>
                 <td>{{ part.quantity }}</td>
                 <td>{{ part.totalCostKobo | koboCurrency }}</td>
@@ -52,6 +56,10 @@
 
       @switch (t.status) {
         @case ('Received') {
+          <button (click)="startDiagnosis()" [disabled]="isBusy()" class="primary-button">Start diagnosis</button>
+        }
+
+        @case ('Diagnosing') {
           <h2 class="card-title">Record diagnosis</h2>
           <div class="field">
             <label class="label">Diagnosis notes</label>
@@ -59,13 +67,7 @@
           </div>
           <div class="field">
             <label class="label">Quoted price (₦)</label>
-            <input
-              type="number"
-              min="0"
-              [ngModel]="quotedPriceNaira()"
-              (ngModelChange)="quotedPriceNaira.set($event)"
-              class="input"
-            />
+            <input type="number" min="0" [ngModel]="quotedPriceNaira()" (ngModelChange)="quotedPriceNaira.set($event)" class="input" />
           </div>
           <button (click)="submitDiagnosis()" [disabled]="isBusy()" class="primary-button">Submit diagnosis</button>
         }
@@ -77,22 +79,9 @@
         @case ('InRepair') {
           <h2 class="card-title">Log a part used</h2>
           <div class="part-form">
-            <input
-              type="number"
-              placeholder="Product ID"
-              [ngModel]="partProductId()"
-              (ngModelChange)="partProductId.set($event)"
-              class="input small"
-            />
-            <input
-              type="number"
-              min="1"
-              placeholder="Qty"
-              [ngModel]="partQuantity()"
-              (ngModelChange)="partQuantity.set($event)"
-              class="input small"
-            />
-            <button (click)="submitPart()" [disabled]="isBusy()" class="add-button">Add part</button>
+            <app-product-search-input (productSelected)="partProductId.set($event.id)" />
+            <input type="number" min="1" placeholder="Qty" [ngModel]="partQuantity()" (ngModelChange)="partQuantity.set($event)" class="input small" />
+            <button (click)="submitPart()" [disabled]="isBusy() || partProductId() === null" class="add-button">Add part</button>
           </div>
           <button (click)="markReady()" [disabled]="isBusy()" class="primary-button">Mark ready for collection</button>
         }

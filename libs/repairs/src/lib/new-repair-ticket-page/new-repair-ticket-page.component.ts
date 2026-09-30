@@ -4,12 +4,13 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ApiException } from '@doublestar/shared';
+import { CustomerSelection, CustomerSelectorComponent } from '@doublestar/customers';
 import { RepairsApiService } from '../repairs-api.service';
 
 @Component({
   selector: 'app-new-repair-ticket-page',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, CustomerSelectorComponent],
   templateUrl: './new-repair-ticket-page.component.html',
   styleUrl: './new-repair-ticket-page.component.scss',
 })
@@ -17,8 +18,7 @@ export class NewRepairTicketPageComponent {
   private readonly repairsApi = inject(RepairsApiService);
   private readonly router = inject(Router);
 
-  protected readonly walkInName = signal('');
-  protected readonly walkInPhone = signal('');
+  protected readonly customer = signal<CustomerSelection | null>(null);
   protected readonly deviceDescription = signal('');
   protected readonly imeiOrSerial = signal('');
   protected readonly faultDescription = signal('');
@@ -26,21 +26,20 @@ export class NewRepairTicketPageComponent {
   protected readonly isBusy = signal(false);
 
   protected readonly canSubmit = () =>
-    this.walkInName().trim().length > 0 &&
+    this.customer() !== null &&
     this.deviceDescription().trim().length > 0 &&
     this.faultDescription().trim().length > 0;
 
   protected submit(): void {
-    if (!this.canSubmit()) return;
+    const selection = this.customer();
+    if (!selection || !this.canSubmit()) return;
 
     this.isBusy.set(true);
     this.errorMessage.set(null);
 
     this.repairsApi
       .open({
-        customerId: null,
-        walkInName: this.walkInName(),
-        walkInPhone: this.walkInPhone() || null,
+        ...selection,
         deviceDescription: this.deviceDescription(),
         imeiOrSerial: this.imeiOrSerial() || null,
         faultDescription: this.faultDescription(),

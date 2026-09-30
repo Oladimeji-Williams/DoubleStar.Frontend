@@ -18,11 +18,23 @@ export class SaleListPageComponent implements OnInit {
 
   protected readonly sales = signal<Sale[]>([]);
   protected readonly isLoading = signal(true);
+  protected readonly errorMessage = signal<string | null>(null);
+  protected readonly expandedSaleId = signal<number | null>(null);
 
   ngOnInit(): void {
-    this.salesApi.getAll().subscribe((sales) => {
-      this.sales.set(sales);
-      this.isLoading.set(false);
+    this.salesApi.getAll().subscribe({
+      next: (sales) => {
+        this.sales.set(sales);
+        this.isLoading.set(false);
+      },
+      error: () => {
+        this.isLoading.set(false);
+        this.errorMessage.set('Could not load sales.');
+      },
     });
+  }
+
+  protected toggleExpand(saleId: number): void {
+    this.expandedSaleId.set(this.expandedSaleId() === saleId ? null : saleId);
   }
 }

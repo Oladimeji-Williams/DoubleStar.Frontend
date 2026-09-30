@@ -55,8 +55,8 @@
       <div class="field">
         <label class="label">Stock tracking</label>
         <select [ngModel]="trackingMode()" (ngModelChange)="trackingMode.set($event)" class="select">
-          <option [ngValue]="0">Bulk (quantity)</option>
-          <option [ngValue]="1">Serialized (IMEI/serial)</option>
+          <option [ngValue]="'Bulk'">Bulk (quantity)</option>
+          <option [ngValue]="'Serialized'">Serialized (IMEI/serial)</option>
         </select>
       </div>
     </div>

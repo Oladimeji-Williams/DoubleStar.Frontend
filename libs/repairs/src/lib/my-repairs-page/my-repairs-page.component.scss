@@ -1,0 +1,84 @@
+// libs/repairs/src/lib/my-repairs-page/my-repairs-page.component.scss
+.page {
+  max-width: 40rem;
+}
+
+.page-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #0f172a;
+  margin: 0 0 1rem;
+}
+
+.empty-state {
+  color: #64748b;
+  font-size: 0.875rem;
+}
+
+.ticket-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.ticket-card {
+  background: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+}
+
+.ticket-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.ticket-device {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.ticket-fault {
+  font-size: 0.875rem;
+  color: #64748b;
+  margin: 0 0 0.25rem;
+}
+
+.ticket-diagnosis {
+  font-size: 0.875rem;
+  color: #0f172a;
+  margin: 0;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 0.125rem 0.5rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  background: #f1f5f9;
+  color: #475569;
+
+  &[data-status='Ready'] {
+    background: #dcfce7;
+    color: #166534;
+  }
+
+  &[data-status='Collected'] {
+    background: #e0e7ff;
+    color: #3730a3;
+  }
+
+  &[data-status='Cancelled'] {
+    background: #fee2e2;
+    color: #991b1b;
+  }
+
+  &[data-status='AwaitingApproval'] {
+    background: #fef3c7;
+    color: #92400e;
+  }
+}

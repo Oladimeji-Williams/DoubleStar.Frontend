@@ -1,54 +1,53 @@
-<!-- libs/payments/src/lib/payment-lookup-page/payment-lookup-page.component.html -->
+<!-- libs/payments/src/lib/payment-lookup-page/payment-lookup-page.component.html — full replacement -->
 <div class="page">
   <h1 class="page-title">Payments</h1>
 
   <div class="card">
     <h2 class="card-title">Look up a source</h2>
-
     <div class="lookup-row">
       <select [ngModel]="sourceType()" (ngModelChange)="sourceType.set($event)" class="select">
         <option value="Sale">Sale</option>
         <option value="RepairJob">Repair</option>
       </select>
-
-      <input
-        type="number"
-        placeholder="ID"
-        [ngModel]="sourceId()"
-        (ngModelChange)="sourceId.set($event)"
-        class="input small"
-      />
-
+      <input type="number" placeholder="ID" [ngModel]="sourceId()" (ngModelChange)="sourceId.set($event)" class="input small" />
       <button (click)="lookup()" [disabled]="isLoading() || sourceId() === null" class="primary-button">
         {{ isLoading() ? 'Looking up...' : 'Look up' }}
       </button>
     </div>
 
-    @if (errorMessage()) {
-      <p class="error">{{ errorMessage() }}</p>
-    }
+    @if (errorMessage()) { <p class="error">{{ errorMessage() }}</p> }
 
     @if (payments(); as list) {
       @if (list.length === 0) {
         <p class="empty-state">No payments recorded for this source yet.</p>
       } @else {
         <table class="payments-table">
-          <thead>
-            <tr>
-              <th>Method</th>
-              <th>Status</th>
-              <th>Amount</th>
-              <th>Refunded</th>
-            </tr>
-          </thead>
+          <thead><tr><th>Method</th><th>Status</th><th>Amount</th><th>Refunded</th></tr></thead>
           <tbody>
             @for (payment of list; track payment.id) {
-              <tr>
+              <tr (click)="toggleExpand(payment)" class="payment-row">
                 <td>{{ payment.method }}</td>
                 <td>{{ payment.status }}</td>
                 <td>{{ payment.amountKobo | koboCurrency }}</td>
                 <td>{{ payment.totalRefundedKobo | koboCurrency }}</td>
               </tr>
+              @if (expandedPaymentId() === payment.id) {
+                <tr class="detail-row">
+                  <td colspan="4">
+                    @if (canRefund(payment)) {
+                      <div class="refund-row">
+                        <input type="number" min="0" placeholder="Refund amount (₦)" [ngModel]="refundAmountNaira()" (ngModelChange)="refundAmountNaira.set($event)" class="input small" />
+                        <input placeholder="Reason" [ngModel]="refundReason()" (ngModelChange)="refundReason.set($event)" class="input" />
+                        <button (click)="submitRefund(payment)" [disabled]="isRefunding()" class="refund-button">
+                          {{ isRefunding() ? 'Refunding...' : 'Issue refund' }}
+                        </button>
+                      </div>
+                    } @else {
+                      <p class="muted">This payment can't be refunded in its current state.</p>
+                    }
+                  </td>
+                </tr>
+              }
             }
           </tbody>
         </table>
@@ -56,22 +55,18 @@
 
       <h2 class="card-title">Record a payment</h2>
       <div class="record-row">
-        <input
-          type="number"
-          placeholder="Amount (₦)"
-          [ngModel]="amountNaira()"
-          (ngModelChange)="amountNaira.set($event)"
-          class="input small"
-        />
-
+        <input type="number" placeholder="Amount (₦)" [ngModel]="amountNaira()" (ngModelChange)="amountNaira.set($event)" class="input small" />
         <select [ngModel]="method()" (ngModelChange)="method.set($event)" class="select">
           <option value="Cash">Cash</option>
           <option value="Transfer">Transfer</option>
           <option value="Card">Card</option>
+          <option value="Paystack">Paystack</option>
         </select>
-
+        @if (method() === 'Paystack') {
+          <input type="email" placeholder="Payer email" [ngModel]="payerEmail()" (ngModelChange)="payerEmail.set($event)" class="input" />
+        }
         <button (click)="recordPayment()" [disabled]="isRecording()" class="add-button">
-          {{ isRecording() ? 'Recording...' : 'Record payment' }}
+          {{ isRecording() ? 'Processing...' : (method() === 'Paystack' ? 'Pay with Paystack' : 'Record payment') }}
         </button>
       </div>
     }

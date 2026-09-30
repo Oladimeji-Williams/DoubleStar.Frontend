@@ -1,0 +1,7 @@
+// libs/notifications/src/lib/notification-log-page/notification-log-page.component.scss
+.page { max-width: 56rem; }
+.page-title { font-size: 1.25rem; font-weight: 600; color: #0f172a; margin: 0 0 1rem; }
+.empty-state { color: #64748b; font-size: 0.875rem; }
+.log-table { width: 100%; border-collapse: collapse; background: white; border-radius: 0.5rem; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1); th, td { text-align: left; padding: 0.75rem; font-size: 0.8125rem; border-bottom: 1px solid #e2e8f0; } th { color: #64748b; font-weight: 500; background: #f8fafc; } }
+.failed { color: #dc2626; font-weight: 600; }
+.error-row td { color: #dc2626; font-size: 0.75rem; background: #fef2f2; }

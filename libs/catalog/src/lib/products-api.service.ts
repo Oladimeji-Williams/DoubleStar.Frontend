@@ -14,6 +14,13 @@ export interface CreateProductRequest {
   trackingMode: StockTrackingMode;
 }
 
+export interface UpdateProductRequest {
+  name: string;
+  description: string | null;
+  categoryId: number | null;
+  brandId: number | null;
+}
+
 @Injectable({ providedIn: 'root' })
 export class ProductsApiService {
   private readonly api = inject(ApiClientService);
@@ -40,5 +47,9 @@ export class ProductsApiService {
 
   archive(id: number): Observable<void> {
     return this.api.post<void>(`/products/${id}/archive`, undefined);
+  }
+
+  update(id: number, request: UpdateProductRequest): Observable<void> {
+    return this.api.put<void>(`/products/${id}`, request);
   }
 }

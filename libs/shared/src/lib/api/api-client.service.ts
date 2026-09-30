@@ -42,12 +42,15 @@ export class ApiClientService {
     }
 
     return this.http.request<ApiResponse<T>>(method, url, { body, params: httpParams }).pipe(
-      map((response) => {
-        if (!response.success) {
-          throw new ApiException(response.errors ?? [], 200);
+        map((response) => {
+        if (!response || !response.success) {
+            const errors = response?.errors ?? [
+            { code: 'EmptyResponse', message: 'The server returned an unexpected empty response.', type: 'Failure' },
+            ];
+            throw new ApiException(errors, 200);
         }
         return response.data as T;
-      }),
+        }),
       catchError((error: HttpErrorResponse) => {
         const body = error.error as ApiResponse<unknown> | null;
         const apiErrors = body?.errors ?? [

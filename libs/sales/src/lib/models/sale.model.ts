@@ -9,6 +9,7 @@ export interface SaleLine {
   serialNumber: string | null;
   lineTotalKobo: number;
   isStockDeducted: boolean;
+  productName: string;
 }
 
 export interface Sale {

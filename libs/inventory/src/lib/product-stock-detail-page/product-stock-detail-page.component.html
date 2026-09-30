@@ -1,0 +1,48 @@
+<!-- libs/inventory/src/lib/product-stock-detail-page/product-stock-detail-page.component.html -->
+<div class="page">
+  @if (isLoading()) {
+    <p>Loading...</p>
+  } @else if (product(); as p) {
+    <div class="page-header">
+      <h1 class="page-title">{{ p.name }}</h1>
+      <a routerLink="/inventory/restock" class="primary-button">Restock</a>
+    </div>
+    <p class="subtitle">{{ p.sku }} · {{ p.unitPriceKobo | koboCurrency }}</p>
+
+    @if (p.trackingMode === 'Bulk') {
+      <div class="card">
+        <div class="stat-row">
+          <div>
+            <p class="stat-label">Available</p>
+            <p class="stat-value">{{ stockLevel()?.availableQuantity ?? 0 }}</p>
+          </div>
+          <div>
+            <p class="stat-label">Reserved</p>
+            <p class="stat-value">{{ stockLevel()?.reservedQuantity ?? 0 }}</p>
+          </div>
+        </div>
+      </div>
+    } @else {
+      <div class="card">
+        <h2 class="card-title">Look up a unit</h2>
+        <div class="lookup-row">
+          <input
+            [ngModel]="serialSearch()"
+            (ngModelChange)="serialSearch.set($event)"
+            placeholder="Serial number"
+            class="input"
+          />
+          <button (click)="lookupSerial()" class="primary-button">Look up</button>
+        </div>
+
+        @if (serialError()) {
+          <p class="error">{{ serialError() }}</p>
+        }
+        @if (serialResult(); as unit) {
+          <p class="detail-line">Serial: {{ unit.serialNumber }}</p>
+          <p class="detail-line muted">Status: {{ unit.status }}</p>
+        }
+      </div>
+    }
+  }
+</div>

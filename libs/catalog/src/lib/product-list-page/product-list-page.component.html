@@ -26,14 +26,12 @@
       </thead>
       <tbody>
         @for (product of products(); track product.id) {
-          <tr>
+          <tr [routerLink]="['/catalog/products', product.id]" class="product-row">
             <td>{{ product.name }}</td>
             <td>{{ product.sku }}</td>
             <td>{{ product.unitPriceKobo | koboCurrency }}</td>
-            <td>{{ product.trackingMode === 1 ? 'Serialized' : 'Bulk' }}</td>
-            <td>
-              <button (click)="archive(product)" class="archive-button">Archive</button>
-            </td>
+            <td>{{ product.trackingMode === 'Serialized' ? 'Serialized' : 'Bulk' }}</td>
+            <td><button (click)="archive(product); $event.stopPropagation()" class="archive-button">Archive</button></td>
           </tr>
         }
       </tbody>

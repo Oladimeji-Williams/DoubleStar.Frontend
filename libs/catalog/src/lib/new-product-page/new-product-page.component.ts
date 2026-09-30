@@ -33,7 +33,7 @@ export class NewProductPageComponent implements OnInit {
   protected readonly categoryId = signal<number | null>(null);
   protected readonly brandId = signal<number | null>(null);
   protected readonly priceNaira = signal<number | null>(null);
-  protected readonly trackingMode = signal<StockTrackingMode>(0);
+  protected readonly trackingMode = signal<StockTrackingMode>('Bulk');
   protected readonly errorMessage = signal<string | null>(null);
   protected readonly isBusy = signal(false);
 

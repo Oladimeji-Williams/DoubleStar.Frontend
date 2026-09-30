@@ -1,0 +1,17 @@
+// libs/staff/src/lib/staff-list-page/staff-list-page.component.scss — full replacement
+.page { max-width: 44rem; }
+.page-title { font-size: 1.25rem; font-weight: 600; color: #0f172a; margin: 0 0 1rem; }
+.staff-table { width: 100%; border-collapse: collapse; background: white; border-radius: 0.5rem; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 1.5rem; th, td { text-align: left; padding: 0.75rem; font-size: 0.875rem; border-bottom: 1px solid #e2e8f0; } th { color: #64748b; font-weight: 500; background: #f8fafc; } }
+.staff-row { cursor: pointer; &:hover { background: #f8fafc; } }
+.inactive { color: #dc2626; }
+.detail-row td { background: #f8fafc; padding: 1rem; }
+.edit-form { display: flex; gap: 0.5rem; align-items: center; margin-bottom: 0.5rem; > * { flex: 1; } }
+.deactivate-button { background: none; border: 1px solid #dc2626; color: #dc2626; font-size: 0.75rem; padding: 0.25rem 0.5rem; border-radius: 0.375rem; cursor: pointer; }
+.reactivate-button { background: none; border: 1px solid #16a34a; color: #16a34a; font-size: 0.75rem; padding: 0.25rem 0.5rem; border-radius: 0.375rem; cursor: pointer; }
+.card { background: white; border-radius: 0.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); padding: 1.5rem; }
+.card-title { font-size: 0.875rem; font-weight: 600; color: #0f172a; margin: 0 0 1rem; }
+.field { display: flex; flex-direction: column; margin-bottom: 1rem; }
+.field-row { display: flex; gap: 0.75rem; margin-bottom: 1rem; > * { flex: 1; } }
+.input, .select { width: 100%; border: 1px solid #cbd5e1; border-radius: 0.375rem; padding: 0.5rem 0.75rem; font-size: 0.875rem; background: white; }
+.error { font-size: 0.875rem; color: #dc2626; margin: 0 0 1rem; }
+.primary-button { background-color: #0f172a; color: white; font-size: 0.875rem; font-weight: 500; padding: 0.5rem 1rem; border: none; border-radius: 0.375rem; cursor: pointer; white-space: nowrap; &:disabled { opacity: 0.5; cursor: not-allowed; } }

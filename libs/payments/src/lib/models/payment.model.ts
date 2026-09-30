@@ -12,3 +12,16 @@ export interface PaymentTransaction {
   status: string;
   paystackReference: string | null;
 }
+
+export interface RefundPaymentRequest {
+  amountKobo: number;
+  reason: string;
+}
+
+export interface InitializePaystackPaymentRequest {
+  sourceType: PaymentSourceType;
+  sourceId: number;
+  amountKobo: number;
+  email: string;
+  callbackUrl: string;
+}

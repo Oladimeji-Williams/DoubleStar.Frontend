@@ -1,10 +1,10 @@
 // libs/shared/src/lib/auth/auth.service.ts
 import { Injectable, inject } from '@angular/core';
-import { Observable, tap } from 'rxjs';
+import { Observable, catchError, map, of, tap } from 'rxjs';
 import { ApiClientService } from '../api/api-client.service';
 import { TokenStorageService } from './token-storage.service';
 import { CurrentUserStore } from './current-user.store';
-import { AuthResult } from './models/auth.models';
+import { AuthResult, UserProfile } from './models/auth.models';
 
 export interface LoginRequest {
   emailOrPhone: string;
@@ -38,6 +38,35 @@ export class AuthService {
     return this.api
       .post<AuthResult>('/authentication/refresh', { refreshToken })
       .pipe(tap((r) => this.applyAuthResult(r)));
+  }
+
+  /**
+   * Runs once at app startup. If tokens exist from a previous visit, asks the API
+   * who they belong to and repopulates the in-memory user store. If the access token
+   * has expired, the auth interceptor transparently refreshes it and retries this call.
+   * Never errors: any failure just leaves the user logged out.
+   */
+  restoreSession(): Observable<void> {
+    if (!this.tokenStorage.getAccessToken()) {
+      return of(undefined);
+    }
+
+    return this.api.get<UserProfile>('/authentication/me').pipe(
+      tap((profile) =>
+        this.currentUserStore.setFromProfile({
+          userId: profile.id,
+          email: profile.email,
+          phone: profile.phone,
+          displayName: `${profile.firstName} ${profile.lastName}`.trim(),
+          roles: profile.roles,
+        }),
+      ),
+      map(() => undefined),
+      catchError(() => {
+        this.tokenStorage.clear();
+        return of(undefined);
+      }),
+    );
   }
 
   logout(): void {

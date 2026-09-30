@@ -22,7 +22,11 @@
       "@doublestar/sales": ["./libs/sales/src/index.ts"],
       "@doublestar/repairs": ["./libs/repairs/src/index.ts"],
       "@doublestar/payments": ["./libs/payments/src/index.ts"],
-      "@doublestar/customers": ["./libs/customers/src/index.ts"]
+      "@doublestar/customers": ["./libs/customers/src/index.ts"],
+      "@doublestar/inventory": ["./libs/inventory/src/index.ts"],
+      "@doublestar/reporting": ["./libs/reporting/src/index.ts"],
+      "@doublestar/notifications": ["./libs/notifications/src/index.ts"],
+      "@doublestar/staff": ["./libs/staff/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
