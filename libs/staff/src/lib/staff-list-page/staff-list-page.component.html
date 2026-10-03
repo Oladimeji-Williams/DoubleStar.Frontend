@@ -1,0 +1,82 @@
+<!-- libs/staff/src/lib/staff-list-page/staff-list-page.component.html — full replacement -->
+<div class="page">
+  <h1 class="page-title">Staff</h1>
+
+  @if (isLoading()) {
+    <p>Loading...</p>
+  } @else {
+    <table class="staff-table">
+      <thead><tr><th>Name</th><th>Email</th><th>Roles</th><th>Status</th><th></th></tr></thead>
+      <tbody>
+        @for (member of staff(); track member.id) {
+          <tr (click)="toggleExpand(member)" class="staff-row" [class.self-row]="member.id === currentUserId()">
+            <td>
+              {{ member.firstName }} {{ member.lastName }}
+              @if (member.id === currentUserId()) { <span class="you-badge">You</span> }
+            </td>
+            <td>{{ member.email }}</td>
+            <td>{{ member.roles.join(', ') }}</td>
+            <td [class.inactive]="!member.isActive">{{ member.isActive ? 'Active' : 'Deactivated' }}</td>
+            <td>
+              @if (member.id !== currentUserId()) {
+                @if (member.isActive) {
+                  <button (click)="deactivate(member); $event.stopPropagation()" class="deactivate-button">Deactivate</button>
+                } @else {
+                  <button (click)="reactivate(member); $event.stopPropagation()" class="reactivate-button">Reactivate</button>
+                }
+              } @else {
+                <span class="self-note">Manage in your profile</span>
+              }
+            </td>
+          </tr>
+          @if (expandedStaffId() === member.id) {
+            <tr class="detail-row">
+              <td colspan="5">
+                <div class="edit-form">
+                  <input [ngModel]="editFirstName()" (ngModelChange)="editFirstName.set($event)" placeholder="First name" class="input" />
+                  <input [ngModel]="editLastName()" (ngModelChange)="editLastName.set($event)" placeholder="Last name" class="input" />
+                  <select [ngModel]="editRole()" (ngModelChange)="editRole.set($event)" class="select">
+                    <option value="Admin">Admin</option>
+                    <option value="Manager">Manager</option>
+                    <option value="Cashier">Cashier</option>
+                    <option value="Technician">Technician</option>
+                  </select>
+                  <button (click)="saveEdit(member)" [disabled]="isSaving()" class="primary-button">
+                    {{ isSaving() ? 'Saving...' : 'Save changes' }}
+                  </button>
+                </div>
+                @if (editError()) { <p class="error">{{ editError() }}</p> }
+              </td>
+            </tr>
+          }
+        }
+      </tbody>
+    </table>
+  }
+
+  <div class="card">
+    <h2 class="card-title">Add staff member</h2>
+    <div class="field-row">
+      <input [ngModel]="firstName()" (ngModelChange)="firstName.set($event)" placeholder="First name" class="input" />
+      <input [ngModel]="lastName()" (ngModelChange)="lastName.set($event)" placeholder="Last name" class="input" />
+    </div>
+    <div class="field-row">
+      <input type="email" [ngModel]="email()" (ngModelChange)="email.set($event)" placeholder="Email" class="input" />
+      <select [ngModel]="role()" (ngModelChange)="role.set($event)" class="select">
+        <option value="Admin">Admin</option>
+        <option value="Manager">Manager</option>
+        <option value="Cashier">Cashier</option>
+        <option value="Technician">Technician</option>
+      </select>
+    </div>
+    <div class="field">
+      <input type="password" [ngModel]="password()" (ngModelChange)="password.set($event)" placeholder="Password (12+ characters)" class="input" />
+    </div>
+
+    @if (errorMessage()) { <p class="error">{{ errorMessage() }}</p> }
+
+    <button (click)="createStaff()" [disabled]="isCreating() || !canCreate()" class="primary-button">
+      {{ isCreating() ? 'Creating...' : 'Create staff member' }}
+    </button>
+  </div>
+</div>

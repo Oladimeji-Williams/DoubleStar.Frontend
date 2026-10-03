@@ -1,0 +1,10 @@
+<!-- libs/catalog/src/lib/product-image/product-image.component.html -->
+<div class="frame" [attr.data-size]="size()">
+  @if (imageUrl() && !loadError()) {
+    <img [src]="fullUrl()" [alt]="alt()" (error)="onError()" class="image" />
+  } @else {
+    <div class="placeholder" [attr.aria-label]="alt()">
+      <app-icon name="phone-new" [size]="size() === 'large' ? 48 : size() === 'thumb' ? 18 : 32" />
+    </div>
+  }
+</div>

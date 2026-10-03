@@ -1,0 +1,9 @@
+<!-- libs/shared/src/lib/ui/pagination/pagination.component.html -->
+<div class="pagination">
+  <button (click)="pageChange.emit(page() - 1)" [disabled]="page() <= 1" class="page-button">←</button>
+  <span class="page-info">Page {{ page() }} of {{ totalPages() || 1 }}</span>
+  <button (click)="pageChange.emit(page() + 1)" [disabled]="page() >= totalPages()" class="page-button">→</button>
+  <select [ngModel]="pageSize()" (ngModelChange)="pageSizeChange.emit($event)" class="size-select">
+    @for (size of pageSizeOptions(); track size) { <option [ngValue]="size">{{ size }} / page</option> }
+  </select>
+</div>

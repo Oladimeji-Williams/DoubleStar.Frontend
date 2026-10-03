@@ -3,15 +3,7 @@
   <h1 class="page-title">New repair ticket</h1>
 
   <div class="card">
-    <div class="field">
-      <label class="label">Customer name</label>
-      <input [ngModel]="walkInName()" (ngModelChange)="walkInName.set($event)" class="input" />
-    </div>
-
-    <div class="field">
-      <label class="label">Phone (optional)</label>
-      <input [ngModel]="walkInPhone()" (ngModelChange)="walkInPhone.set($event)" class="input" />
-    </div>
+    <app-customer-selector (selectionChange)="customer.set($event)" />
 
     <div class="field">
       <label class="label">Device</label>

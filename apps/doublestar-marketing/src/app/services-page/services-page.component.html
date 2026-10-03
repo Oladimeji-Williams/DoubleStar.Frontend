@@ -1,0 +1,42 @@
+<!-- apps/doublestar-marketing/src/app/services-page/services-page.component.html -->
+<div class="page">
+  <header class="page-header">
+    <h1 class="page-title">Our Services</h1>
+    <p class="page-subtitle">From a cracked screen to a full device purchase, here's everything we handle.</p>
+  </header>
+
+  <section class="service-section">
+    <h2 class="service-title">Repairs</h2>
+    <div class="service-grid">
+      @for (item of repairs; track item.title) {
+        <article class="service-card">
+          <div class="service-icon"><app-icon [name]="item.icon" [size]="24" /></div>
+          <h3 class="service-item-title">{{ item.title }}</h3>
+          <p class="service-item-text">{{ item.text }}</p>
+        </article>
+      }
+    </div>
+  </section>
+
+  <section class="service-section service-section-alt">
+    <h2 class="service-title">Sales</h2>
+    <div class="service-grid">
+      @for (item of sales; track item.title) {
+        <article class="service-card">
+          <div class="service-icon"><app-icon [name]="item.icon" [size]="24" /></div>
+          <h3 class="service-item-title">{{ item.title }}</h3>
+          <p class="service-item-text">{{ item.text }}</p>
+        </article>
+      }
+    </div>
+  </section>
+
+  <section class="service-section cta-section">
+    <h2 class="service-title">Ready to get started?</h2>
+    <div class="cta-actions">
+      <a [href]="customerAppUrl + '/products'" class="primary-button">Browse products</a>
+      <a [href]="customerAppUrl + '/register'" class="secondary-button">Request a repair</a>
+    </div>
+    <a routerLink="/faq" class="text-link">Have questions? See our FAQ →</a>
+  </section>
+</div>

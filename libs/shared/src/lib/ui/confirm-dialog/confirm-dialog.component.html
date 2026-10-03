@@ -1,0 +1,12 @@
+<!-- libs/shared/src/lib/ui/confirm-dialog/confirm-dialog.component.html -->
+@if (confirmService.request(); as req) {
+  <div class="overlay">
+    <div class="dialog">
+      <p class="message">{{ req.message }}</p>
+      <div class="actions">
+        <button (click)="confirmService.respond(false)" class="cancel-button">{{ req.cancelLabel }}</button>
+        <button (click)="confirmService.respond(true)" class="confirm-button">{{ req.confirmLabel }}</button>
+      </div>
+    </div>
+  </div>
+}

@@ -1,0 +1,21 @@
+<!-- libs/catalog/src/lib/product-search-input/product-search-input.component.html -->
+<div class="picker">
+  @if (selected(); as product) {
+    <div class="selected-row">
+      <span>{{ product.name }} ({{ product.sku }})</span>
+      <button type="button" (click)="clear()" class="clear-button">Change</button>
+    </div>
+  } @else {
+    <input [ngModel]="searchTerm()" (ngModelChange)="onSearchInput($event)" placeholder="Search by name or SKU" class="input" />
+
+    @if (results().length > 0) {
+      <ul class="results">
+        @for (product of results(); track product.id) {
+          <li>
+            <button type="button" (click)="select(product)" class="result-button">{{ product.name }} ({{ product.sku }})</button>
+          </li>
+        }
+      </ul>
+    }
+  }
+</div>

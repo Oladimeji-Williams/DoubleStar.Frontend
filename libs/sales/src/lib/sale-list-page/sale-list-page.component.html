@@ -7,6 +7,8 @@
 
   @if (isLoading()) {
     <p>Loading...</p>
+  } @else if (errorMessage()) {
+    <p class="error">{{ errorMessage() }}</p>
   } @else if (sales().length === 0) {
     <p class="empty-state">No sales yet.</p>
   } @else {
@@ -20,11 +22,41 @@
       </thead>
       <tbody>
         @for (sale of sales(); track sale.id) {
-          <tr>
+          <tr (click)="toggleExpand(sale.id)" class="sale-row">
             <td>{{ sale.id }}</td>
             <td>{{ sale.status }}</td>
             <td>{{ sale.totalKobo | koboCurrency }}</td>
           </tr>
+          @if (expandedSaleId() === sale.id) {
+            <tr class="detail-row">
+              <td colspan="3">
+                <table class="lines-table">
+                  <thead>
+                    <tr>
+                      <th>Product</th>
+                      <th>Qty</th>
+                      <th>Unit price</th>
+                      <th>Line total</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @for (line of sale.lines; track line.id) {
+                      <tr>
+                        <td>{{ line.productName }}{{ line.serialNumber ? ' — ' + line.serialNumber : '' }}</td>
+                        <td>{{ line.serialNumber ?? ('Product #' + line.productId) }}</td>
+                        <td>{{ line.quantity }}</td>
+                        <td>{{ line.unitPriceKobo | koboCurrency }}</td>
+                        <td>{{ line.lineTotalKobo | koboCurrency }}</td>
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+                <a [routerLink]="['/payments']" [queryParams]="{ sourceType: 'Sale', sourceId: sale.id }" class="payments-link">
+                  View payments for this sale
+                </a>
+              </td>
+            </tr>
+          }
         }
       </tbody>
     </table>

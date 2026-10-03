@@ -1,0 +1,47 @@
+<!-- libs/inventory/src/lib/restock-page/restock-page.component.html -->
+<div class="page">
+  <h1 class="page-title">Restock</h1>
+
+  <div class="card">
+    <div class="field">
+      <label class="label">Product</label>
+      <select [ngModel]="selectedProductId()" (ngModelChange)="selectedProductId.set($event)" class="select">
+        <option [ngValue]="null">Select a product</option>
+        @for (product of products(); track product.id) {
+          <option [ngValue]="product.id">{{ product.name }} ({{ product.sku }})</option>
+        }
+      </select>
+    </div>
+
+    @if (selectedProduct; as product) {
+      @if (product.trackingMode === 'Serialized') {
+        <div class="field">
+          <label class="label">Serial number</label>
+          <input [ngModel]="serialNumber()" (ngModelChange)="serialNumber.set($event)" class="input" />
+        </div>
+      } @else {
+        <div class="field">
+          <label class="label">Quantity to add</label>
+          <input
+            type="number"
+            min="1"
+            [ngModel]="quantity()"
+            (ngModelChange)="quantity.set($event)"
+            class="input"
+          />
+        </div>
+      }
+
+      @if (errorMessage()) {
+        <p class="error">{{ errorMessage() }}</p>
+      }
+      @if (successMessage()) {
+        <p class="success">{{ successMessage() }}</p>
+      }
+
+      <button (click)="submit()" [disabled]="isBusy()" class="primary-button">
+        {{ isBusy() ? 'Saving...' : 'Add stock' }}
+      </button>
+    }
+  </div>
+</div>

@@ -1,0 +1,69 @@
+<!-- libs/catalog/src/lib/product-detail-page/product-detail-page.component.html -->
+<div class="page">
+  @if (isLoading()) {
+    <p>Loading...</p>
+  } @else if (product(); as p) {
+    <div class="page-header">
+      <h1 class="page-title">{{ p.name }}</h1>
+      <button (click)="archive()" class="archive-button">Archive product</button>
+    </div>
+    <p class="subtitle">{{ p.sku }} · {{ p.trackingMode === 'Serialized' ? 'Serialized' : 'Bulk' }}</p>
+
+    <div class="card">
+      <h2 class="card-title">Photo</h2>
+      <div class="image-row">
+        <app-product-image [imageUrl]="product()?.imageUrl ?? null" size="large" alt="Product photo" />
+        <div class="image-actions">
+          <label class="upload-button">
+            Upload photo
+            <input type="file" accept="image/jpeg,image/png,image/webp" (change)="onImageSelected($event)" hidden />
+          </label>
+          @if (product()?.imageUrl) {
+            <button (click)="removeImage()" class="remove-button">Remove photo</button>
+          }
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <h2 class="card-title">Details</h2>
+      <div class="field">
+        <label class="label">Name</label>
+        <input [ngModel]="name()" (ngModelChange)="name.set($event)" class="input" />
+      </div>
+      <div class="field">
+        <label class="label">Description</label>
+        <textarea [ngModel]="description()" (ngModelChange)="description.set($event)" rows="2" class="input"></textarea>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label class="label">Category</label>
+          <select [ngModel]="categoryId()" (ngModelChange)="categoryId.set($event)" class="select">
+            <option [ngValue]="null">None</option>
+            @for (category of categories(); track category.id) { <option [ngValue]="category.id">{{ category.name }}</option> }
+          </select>
+        </div>
+        <div class="field">
+          <label class="label">Brand</label>
+          <select [ngModel]="brandId()" (ngModelChange)="brandId.set($event)" class="select">
+            <option [ngValue]="null">None</option>
+            @for (brand of brands(); track brand.id) { <option [ngValue]="brand.id">{{ brand.name }}</option> }
+          </select>
+        </div>
+      </div>
+      <button (click)="saveDetails()" [disabled]="isSaving() || !name().trim()" class="primary-button">Save details</button>
+    </div>
+
+    <div class="card">
+      <h2 class="card-title">Price</h2>
+      <div class="field-row">
+        <div class="field">
+          <label class="label">Price (₦)</label>
+          <input type="number" min="0" [ngModel]="priceNaira()" (ngModelChange)="priceNaira.set($event)" class="input" />
+        </div>
+        <button (click)="savePrice()" [disabled]="isSaving()" class="primary-button price-button">Update price</button>
+      </div>
+    </div>
+
+    @if (errorMessage()) { <p class="error">{{ errorMessage() }}</p> }
+  }
+</div>

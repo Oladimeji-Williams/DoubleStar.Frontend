@@ -1,27 +1,30 @@
 // libs/sales/src/lib/new-sale-page/new-sale-page.component.ts
 import { Component, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Subject, debounceTime, distinctUntilChanged, switchMap } from 'rxjs';
+import { Subject, debounceTime, distinctUntilChanged, switchMap, catchError, of } from 'rxjs';
 import { ApiException, KoboCurrencyPipe } from '@doublestar/shared';
 import { ProductsApiService, Product } from '@doublestar/catalog';
+import { CustomerSelection, CustomerSelectorComponent } from '@doublestar/customers';
 import { SalesApiService } from '../sales-api.service';
 import { Sale } from '../models/sale.model';
+import { ToastService } from '@doublestar/shared';
 
 @Component({
   selector: 'app-new-sale-page',
   standalone: true,
-  imports: [CommonModule, FormsModule, KoboCurrencyPipe],
+  imports: [CommonModule, FormsModule, KoboCurrencyPipe, CustomerSelectorComponent],
   templateUrl: './new-sale-page.component.html',
   styleUrl: './new-sale-page.component.scss',
 })
 export class NewSalePageComponent {
   private readonly salesApi = inject(SalesApiService);
   private readonly productsApi = inject(ProductsApiService);
+  private readonly toastService = inject(ToastService);
 
   protected readonly sale = signal<Sale | null>(null);
-  protected readonly walkInName = signal('');
-  protected readonly walkInPhone = signal('');
+  protected readonly customer = signal<CustomerSelection | null>(null);
   protected readonly errorMessage = signal<string | null>(null);
   protected readonly isBusy = signal(false);
 
@@ -35,9 +38,14 @@ export class NewSalePageComponent {
   constructor() {
     this.searchTerm$
       .pipe(
+        takeUntilDestroyed(),
         debounceTime(300),
         distinctUntilChanged(),
-        switchMap((term) => (term.trim().length > 0 ? this.productsApi.search(term) : [])),
+        switchMap((term) =>
+          term.trim().length > 0
+            ? this.productsApi.search(term).pipe(catchError(() => of([] as Product[])))
+            : of([] as Product[]),
+        ),
       )
       .subscribe((results) => this.searchResults.set(results));
   }
@@ -48,20 +56,19 @@ export class NewSalePageComponent {
   }
 
   protected startSale(): void {
-    if (!this.walkInName().trim()) return;
+    const selection = this.customer();
+    if (!selection) return;
 
     this.isBusy.set(true);
     this.errorMessage.set(null);
 
-    this.salesApi
-      .create({ customerId: null, walkInName: this.walkInName(), walkInPhone: this.walkInPhone() || null })
-      .subscribe({
-        next: (sale) => {
-          this.isBusy.set(false);
-          this.sale.set(sale);
-        },
-        error: (error: unknown) => this.handleError(error),
-      });
+    this.salesApi.create(selection).subscribe({
+      next: (sale) => {
+        this.isBusy.set(false);
+        this.sale.set(sale);
+      },
+      error: (error: unknown) => this.handleError(error),
+    });
   }
 
   protected quantityFor(productId: number): number {
@@ -80,7 +87,7 @@ export class NewSalePageComponent {
     const currentSale = this.sale();
     if (!currentSale) return;
 
-    const isSerialized = product.trackingMode === 1;
+    const isSerialized = product.trackingMode === 'Serialized';
     const serial = this.serialByProductId()[product.id]?.trim() || null;
 
     if (isSerialized && !serial) {
@@ -103,6 +110,7 @@ export class NewSalePageComponent {
       });
   }
 
+// libs/sales/src/lib/new-sale-page/new-sale-page.component.ts — replace just the `completeSale()` method
   protected completeSale(): void {
     const currentSale = this.sale();
     if (!currentSale) return;
@@ -114,6 +122,7 @@ export class NewSalePageComponent {
       next: (sale) => {
         this.isBusy.set(false);
         this.sale.set(sale);
+        this.toastService.success(`Sale #${sale.id} completed.`);
       },
       error: (error: unknown) => this.handleError(error),
     });

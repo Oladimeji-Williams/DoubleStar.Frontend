@@ -62,4 +62,15 @@ export class RepairsApiService {
   cancel(id: number): Observable<void> {
     return this.api.post<void>(`/repairtickets/${id}/cancel`, undefined);
   }
+    getMine(): Observable<RepairTicket[]> {
+    return this.api.get<RepairTicket[]>('/repairtickets/me');
+    }
+
+    startDiagnosis(id: number): Observable<void> {
+    return this.api.post<void>(`/repairtickets/${id}/start-diagnosis`, undefined);
+    }
+
+  requestRepair(request: { deviceDescription: string; imeiOrSerial: string | null; faultDescription: string }): Observable<RepairTicket> {
+    return this.api.post<RepairTicket>('/repairtickets/me', request);
+  }
 }

@@ -1,0 +1,53 @@
+<!-- libs/reporting/src/lib/dashboard-page/dashboard-page.component.html -->
+<div class="page">
+  <h1 class="page-title">Dashboard</h1>
+  <p class="subtitle">Last 30 days</p>
+
+  @if (isLoading()) {
+    <p>Loading...</p>
+  } @else {
+    <div class="stat-grid">
+      <div class="stat-card">
+        <p class="stat-label">Revenue</p>
+        <p class="stat-value">{{ salesSummary()?.totalRevenueKobo | koboCurrency }}</p>
+      </div>
+      <div class="stat-card">
+        <p class="stat-label">Sales</p>
+        <p class="stat-value">{{ salesSummary()?.salesCount }}</p>
+      </div>
+      <div class="stat-card">
+        <p class="stat-label">Avg. sale</p>
+        <p class="stat-value">{{ salesSummary()?.averageSaleKobo | koboCurrency }}</p>
+      </div>
+      <div class="stat-card">
+        <p class="stat-label">Inventory value</p>
+        <p class="stat-value">{{ inventoryValuation()?.totalValueKobo | koboCurrency }}</p>
+      </div>
+      <div class="stat-card" [class.warning]="(inventoryValuation()?.lowStockCount ?? 0) > 0">
+        <p class="stat-label">Low stock items</p>
+        <p class="stat-value">{{ inventoryValuation()?.lowStockCount }}</p>
+      </div>
+      <div class="stat-card">
+        <p class="stat-label">Repairs completed</p>
+        <p class="stat-value">{{ repairTurnaround()?.completedCount }}</p>
+      </div>
+      <div class="stat-card">
+        <p class="stat-label">Avg. turnaround</p>
+        <p class="stat-value">{{ repairTurnaround()?.averageTurnaroundHours }}h</p>
+      </div>
+    </div>
+
+    @if (revenueByDay().length > 0) {
+      <div class="card">
+        <h2 class="card-title">Revenue by day</h2>
+        <div class="bar-chart">
+          @for (day of revenueByDay(); track day.date) {
+            <div class="bar-column" [title]="day.date + ': ' + (day.revenueKobo / 100 | number: '1.0-0')">
+              <div class="bar" [style.height.%]="barHeightPercent(day.revenueKobo)"></div>
+            </div>
+          }
+        </div>
+      </div>
+    }
+  }
+</div>

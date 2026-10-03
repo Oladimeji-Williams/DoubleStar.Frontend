@@ -1,0 +1,31 @@
+<!-- libs/auth/src/lib/security-settings-page/security-settings-page.component.html -->
+<div class="page">
+  <h1 class="page-title">Security</h1>
+
+  <div class="card">
+    <h2 class="card-title">Two-factor authentication</h2>
+
+    @if (setup(); as s) {
+      <p class="instructions">Add this key to Google Authenticator, Authy, or any TOTP app, then enter the 6-digit code it generates.</p>
+      <div class="key-box">{{ s.sharedKey }}</div>
+      <div class="field">
+        <label class="label">6-digit code</label>
+        <input [ngModel]="confirmCode()" (ngModelChange)="confirmCode.set($event)" inputmode="numeric" maxlength="6" class="input" />
+      </div>
+      @if (errorMessage()) { <p class="error">{{ errorMessage() }}</p> }
+      <button (click)="confirmSetup()" [disabled]="isBusy()" class="primary-button">Confirm & enable</button>
+    } @else {
+      <p class="instructions">Protect your account with a 6-digit code from an authenticator app, in addition to your password.</p>
+      <button (click)="beginSetup()" [disabled]="isBusy()" class="primary-button">Set up two-factor authentication</button>
+
+      <div class="disable-section">
+        <h3 class="disable-title">Already have it enabled and want to turn it off?</h3>
+        <div class="field">
+          <label class="label">Current password</label>
+          <input type="password" [ngModel]="disablePassword()" (ngModelChange)="disablePassword.set($event)" class="input" />
+        </div>
+        <button (click)="disable()" [disabled]="isBusy() || !disablePassword().trim()" class="danger-button">Disable</button>
+      </div>
+    }
+  </div>
+</div>

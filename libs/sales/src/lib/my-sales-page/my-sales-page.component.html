@@ -1,0 +1,29 @@
+<!-- libs/sales/src/lib/my-sales-page/my-sales-page.component.html -->
+<div class="page">
+  <h1 class="page-title">My orders</h1>
+
+  @if (isLoading()) {
+    <p>Loading...</p>
+  } @else if (sales().length === 0) {
+    <p class="empty-state">You don't have any orders yet.</p>
+  } @else {
+    <table class="sales-table">
+      <thead>
+        <tr>
+          <th>Order #</th>
+          <th>Items</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (sale of sales(); track sale.id) {
+          <tr>
+            <td>{{ sale.id }}</td>
+            <td>{{ sale.lines.length }}</td>
+            <td>{{ sale.totalKobo | koboCurrency }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+</div>

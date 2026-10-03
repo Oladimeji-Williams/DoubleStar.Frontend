@@ -1,0 +1,40 @@
+<!-- apps/doublestar-customer/src/app/customer-layout/customer-layout.component.html — full replacement -->
+<div class="layout">
+  <header class="topbar">
+    <span class="brand">
+      <app-brand-logo [size]="24" />
+      <app-brand-wordmark />
+    </span>
+
+
+    <nav class="nav">
+    <a routerLink="/my/sales" routerLinkActive="nav-link-active" class="nav-link">
+        <app-icon name="my-orders" [size]="18" /><span>My orders</span>
+    </a>
+    <a routerLink="/my/repairs" routerLinkActive="nav-link-active" class="nav-link">
+        <app-icon name="my-repairs" [size]="18" /><span>My repairs</span>
+    </a>
+    <a routerLink="/request-repair" routerLinkActive="nav-link-active" class="nav-link">
+        <app-icon name="repairs" [size]="18" /><span>Request repair</span>
+    </a>
+    <a routerLink="/products" class="nav-link">
+        <app-icon name="catalog" [size]="18" /><span>Browse products</span>
+    </a>
+    </nav>
+
+    <div class="user-panel">
+    <a routerLink="/profile" class="profile-link">
+        <app-avatar [avatarUrl]="currentUserStore.currentUser()?.avatarUrl ?? null" [size]="20" />
+        <span class="user-name">{{ currentUserStore.currentUser()?.displayName }}</span>
+    </a>
+    <button (click)="logout()" class="logout-button">
+        <app-icon name="logout" [size]="14" />
+        <span>Sign out</span>
+    </button>
+    </div>
+  </header>
+
+  <main class="content">
+    <router-outlet />
+  </main>
+</div>

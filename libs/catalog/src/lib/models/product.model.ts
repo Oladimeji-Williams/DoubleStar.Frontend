@@ -1,5 +1,5 @@
 // libs/catalog/src/lib/models/product.model.ts
-export type StockTrackingMode = 0 | 1; // 0 = Bulk, 1 = Serialized
+export type StockTrackingMode = 'Bulk' | 'Serialized';
 
 export interface Product {
   id: number;
@@ -11,4 +11,6 @@ export interface Product {
   unitPriceKobo: number;
   trackingMode: StockTrackingMode;
   isArchived: boolean;
+  imageUrl: string | null;
+
 }

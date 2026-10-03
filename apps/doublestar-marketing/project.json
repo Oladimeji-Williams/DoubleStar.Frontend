@@ -1,0 +1,84 @@
+{
+  "name": "doublestar-marketing",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "prefix": "app",
+  "sourceRoot": "apps/doublestar-marketing/src",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@angular/build:application",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "outputPath": "dist/apps/doublestar-marketing",
+        "browser": "apps/doublestar-marketing/src/main.ts",
+        "tsConfig": "apps/doublestar-marketing/tsconfig.app.json",
+        "inlineStyleLanguage": "scss",
+        "assets": [
+          {
+            "glob": "**/*",
+            "input": "apps/doublestar-marketing/public"
+          }
+        ],
+        "styles": ["apps/doublestar-marketing/src/styles.scss"],
+        "server": "apps/doublestar-marketing/src/main.server.ts",
+        "ssr": {
+          "entry": "apps/doublestar-marketing/src/server.ts"
+        },
+        "outputMode": "server"
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "500kb",
+              "maximumError": "1mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "4kb",
+              "maximumError": "8kb"
+            }
+          ],
+          "outputHashing": "all"
+        },
+        "development": {
+          "optimization": false,
+          "extractLicenses": false,
+          "sourceMap": true,
+          "fileReplacements": [
+            { "replace": "apps/doublestar-marketing/src/environments/environment.ts",
+              "with": "apps/doublestar-marketing/src/environments/environment.development.ts" }
+          ]
+        }
+      }
+    },
+    "serve": {
+      "continuous": true,
+      "executor": "@angular/build:dev-server",
+      "defaultConfiguration": "development",
+      "configurations": {
+        "production": {
+          "buildTarget": "doublestar-marketing:build:production"
+        },
+        "development": {
+          "buildTarget": "doublestar-marketing:build:development"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "serve-static": {
+      "continuous": true,
+      "executor": "@nx/web:file-server",
+      "options": {
+        "buildTarget": "doublestar-marketing:build",
+        "staticFilePath": "dist/apps/doublestar-marketing/browser",
+        "spa": true
+      }
+    }
+  }
+}

@@ -2,7 +2,7 @@
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApiClientService } from '@doublestar/shared';
-import { PaymentMethod, PaymentSourceType, PaymentTransaction } from './models/payment.model';
+import { PaymentMethod, PaymentSourceType, PaymentTransaction, RefundPaymentRequest, InitializePaystackPaymentRequest } from './models/payment.model';
 
 export interface RecordManualPaymentRequest {
   sourceType: PaymentSourceType;
@@ -23,4 +23,12 @@ export class PaymentsApiService {
   recordManual(request: RecordManualPaymentRequest): Observable<PaymentTransaction> {
     return this.api.post<PaymentTransaction>('/payments/manual', request);
   }
+
+    refund(paymentId: string, request: RefundPaymentRequest): Observable<void> {
+    return this.api.post<void>(`/payments/${paymentId}/refund`, request);
+    }
+
+    initializePaystack(request: InitializePaystackPaymentRequest): Observable<string> {
+    return this.api.post<string>('/payments/paystack/initialize', request);
+    }
 }

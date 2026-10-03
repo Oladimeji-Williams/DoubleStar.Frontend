@@ -1,0 +1,24 @@
+// apps/doublestar-marketing/src/app/home-page/home-page.component.scss — full replacement
+.hero { background: linear-gradient(180deg, var(--ds-color-primary) 0%, #1e293b 100%); color: white; padding: 4rem 1.5rem; }
+.hero-inner { max-width: 44rem; margin: 0 auto; text-align: center; }
+.hero-title { font-size: 2rem; font-weight: 800; margin: 0 0 1rem; line-height: 1.2; }
+.hero-subtitle { font-size: 1.0625rem; color: #cbd5e1; margin: 0 0 2rem; line-height: 1.6; }
+.hero-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+.primary-button { background: var(--ds-color-accent); color: var(--ds-color-accent-contrast); font-weight: 700; font-size: 0.9375rem; padding: 0.75rem 1.5rem; border-radius: var(--ds-radius); text-decoration: none; &:hover { background: var(--ds-color-accent-dark); } }
+.secondary-button { background: transparent; color: white; border: 1px solid #475569; font-weight: 500; font-size: 0.9375rem; padding: 0.75rem 1.5rem; border-radius: var(--ds-radius); text-decoration: none; }
+.section { max-width: 64rem; margin: 0 auto; padding: 3rem 1.5rem; }
+.section-alt { background: var(--ds-color-surface-alt); max-width: none; > * { max-width: 64rem; margin-left: auto; margin-right: auto; } }
+.section-title { font-size: 1.5rem; font-weight: 700; color: var(--ds-color-primary); margin: 0 0 1.5rem; text-align: center; }
+.section-text { font-size: 1rem; color: var(--ds-color-text-muted); text-align: center; margin: 0 0 1.5rem; }
+.feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); gap: 1.5rem; margin-bottom: 1.5rem; }
+.feature-card { background: var(--ds-color-surface); border: 1px solid var(--ds-color-border); border-radius: var(--ds-radius); padding: 1.5rem; }
+.feature-icon { width: 3rem; height: 3rem; border-radius: 0.75rem; background: var(--ds-color-surface-alt); color: var(--ds-color-accent-dark); display: flex; align-items: center; justify-content: center; margin-bottom: 1rem; }
+.feature-title { font-size: 1.0625rem; font-weight: 600; color: var(--ds-color-primary); margin: 0 0 0.5rem; }
+.feature-text { font-size: 0.9375rem; color: var(--ds-color-text-muted); line-height: 1.5; margin: 0; }
+.text-link { display: block; text-align: center; font-size: 0.9375rem; font-weight: 500; color: var(--ds-color-primary); text-decoration: underline; }
+.testimonial-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); gap: 1.25rem; }
+.testimonial-card { background: var(--ds-color-surface); border: 1px solid var(--ds-color-border); border-radius: var(--ds-radius); padding: 1.25rem; }
+.testimonial-stars { display: flex; gap: 0.125rem; color: var(--ds-color-accent); margin-bottom: 0.75rem; }
+.testimonial-quote { font-size: 0.9375rem; color: var(--ds-color-text); line-height: 1.5; margin: 0 0 0.75rem; font-style: italic; }
+.testimonial-name { font-size: 0.8125rem; font-weight: 600; color: var(--ds-color-text-muted); margin: 0; }
+.cta-section { text-align: center; }

@@ -1,0 +1,11 @@
+# apps/doublestar-customer/public/robots.txt — full replacement
+User-agent: *
+Allow: /login
+Allow: /register
+Allow: /products
+Disallow: /my/
+Disallow: /request-repair
+Disallow: /profile
+
+Sitemap: https://REPLACE-WITH-YOUR-REAL-DOMAIN.com/sitemap.xml
+Sitemap: https://REPLACE-WITH-YOUR-API-DOMAIN.com/api/v1/sitemap-products.xml

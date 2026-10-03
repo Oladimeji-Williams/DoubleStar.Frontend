@@ -1,0 +1,85 @@
+<!-- libs/auth/src/lib/profile-page/profile-page.component.html -->
+<div class="page">
+  <h1 class="page-title">My profile</h1>
+  <a routerLink="/security" class="footer-link">Security settings →</a>
+  <div class="card">
+    <h2 class="card-title">Photo</h2>
+    <div class="avatar-row">
+      <app-avatar [avatarUrl]="avatarUrl()" [size]="72" />
+      <div class="avatar-actions">
+        <label class="upload-button">
+          {{ isUploadingAvatar() ? 'Uploading...' : 'Upload photo' }}
+          <input type="file" accept="image/jpeg,image/png,image/webp" (change)="onAvatarSelected($event)" hidden />
+        </label>
+        <button (click)="removeAvatar()" class="remove-button">Remove</button>
+      </div>
+    </div>
+  </div>
+  @if (isLoading()) {
+    <p>Loading...</p>
+  } @else {
+    <div class="card">
+      <h2 class="card-title">Details</h2>
+
+      <div class="field">
+        <label class="label">Email</label>
+        <input [value]="email()" disabled class="input input-disabled" />
+        <p class="hint">Contact an administrator to change your email.</p>
+      </div>
+
+      <div class="field">
+        <label class="label">Role</label>
+        <input [value]="roles().join(', ')" disabled class="input input-disabled" />
+      </div>
+
+      <div class="field">
+        <label class="label">First name</label>
+        <input [ngModel]="firstName()" (ngModelChange)="firstName.set($event)" class="input" />
+      </div>
+
+      <div class="field">
+        <label class="label">Last name</label>
+        <input [ngModel]="lastName()" (ngModelChange)="lastName.set($event)" class="input" />
+      </div>
+
+      <div class="field">
+        <label class="label">Phone</label>
+        <input [ngModel]="phone()" (ngModelChange)="phone.set($event)" class="input" />
+      </div>
+
+      @if (detailsError()) { <p class="error">{{ detailsError() }}</p> }
+      @if (detailsSuccess()) { <p class="success">{{ detailsSuccess() }}</p> }
+
+      <button (click)="saveDetails()" [disabled]="isSavingDetails() || !canSaveDetails()" class="primary-button">
+        {{ isSavingDetails() ? 'Saving...' : 'Save details' }}
+      </button>
+    </div>
+
+    <div class="card">
+      <h2 class="card-title">Change password</h2>
+
+      <div class="field">
+        <label class="label">Current password</label>
+        <input type="password" [ngModel]="currentPassword()" (ngModelChange)="currentPassword.set($event)" class="input" />
+      </div>
+
+      <div class="field">
+        <label class="label">New password</label>
+        <input type="password" [ngModel]="newPassword()" (ngModelChange)="newPassword.set($event)" class="input" />
+        <p class="hint">At least 12 characters, with upper/lowercase, a number and a symbol.</p>
+      </div>
+
+      <div class="field">
+        <label class="label">Confirm new password</label>
+        <input type="password" [ngModel]="confirmNewPassword()" (ngModelChange)="confirmNewPassword.set($event)" class="input" />
+      </div>
+
+      @if (passwordError()) { <p class="error">{{ passwordError() }}</p> }
+      @if (passwordSuccess()) { <p class="success">{{ passwordSuccess() }}</p> }
+
+      <button (click)="savePassword()" [disabled]="isSavingPassword() || !canSavePassword()" class="primary-button">
+        {{ isSavingPassword() ? 'Saving...' : 'Change password' }}
+      </button>
+    </div>
+  }
+</div>

@@ -1,0 +1,9 @@
+// apps/doublestar-customer/src/app/product-detail-page/product-detail-page.component.scss
+.page { min-height: 100vh; background: var(--ds-color-surface-alt); }
+.content { max-width: 56rem; margin: 0 auto; padding: 2rem 1.5rem; }
+.back-link { display: inline-block; font-size: 0.875rem; color: var(--ds-color-primary); margin-bottom: 1.5rem; }
+.detail-grid { display: grid; grid-template-columns: 1fr; gap: 2rem; @media (min-width: 48rem) { grid-template-columns: 1fr 1fr; } }
+.product-title { font-size: 1.5rem; font-weight: 700; color: var(--ds-color-primary); margin: 0 0 0.5rem; }
+.product-price { font-size: 1.375rem; font-weight: 700; color: var(--ds-color-primary); margin: 0 0 1rem; }
+.product-description { font-size: 0.9375rem; color: var(--ds-color-text-muted); line-height: 1.6; margin: 0 0 1rem; }
+.product-meta { font-size: 0.8125rem; color: var(--ds-color-text-muted); }

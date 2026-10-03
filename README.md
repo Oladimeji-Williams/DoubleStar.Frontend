@@ -11,19 +11,19 @@
 To run the dev server for your app, use:
 
 ```sh
-npx nx serve doublestar
+npx nx serve doublestar-staff
 ```
 
 To create a production bundle:
 
 ```sh
-npx nx build doublestar
+npx nx build doublestar-staff
 ```
 
 To see all available targets to run for a project, run:
 
 ```sh
-npx nx show project doublestar
+npx nx show project doublestar-staff
 ```
 
 These targets are either [inferred automatically](https://nx.dev/concepts/inferred-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) or defined in the `project.json` or `package.json` files.

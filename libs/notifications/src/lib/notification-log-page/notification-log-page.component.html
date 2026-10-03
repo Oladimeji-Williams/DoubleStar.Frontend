@@ -1,0 +1,27 @@
+<!-- libs/notifications/src/lib/notification-log-page/notification-log-page.component.html -->
+<div class="page">
+  <h1 class="page-title">Notification log</h1>
+  @if (isLoading()) {
+    <p>Loading...</p>
+  } @else if (entries().length === 0) {
+    <p class="empty-state">No notifications sent yet.</p>
+  } @else {
+    <table class="log-table">
+      <thead><tr><th>Channel</th><th>Recipient</th><th>Template</th><th>Status</th><th>Sent</th></tr></thead>
+      <tbody>
+        @for (entry of entries(); track entry.id) {
+          <tr>
+            <td>{{ entry.channel }}</td>
+            <td>{{ entry.recipient }}</td>
+            <td>{{ entry.templateName }}</td>
+            <td [class.failed]="entry.status === 'Failed'">{{ entry.status }}</td>
+            <td>{{ entry.createdAt | date: 'short' }}</td>
+          </tr>
+          @if (entry.errorMessage) {
+            <tr class="error-row"><td colspan="5">{{ entry.errorMessage }}</td></tr>
+          }
+        }
+      </tbody>
+    </table>
+  }
+</div>

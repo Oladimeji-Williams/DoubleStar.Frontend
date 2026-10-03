@@ -1,0 +1,29 @@
+// apps/doublestar-marketing/src/styles.scss
+// apps/doublestar-customer/src/styles.scss
+// apps/doublestar-staff/src/styles.scss
+@import "tailwindcss";
+
+:root {
+  --ds-color-primary: #0f172a;
+  --ds-color-primary-contrast: #ffffff;
+
+  --ds-color-accent: #f59e0b;
+  --ds-color-accent-dark: #d97706;
+  --ds-color-accent-contrast: #0f172a;
+
+  --ds-color-success: #16a34a;
+  --ds-color-danger: #dc2626;
+
+  --ds-color-surface: #ffffff;
+  --ds-color-surface-alt: #f8fafc;
+  --ds-color-border: #e2e8f0;
+
+  --ds-color-text: #0f172a;
+  --ds-color-text-muted: #64748b;
+
+  --ds-radius: 0.5rem;
+  --ds-shadow-card: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; height: 100%; font-family: system-ui, -apple-system, "Segoe UI", sans-serif; }

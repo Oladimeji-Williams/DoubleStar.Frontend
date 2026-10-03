@@ -3,3 +3,4 @@ export * from './lib/models/sale.model';
 export * from './lib/sales-api.service';
 export * from './lib/sale-list-page/sale-list-page.component';
 export * from './lib/new-sale-page/new-sale-page.component';
+export * from './lib/my-sales-page/my-sales-page.component';

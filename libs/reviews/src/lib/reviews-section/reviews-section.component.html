@@ -1,0 +1,38 @@
+<!-- libs/reviews/src/lib/reviews-section/reviews-section.component.html -->
+<div class="section">
+  <div class="write-card">
+    <h2 class="write-title">Share your experience</h2>
+    <app-star-rating [rating]="draftRating()" [interactive]="true" [size]="22" (ratingChange)="draftRating.set($event)" />
+    <textarea
+      [value]="draftComment()"
+      (input)="draftComment.set($any($event.target).value)"
+      rows="3"
+      placeholder="Tell us how it went..."
+      class="comment-input"
+    ></textarea>
+    <button (click)="submit()" [disabled]="isSubmitting() || !canSubmit()" class="submit-button">
+      {{ isSubmitting() ? 'Submitting...' : 'Submit review' }}
+    </button>
+  </div>
+
+  @if (isLoading()) {
+    <p>Loading reviews...</p>
+  } @else if (reviews().length === 0) {
+    <p class="empty-state">No reviews yet — be the first to share yours.</p>
+  } @else {
+    <div class="review-grid">
+      @for (review of reviews(); track review.id) {
+        <article class="review-card">
+          <app-star-rating [rating]="review.rating" [size]="15" />
+          <p class="review-comment">&ldquo;{{ review.comment }}&rdquo;</p>
+          <div class="review-footer">
+            <span class="review-name">{{ review.reviewerName }}</span>
+            @if (review.canDelete) {
+              <button (click)="deleteReview(review)" class="delete-link">Delete</button>
+            }
+          </div>
+        </article>
+      }
+    </div>
+  }
+</div>

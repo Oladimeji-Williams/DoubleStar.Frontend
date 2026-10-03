@@ -1,0 +1,20 @@
+<!-- apps/doublestar-customer/src/app/product-detail-page/product-detail-page.component.html -->
+<div class="page">
+  <app-public-topbar activePath="products" />
+  <main class="content">
+    @if (isLoading()) {
+      <p>Loading...</p>
+    } @else if (product(); as p) {
+      <a routerLink="/products" class="back-link">← Back to products</a>
+      <div class="detail-grid">
+        <app-product-image [imageUrl]="p.imageUrl" size="large" [alt]="p.name" />
+        <div class="detail-info">
+          <h1 class="product-title">{{ p.name }}</h1>
+          <p class="product-price">{{ p.unitPriceKobo | koboCurrency }}</p>
+          @if (p.description) { <p class="product-description">{{ p.description }}</p> }
+          <p class="product-meta">{{ p.trackingMode === 'Serialized' ? 'Serialized item' : 'In stock' }}</p>
+        </div>
+      </div>
+    }
+  </main>
+</div>

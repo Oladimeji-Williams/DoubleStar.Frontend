@@ -1,0 +1,26 @@
+<!-- apps/doublestar-customer/src/app/request-repair-page/request-repair-page.component.html -->
+<div class="page">
+  <h1 class="page-title">Request a repair</h1>
+  <p class="subtitle">Tell us what's wrong — our technicians will diagnose it and send you a quote.</p>
+
+  <div class="card">
+    <div class="field">
+      <label class="label">Device</label>
+      <input [ngModel]="deviceDescription()" (ngModelChange)="deviceDescription.set($event)" placeholder="e.g. iPhone 12, cracked screen" class="input" />
+    </div>
+    <div class="field">
+      <label class="label">IMEI / serial (optional)</label>
+      <input [ngModel]="imeiOrSerial()" (ngModelChange)="imeiOrSerial.set($event)" class="input" />
+    </div>
+    <div class="field">
+      <label class="label">What's wrong?</label>
+      <textarea [ngModel]="faultDescription()" (ngModelChange)="faultDescription.set($event)" rows="4" class="input"></textarea>
+    </div>
+
+    @if (errorMessage()) { <p class="error">{{ errorMessage() }}</p> }
+
+    <button (click)="submit()" [disabled]="isBusy() || !canSubmit()" class="primary-button">
+      {{ isBusy() ? 'Submitting...' : 'Submit request' }}
+    </button>
+  </div>
+</div>

@@ -43,4 +43,8 @@ export class SalesApiService {
   voidSale(saleId: number): Observable<void> {
     return this.api.post<void>(`/sales/${saleId}/void`, undefined);
   }
+    
+    getMine(): Observable<Sale[]> {
+    return this.api.get<Sale[]>('/sales/me');
+    }
 }

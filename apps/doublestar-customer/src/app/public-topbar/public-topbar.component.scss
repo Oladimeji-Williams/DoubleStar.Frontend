@@ -1,0 +1,9 @@
+// apps/doublestar-customer/src/app/public-topbar/public-topbar.component.scss
+.topbar { display: flex; align-items: center; justify-content: space-between; padding: 1rem 1.5rem; background: white; border-bottom: 1px solid var(--ds-color-border); gap: 1.5rem; }
+.brand { display: flex; align-items: center; gap: 0.5rem; font-size: 1.125rem; font-weight: 600; color: var(--ds-color-primary); text-decoration: none; }
+.public-nav { display: flex; gap: 1rem; flex: 1; }
+.nav-link { font-size: 0.875rem; color: var(--ds-color-text-muted); text-decoration: none; padding: 0.375rem 0; border-bottom: 2px solid transparent; }
+.nav-link-active { color: var(--ds-color-primary); border-bottom-color: var(--ds-color-primary); font-weight: 600; }
+.auth-links { display: flex; gap: 0.75rem; align-items: center; }
+.auth-link { font-size: 0.875rem; color: #334155; text-decoration: none; padding: 0.5rem 0.875rem; border-radius: 0.375rem; }
+.auth-link-primary { background: var(--ds-color-primary); color: white; }

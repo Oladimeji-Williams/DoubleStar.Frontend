@@ -1,31 +1,58 @@
-<!-- libs/auth/src/lib/login-page/login-page.component.html -->
-<div class="page">
-  <div class="card">
-    <h1 class="title">Double Star</h1>
-    <p class="subtitle">Sign in to your account</p>
+<!-- libs/auth/src/lib/login-page/login-page.component.html — full replacement -->
+<div class="auth-page">
+  <div class="hero"><app-auth-marketing-panel heading="Welcome back to Double Star" subtitle="Sign in to track your repairs, view past orders, and shop our latest stock." /></div>
 
-    <form [formGroup]="form" (ngSubmit)="submit()" class="form">
-      <div class="field">
-        <label class="label">Email or phone</label>
-        <input type="text" formControlName="emailOrPhone" class="input" />
-      </div>
+  <div class="card" [attr.data-position]="cardPosition">
+    <app-brand-wordmark size="sm" />
+
+    @if (!needsTwoFactor()) {
+      <h2 class="card-title">Sign in</h2>
 
       <div class="field">
-        <label class="label">Password</label>
-        <input type="password" formControlName="password" class="input" />
+        <app-icon name="mail" [size]="16" class="field-icon" />
+        <input
+          type="text"
+          [placeholder]="mode() === 'password' ? 'Email or phone' : 'Email'"
+          [ngModel]="identifier()"
+          (ngModelChange)="identifier.set($event)"
+          class="input"
+        />
       </div>
 
-      @if (errorMessage()) {
-        <p class="error">{{ errorMessage() }}</p>
+      @if (mode() === 'password') {
+        <div class="field">
+          <app-icon name="lock" [size]="16" class="field-icon" />
+          <input type="password" placeholder="Password" [ngModel]="password()" (ngModelChange)="password.set($event)" class="input" />
+        </div>
+        @if (errorMessage()) { <p class="error">{{ errorMessage() }}</p> }
+        <button (click)="submitPassword()" [disabled]="isSubmitting()" class="submit-button">{{ isSubmitting() ? 'Signing in...' : 'Sign in' }}</button>
+      } @else {
+        @if (!codeSent()) {
+          @if (errorMessage()) { <p class="error">{{ errorMessage() }}</p> }
+          <button (click)="requestEmailCode()" [disabled]="isSubmitting()" class="submit-button">Send code</button>
+        } @else {
+          <div class="field">
+            <app-icon name="key" [size]="16" class="field-icon" />
+            <input placeholder="6-digit code" inputmode="numeric" maxlength="6" [ngModel]="code()" (ngModelChange)="code.set($event)" class="input" />
+          </div>
+          @if (errorMessage()) { <p class="error">{{ errorMessage() }}</p> }
+          <button (click)="submitEmailCode()" [disabled]="isSubmitting()" class="submit-button">{{ isSubmitting() ? 'Verifying...' : 'Sign in' }}</button>
+        }
       }
 
-      <button type="submit" [disabled]="form.invalid || isSubmitting()" class="submit-button">
-        {{ isSubmitting() ? 'Signing in...' : 'Sign in' }}
+      <button type="button" (click)="toggleMode()" class="toggle-link">
+        {{ mode() === 'password' ? 'Sign in with an emailed code instead' : 'Use your password instead' }}
       </button>
-    </form>
-
-    <p class="footer-text">
-      New customer? <a routerLink="/register" class="footer-link">Create an account</a>
-    </p>
+      <a routerLink="/forgot-password" class="toggle-link">Forgot password?</a>
+      <p class="footer-text">New? <a routerLink="/register" class="footer-link">Create an account</a></p>
+    } @else {
+      <h2 class="card-title">Enter your 2FA code</h2>
+      <div class="field">
+        <app-icon name="key" [size]="16" class="field-icon" />
+        <input placeholder="6-digit code" inputmode="numeric" maxlength="6" [ngModel]="twoFactorCode()" (ngModelChange)="twoFactorCode.set($event)" class="input" />
+      </div>
+      @if (errorMessage()) { <p class="error">{{ errorMessage() }}</p> }
+      <button (click)="submitTwoFactorCode()" [disabled]="isSubmitting()" class="submit-button">{{ isSubmitting() ? 'Verifying...' : 'Verify' }}</button>
+    }
   </div>
 </div>

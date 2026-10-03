@@ -12,7 +12,7 @@
     "src/**/*.spec.ts",
     "src/**/*.test.ts",
     "vite.config.ts",
-    "vite.config.mts",
+    "src/lib/vite.config.mts",
     "vitest.config.ts",
     "vitest.config.mts",
     "src/**/*.test.tsx",

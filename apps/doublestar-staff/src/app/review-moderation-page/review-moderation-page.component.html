@@ -1,0 +1,24 @@
+<!-- apps/doublestar-staff/src/app/review-moderation-page/review-moderation-page.component.html -->
+<div class="page">
+  <h1 class="page-title">Review moderation</h1>
+
+  @if (isLoading()) {
+    <p>Loading...</p>
+  } @else if (pending().length === 0) {
+    <p class="empty-state">No reviews waiting for approval.</p>
+  } @else {
+    <div class="review-list">
+      @for (review of pending(); track review.id) {
+        <article class="review-card">
+          <app-star-rating [rating]="review.rating" [size]="16" />
+          <p class="review-comment">&ldquo;{{ review.comment }}&rdquo;</p>
+          <p class="review-meta">{{ review.isAnonymous ? 'Anonymous' : review.reviewerName }}</p>
+          <div class="actions">
+            <button (click)="approve(review)" class="approve-button">Approve</button>
+            <button (click)="reject(review)" class="reject-button">Reject</button>
+          </div>
+        </article>
+      }
+    </div>
+  }
+</div>

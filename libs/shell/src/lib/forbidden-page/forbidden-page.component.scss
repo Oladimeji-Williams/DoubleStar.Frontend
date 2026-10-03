@@ -1,0 +1,23 @@
+// libs/shell/src/lib/forbidden-page/forbidden-page.component.scss
+.page {
+  max-width: 28rem;
+}
+
+.title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #0f172a;
+  margin: 0 0 0.5rem;
+}
+
+.message {
+  font-size: 0.875rem;
+  color: #64748b;
+  margin: 0 0 1rem;
+}
+
+.link {
+  font-size: 0.875rem;
+  color: #0f172a;
+  font-weight: 500;
+}

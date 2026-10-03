@@ -9,3 +9,6 @@ export * from './lib/product-list-page/product-list-page.component';
 export * from './lib/new-product-page/new-product-page.component';
 export * from './lib/category-list-page/category-list-page.component';
 export * from './lib/brand-list-page/brand-list-page.component';
+export * from './lib/product-search-input/product-search-input.component';
+export * from './lib/product-detail-page/product-detail-page.component';
+export * from './lib/product-image/product-image.component';

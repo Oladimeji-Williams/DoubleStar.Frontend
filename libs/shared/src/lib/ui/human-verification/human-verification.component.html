@@ -1,0 +1,13 @@
+<!-- libs/shared/src/lib/ui/human-verification/human-verification.component.html -->
+<div class="verify" [attr.data-status]="status()">
+  <p class="verify-label">
+    @if (status() === 'success') { Verified ✓ } @else { Tap the star to continue }
+  </p>
+  <div class="verify-grid">
+    @for (icon of icons(); track $index) {
+      <button type="button" class="verify-icon" [disabled]="status() === 'success'" (click)="select($index)">
+        <app-icon [name]="icon" [size]="20" />
+      </button>
+    }
+  </div>
+</div>
