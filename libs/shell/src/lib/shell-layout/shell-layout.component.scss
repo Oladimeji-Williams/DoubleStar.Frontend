@@ -1,4 +1,4 @@
-// libs/shell/src/lib/shell-layout/shell-layout.component.scss
+// libs/shell/src/lib/shell-layout/shell-layout.component.scss — full replacement
 .shell {
   min-height: 100vh;
   display: flex;
@@ -15,6 +15,9 @@
 }
 
 .brand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
   padding: 1.25rem 1rem;
   font-size: 1.125rem;
   font-weight: 600;
@@ -29,6 +32,9 @@
 }
 
 .nav-link {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
   padding: 0.5rem 1rem;
   font-size: 0.875rem;
   color: #cbd5e1;
@@ -46,6 +52,10 @@
 }
 
 .user-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.375rem;
   padding: 1rem;
   border-top: 1px solid #1e293b;
 }
@@ -57,9 +67,13 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  max-width: 100%;
 }
 
 .logout-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
   font-size: 0.75rem;
   color: #94a3b8;
   background: none;
@@ -76,3 +90,5 @@
   flex: 1;
   padding: 1.5rem;
 }
+
+.profile-link { display: flex; align-items: center; gap: 0.5rem; text-decoration: none; color: inherit; max-width: 100%; &:hover .user-name { color: white; } }

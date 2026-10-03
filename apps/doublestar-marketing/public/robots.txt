@@ -1,0 +1,5 @@
+# apps/doublestar-marketing/public/robots.txt
+User-agent: *
+Allow: /
+
+Sitemap: https://REPLACE-WITH-YOUR-REAL-DOMAIN.com/sitemap.xml

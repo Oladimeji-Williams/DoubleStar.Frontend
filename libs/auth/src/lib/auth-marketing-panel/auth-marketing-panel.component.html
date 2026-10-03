@@ -1,0 +1,15 @@
+<!-- libs/auth/src/lib/auth-marketing-panel/auth-marketing-panel.component.html -->
+<div class="panel">
+  <p class="brand">Double Star</p>
+  <h1 class="heading">{{ heading() }}</h1>
+  <p class="subtitle">{{ subtitle() }}</p>
+
+  <ul class="highlight-list">
+    @for (item of highlights; track item.text) {
+      <li class="highlight-item">
+        <span class="highlight-icon"><app-icon [name]="item.icon" [size]="20" /></span>
+        <span>{{ item.text }}</span>
+      </li>
+    }
+  </ul>
+</div>

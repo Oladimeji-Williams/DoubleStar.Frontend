@@ -13,6 +13,7 @@ export interface AuthResult {
   phone: string | null;
   displayName: string;
   roles: Role[];
+
 }
 
 export interface CurrentUser {
@@ -21,6 +22,7 @@ export interface CurrentUser {
   phone: string | null;
   displayName: string;
   roles: Role[];
+  avatarUrl: string | null;
 }
 
 export interface UserProfile {
@@ -30,4 +32,27 @@ export interface UserProfile {
   firstName: string;
   lastName: string;
   roles: Role[];
+  avatarUrl: string | null;
+}
+
+export interface UpdateProfileRequest {
+  firstName: string;
+  lastName: string;
+  phone: string | null;
+}
+
+export interface ChangePasswordRequest {
+  currentPassword: string;
+  newPassword: string;
+}
+
+export interface TwoFactorSetup {
+  sharedKey: string;
+  authenticatorUri: string;
+}
+
+export interface LoginResponse {
+  requiresTwoFactor: boolean;
+  challengeToken: string | null;
+  authResult: AuthResult | null;
 }

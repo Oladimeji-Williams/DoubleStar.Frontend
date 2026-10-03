@@ -1,0 +1,5 @@
+// libs/shared/src/lib/ui/pagination/pagination.component.scss
+.pagination { display: flex; align-items: center; justify-content: center; gap: 0.75rem; margin-top: 2rem; }
+.page-button { width: 2rem; height: 2rem; border-radius: 0.375rem; border: 1px solid var(--ds-color-border, #e2e8f0); background: var(--ds-color-surface, #fff); cursor: pointer; &:disabled { opacity: 0.4; cursor: not-allowed; } }
+.page-info { font-size: 0.8125rem; color: var(--ds-color-text-muted, #64748b); }
+.size-select { border: 1px solid var(--ds-color-border, #e2e8f0); border-radius: 0.375rem; padding: 0.25rem 0.5rem; font-size: 0.8125rem; }

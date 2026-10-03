@@ -1,12 +1,13 @@
-// apps/doublestar-customer/src/app/customer-layout/customer-layout.component.ts
+// apps/doublestar-customer/src/app/customer-layout/customer-layout.component.ts — full replacement
 import { Component, inject } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
-import { AuthService, CurrentUserStore } from '@doublestar/shared';
+import { AuthService, AvatarComponent, BrandLogoComponent, CurrentUserStore, IconComponent, BrandWordmarkComponent } from '@doublestar/shared';
+
 
 @Component({
   selector: 'app-customer-layout',
   standalone: true,
-  imports: [RouterLink, RouterLinkActive, RouterOutlet],
+  imports: [RouterLink, RouterLinkActive, RouterOutlet, IconComponent, BrandLogoComponent, AvatarComponent, BrandWordmarkComponent],
   templateUrl: './customer-layout.component.html',
   styleUrl: './customer-layout.component.scss',
 })

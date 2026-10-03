@@ -6,6 +6,7 @@ import { ActivatedRoute } from '@angular/router';
 import { ApiException, KoboCurrencyPipe } from '@doublestar/shared';
 import { PaymentsApiService } from '../payments-api.service';
 import { PaymentMethod, PaymentSourceType, PaymentTransaction } from '../models/payment.model';
+import { ConfirmService, ToastService } from '@doublestar/shared';
 
 @Component({
   selector: 'app-payment-lookup-page',
@@ -17,6 +18,8 @@ import { PaymentMethod, PaymentSourceType, PaymentTransaction } from '../models/
 export class PaymentLookupPageComponent implements OnInit {
   private readonly paymentsApi = inject(PaymentsApiService);
   private readonly route = inject(ActivatedRoute);
+  private readonly confirmService = inject(ConfirmService);
+  private readonly toastService = inject(ToastService);
 
   protected readonly sourceType = signal<PaymentSourceType>('Sale');
   protected readonly sourceId = signal<number | null>(null);
@@ -74,10 +77,38 @@ export class PaymentLookupPageComponent implements OnInit {
     this.paymentsApi
       .recordManual({ sourceType: this.sourceType(), sourceId: id, amountKobo: Math.round(naira * 100), method: this.method() })
       .subscribe({
-        next: () => { this.isRecording.set(false); this.amountNaira.set(null); this.lookup(); },
+        next: () => {
+          this.isRecording.set(false);
+          this.amountNaira.set(null);
+          this.toastService.success('Payment recorded.');
+          this.lookup();
+        },
         error: (error: unknown) => { this.isRecording.set(false); this.errorMessage.set(error instanceof ApiException ? error.message : 'Something went wrong.'); },
       });
   }
+
+  protected async submitRefund(payment: PaymentTransaction): Promise<void> {
+    const naira = this.refundAmountNaira();
+    const reason = this.refundReason().trim();
+    if (naira === null || naira <= 0 || !reason) return;
+
+    const confirmed = await this.confirmService.confirm(`Refund ₦${naira.toLocaleString()} for this payment? This cannot be undone.`, 'Issue refund');
+    if (!confirmed) return;
+
+    this.isRefunding.set(true);
+    this.errorMessage.set(null);
+
+    this.paymentsApi.refund(payment.id, { amountKobo: Math.round(naira * 100), reason }).subscribe({
+      next: () => {
+        this.isRefunding.set(false);
+        this.expandedPaymentId.set(null);
+        this.toastService.success('Refund issued.');
+        this.lookup();
+      },
+      error: (error: unknown) => { this.isRefunding.set(false); this.errorMessage.set(error instanceof ApiException ? error.message : 'Something went wrong.'); },
+    });
+  }
+
 
   private payWithPaystack(sourceId: number, naira: number): void {
     if (!this.payerEmail().trim()) {
@@ -105,19 +136,5 @@ export class PaymentLookupPageComponent implements OnInit {
 
   protected canRefund(payment: PaymentTransaction): boolean {
     return payment.status === 'Successful' || payment.status === 'PartiallyRefunded';
-  }
-
-  protected submitRefund(payment: PaymentTransaction): void {
-    const naira = this.refundAmountNaira();
-    const reason = this.refundReason().trim();
-    if (naira === null || naira <= 0 || !reason) return;
-
-    this.isRefunding.set(true);
-    this.errorMessage.set(null);
-
-    this.paymentsApi.refund(payment.id, { amountKobo: Math.round(naira * 100), reason }).subscribe({
-      next: () => { this.isRefunding.set(false); this.expandedPaymentId.set(null); this.lookup(); },
-      error: (error: unknown) => { this.isRefunding.set(false); this.errorMessage.set(error instanceof ApiException ? error.message : 'Something went wrong.'); },
-    });
   }
 }

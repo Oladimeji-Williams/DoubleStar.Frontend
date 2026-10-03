@@ -11,4 +11,6 @@ export interface Product {
   unitPriceKobo: number;
   trackingMode: StockTrackingMode;
   isArchived: boolean;
+  imageUrl: string | null;
+
 }

@@ -1,0 +1,8 @@
+<!-- libs/shared/src/lib/ui/avatar/avatar.component.html -->
+<div class="avatar" [style.width.px]="size()" [style.height.px]="size()">
+  @if (avatarUrl() && !loadError()) {
+    <img [src]="avatarUrl()" alt="" (error)="onError()" class="avatar-img" />
+  } @else {
+    <app-icon name="profile" [size]="size() * 0.6" />
+  }
+</div>

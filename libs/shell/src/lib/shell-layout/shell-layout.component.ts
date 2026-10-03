@@ -1,14 +1,13 @@
-// libs/shell/src/lib/shell-layout/shell-layout.component.ts
+// libs/shell/src/lib/shell-layout/shell-layout.component.ts — full replacement
 import { Component, computed, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
-import { AuthService, CurrentUserStore } from '@doublestar/shared';
+import { AuthService, AvatarComponent, BrandLogoComponent, CurrentUserStore, IconComponent, BrandWordmarkComponent } from '@doublestar/shared';
 import { NAV_ITEMS } from '../nav-item.model';
 
 @Component({
   selector: 'app-shell-layout',
   standalone: true,
-  imports: [CommonModule, RouterLink, RouterLinkActive, RouterOutlet],
+  imports: [RouterLink, RouterLinkActive, RouterOutlet, IconComponent, BrandLogoComponent, AvatarComponent, BrandWordmarkComponent],
   templateUrl: './shell-layout.component.html',
   styleUrl: './shell-layout.component.scss',
 })

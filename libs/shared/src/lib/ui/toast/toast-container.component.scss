@@ -1,0 +1,7 @@
+// libs/shared/src/lib/ui/toast/toast-container.component.scss
+.toast-stack { position: fixed; bottom: 1.25rem; right: 1.25rem; display: flex; flex-direction: column; gap: 0.5rem; z-index: 1000; }
+.toast { display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; border-radius: 0.375rem; font-size: 0.875rem; color: white; box-shadow: 0 4px 12px rgba(0,0,0,0.15); min-width: 16rem; }
+.toast[data-type='success'] { background-color: #16a34a; }
+.toast[data-type='error'] { background-color: #dc2626; }
+.toast[data-type='info'] { background-color: #0f172a; }
+.toast-close { background: none; border: none; color: white; font-size: 1.125rem; line-height: 1; cursor: pointer; opacity: 0.8; &:hover { opacity: 1; } }

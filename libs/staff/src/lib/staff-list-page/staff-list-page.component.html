@@ -9,17 +9,23 @@
       <thead><tr><th>Name</th><th>Email</th><th>Roles</th><th>Status</th><th></th></tr></thead>
       <tbody>
         @for (member of staff(); track member.id) {
-          <tr (click)="toggleExpand(member)" class="staff-row">
-            <td>{{ member.firstName }} {{ member.lastName }}</td>
+          <tr (click)="toggleExpand(member)" class="staff-row" [class.self-row]="member.id === currentUserId()">
+            <td>
+              {{ member.firstName }} {{ member.lastName }}
+              @if (member.id === currentUserId()) { <span class="you-badge">You</span> }
+            </td>
             <td>{{ member.email }}</td>
             <td>{{ member.roles.join(', ') }}</td>
             <td [class.inactive]="!member.isActive">{{ member.isActive ? 'Active' : 'Deactivated' }}</td>
             <td>
-              @if (member.isActive && !member.roles.includes('Admin')) {
-                <button (click)="deactivate(member); $event.stopPropagation()" class="deactivate-button">Deactivate</button>
-              }
-              @if (!member.isActive) {
-                <button (click)="reactivate(member); $event.stopPropagation()" class="reactivate-button">Reactivate</button>
+              @if (member.id !== currentUserId()) {
+                @if (member.isActive) {
+                  <button (click)="deactivate(member); $event.stopPropagation()" class="deactivate-button">Deactivate</button>
+                } @else {
+                  <button (click)="reactivate(member); $event.stopPropagation()" class="reactivate-button">Reactivate</button>
+                }
+              } @else {
+                <span class="self-note">Manage in your profile</span>
               }
             </td>
           </tr>

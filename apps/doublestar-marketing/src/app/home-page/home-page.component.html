@@ -1,0 +1,62 @@
+<!-- apps/doublestar-marketing/src/app/home-page/home-page.component.html -->
+<section class="hero">
+  <div class="hero-inner">
+    <h1 class="hero-title">Phone &amp; Gadget Sales and Repairs You Can Trust</h1>
+    <p class="hero-subtitle">
+      Double Star sells new and quality-tested phones, accessories and gadgets — and repairs
+      cracked screens, batteries, charging ports and more, usually the same day.
+    </p>
+    <div class="hero-actions">
+      <a [href]="customerAppUrl + '/register'" class="primary-button">Create an account</a>
+      <a routerLink="/contact" class="secondary-button">Visit our store</a>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <h2 class="section-title">What we do</h2>
+  <div class="feature-grid">
+    <article class="feature-card">
+      <div class="feature-icon"><app-icon name="screen" [size]="26" /></div>
+      <h3 class="feature-title">Phone &amp; gadget sales</h3>
+      <p class="feature-text">New and carefully tested used phones, laptops, chargers and accessories — fair prices, no surprises.</p>
+    </article>
+    <article class="feature-card">
+      <div class="feature-icon"><app-icon name="battery" [size]="26" /></div>
+      <h3 class="feature-title">Screen &amp; battery repair</h3>
+      <p class="feature-text">Cracked screens, swollen batteries, faulty charging ports — diagnosed and quoted before any work starts.</p>
+    </article>
+    <article class="feature-card">
+      <div class="feature-icon"><app-icon name="my-repairs" [size]="26" /></div>
+      <h3 class="feature-title">Repair status tracking</h3>
+      <p class="feature-text">Create a free account to track every repair from drop-off to collection, right from your phone.</p>
+    </article>
+  </div>
+  <a routerLink="/services" class="text-link">See all our services →</a>
+</section>
+
+<section class="section section-alt">
+  <h2 class="section-title">What customers say</h2>
+  <div class="testimonial-grid">
+    @for (t of testimonials; track t.name) {
+      <article class="testimonial-card">
+        <div class="testimonial-stars">
+          @for (s of stars; track s) {
+            <app-icon [name]="s < t.rating ? 'star' : 'star-outline'" [size]="16" />
+          }
+        </div>
+        <p class="testimonial-quote">&ldquo;{{ t.quote }}&rdquo;</p>
+        <p class="testimonial-name">{{ t.name }}</p>
+      </article>
+    }
+  </div>
+  <p class="text-link" style="text-align: center; margin-top: 1.25rem;">
+    <a [href]="customerAppUrl + '/reviews'">Read and leave more reviews →</a>
+  </p>
+</section>
+
+<section class="section cta-section">
+  <h2 class="section-title">Have a device that needs fixing?</h2>
+  <p class="section-text">Create a free account and request a repair in under a minute.</p>
+  <a [href]="customerAppUrl + '/register'" class="primary-button">Request a repair</a>
+</section>

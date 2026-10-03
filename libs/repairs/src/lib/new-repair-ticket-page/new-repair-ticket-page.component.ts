@@ -1,4 +1,3 @@
-// libs/repairs/src/lib/new-repair-ticket-page/new-repair-ticket-page.component.ts
 import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -48,7 +47,11 @@ export class NewRepairTicketPageComponent {
         next: (ticket) => this.router.navigate(['/repairs', ticket.id]),
         error: (error: unknown) => {
           this.isBusy.set(false);
-          this.errorMessage.set(error instanceof ApiException ? error.message : 'Something went wrong.');
+          this.errorMessage.set(
+            error instanceof ApiException
+              ? error.message
+              : 'Something went wrong.'
+          );
         },
       });
   }

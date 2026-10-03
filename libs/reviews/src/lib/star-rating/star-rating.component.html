@@ -1,0 +1,13 @@
+<!-- libs/reviews/src/lib/star-rating/star-rating.component.html -->
+<div class="stars" [class.interactive]="interactive()">
+  @for (star of stars; track star) {
+    <button
+      type="button"
+      [disabled]="!interactive()"
+      (click)="select(star)"
+      class="star-button"
+    >
+      <app-icon [name]="star <= rating() ? 'star' : 'star-outline'" [size]="size()" />
+    </button>
+  }
+</div>

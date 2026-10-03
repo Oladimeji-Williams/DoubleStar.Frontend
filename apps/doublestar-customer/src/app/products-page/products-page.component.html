@@ -1,0 +1,32 @@
+<!-- apps/doublestar-customer/src/app/products-page/products-page.component.html — full replacement -->
+<div class="page">
+  <app-public-topbar activePath="products" />
+  <main class="content">
+    <h1 class="page-title">Phones, gadgets &amp; repair parts</h1>
+    <p class="subtitle">Browse what's in stock. Sign in to place an order or request a repair.</p>
+
+    @if (isLoading()) {
+      <p>Loading...</p>
+    } @else if (!result() || result()!.items.length === 0) {
+      <p class="empty-state">No products listed right now — check back soon.</p>
+    } @else {
+      <div class="product-grid">
+        @for (product of result()!.items; track product.id) {
+          <article class="product-card" [routerLink]="['/products', product.id]">
+            <app-product-image [imageUrl]="product.imageUrl" size="card" [alt]="product.name" />
+            <h2 class="product-name">{{ product.name }}</h2>
+            <p class="product-price">{{ product.unitPriceKobo | koboCurrency }}</p>
+            @if (product.description) { <p class="product-description">{{ product.description }}</p> }
+          </article>
+        }
+      </div>
+      <app-pagination
+        [page]="result()!.page"
+        [totalPages]="result()!.totalPages"
+        [pageSize]="result()!.pageSize"
+        (pageChange)="onPageChange($event)"
+        (pageSizeChange)="onPageSizeChange($event)"
+      />
+    }
+  </main>
+</div>

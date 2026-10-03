@@ -1,0 +1,5 @@
+// libs/reviews/src/lib/star-rating/star-rating.component.scss
+.stars { display: flex; gap: 0.125rem; color: var(--ds-color-accent, #f59e0b); }
+.star-button { background: none; border: none; padding: 0; color: inherit; display: flex; }
+.stars.interactive .star-button { cursor: pointer; }
+.stars:not(.interactive) .star-button { cursor: default; }

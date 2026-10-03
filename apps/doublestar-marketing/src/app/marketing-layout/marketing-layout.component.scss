@@ -1,0 +1,16 @@
+// apps/doublestar-marketing/src/app/marketing-layout/marketing-layout.component.scss
+.site { display: flex; flex-direction: column; min-height: 100vh; }
+.topbar { display: flex; align-items: center; gap: 1.5rem; padding: 1rem 1.5rem; background: white; border-bottom: 1px solid #e2e8f0; position: sticky; top: 0; z-index: 10; }
+.brand { display: flex; align-items: center; gap: 0.5rem; font-size: 1.125rem; font-weight: 700; color: #0f172a; text-decoration: none; }
+.nav { display: flex; gap: 1.25rem; flex: 1; }
+.nav-link { font-size: 0.9375rem; color: #334155; text-decoration: none; padding: 0.375rem 0; border-bottom: 2px solid transparent; &:hover { color: #0f172a; } }
+.nav-link-active { color: #0f172a; border-bottom-color: #0f172a; font-weight: 600; }
+.cta-link { background: #0f172a; color: white; font-size: 0.875rem; font-weight: 500; padding: 0.5rem 1rem; border-radius: 0.375rem; text-decoration: none; white-space: nowrap; }
+.content { flex: 1; }
+.footer { background: #0f172a; color: #cbd5e1; padding: 2.5rem 1.5rem 1.5rem; margin-top: 3rem; }
+.footer-grid { max-width: 64rem; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr)); gap: 2rem; margin-bottom: 1.5rem; }
+.footer-brand { font-size: 1.0625rem; font-weight: 700; color: white; margin: 0 0 0.375rem; }
+.footer-heading { font-size: 0.8125rem; font-weight: 600; color: white; text-transform: uppercase; letter-spacing: 0.03em; margin: 0 0 0.625rem; }
+.footer-text { font-size: 0.875rem; margin: 0 0 0.375rem; color: #94a3b8; }
+.footer-link { display: block; font-size: 0.875rem; color: #cbd5e1; text-decoration: none; margin-bottom: 0.5rem; &:hover { color: white; } }
+.copyright { max-width: 64rem; margin: 0 auto; font-size: 0.75rem; color: #64748b; border-top: 1px solid #1e293b; padding-top: 1rem; }

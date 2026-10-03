@@ -15,5 +15,6 @@ jobs:
           cache: 'npm'
       - run: npm ci
       - run: npx nx test shared
-      - run: npx nx build doublestar
+      - run: npx nx build doublestar-staff
       - run: npx nx build doublestar-customer
+      - run: npx nx build doublestar-marketing

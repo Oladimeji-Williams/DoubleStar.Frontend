@@ -26,7 +26,8 @@
       "@doublestar/inventory": ["./libs/inventory/src/index.ts"],
       "@doublestar/reporting": ["./libs/reporting/src/index.ts"],
       "@doublestar/notifications": ["./libs/notifications/src/index.ts"],
-      "@doublestar/staff": ["./libs/staff/src/index.ts"]
+      "@doublestar/staff": ["./libs/staff/src/index.ts"],
+      "@doublestar/reviews": ["./libs/reviews/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

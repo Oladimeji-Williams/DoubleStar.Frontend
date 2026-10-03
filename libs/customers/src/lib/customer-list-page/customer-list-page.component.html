@@ -11,11 +11,12 @@
     placeholder="Search by name or phone"
     class="search-input"
   />
-  
     @if (errorMessage()) {
-    <p class="error">{{ errorMessage() }}</p>
+      <p class="error">
+        {{ errorMessage() }}
+        <button (click)="retryLoad()" class="retry-link">Try again</button>
+      </p>
     }
-
   @if (isLoading()) {
     <p>Loading...</p>
   } @else if (customers().length === 0) {

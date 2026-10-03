@@ -19,6 +19,7 @@ export class CurrentUserStore {
       phone: result.phone,
       displayName: result.displayName,
       roles: result.roles,
+      avatarUrl: null, // AuthResult doesn't carry it; refreshCurrentUser() fills it in right after login
     });
   }
 

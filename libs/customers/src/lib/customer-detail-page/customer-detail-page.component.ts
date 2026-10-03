@@ -6,6 +6,7 @@ import { ActivatedRoute } from '@angular/router';
 import { ApiException } from '@doublestar/shared';
 import { CustomersApiService } from '../customers-api.service';
 import { Customer } from '../models/customer.model';
+import { ToastService } from '@doublestar/shared';
 
 @Component({
   selector: 'app-customer-detail-page',
@@ -17,6 +18,7 @@ import { Customer } from '../models/customer.model';
 export class CustomerDetailPageComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly customersApi = inject(CustomersApiService);
+  private readonly toastService = inject(ToastService);
 
   protected readonly customer = signal<Customer | null>(null);
   protected readonly isLoading = signal(true);
@@ -48,24 +50,12 @@ export class CustomerDetailPageComponent implements OnInit {
 
     this.isSaving.set(true);
     this.errorMessage.set(null);
-    this.successMessage.set(null);
 
     this.customersApi
-      .update(this.customerId, {
-        name: this.name(),
-        phone: this.phone() || null,
-        email: this.email() || null,
-        address: this.address() || null,
-      })
+      .update(this.customerId, { name: this.name(), phone: this.phone() || null, email: this.email() || null, address: this.address() || null })
       .subscribe({
-        next: () => {
-          this.isSaving.set(false);
-          this.successMessage.set('Saved.');
-        },
-        error: (error: unknown) => {
-          this.isSaving.set(false);
-          this.errorMessage.set(error instanceof ApiException ? error.message : 'Something went wrong.');
-        },
+        next: () => { this.isSaving.set(false); this.toastService.success('Customer saved.'); },
+        error: (error: unknown) => { this.isSaving.set(false); this.errorMessage.set(error instanceof ApiException ? error.message : 'Something went wrong.'); },
       });
   }
 }

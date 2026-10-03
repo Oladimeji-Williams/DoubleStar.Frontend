@@ -1,8 +1,7 @@
 // libs/staff/src/lib/staff-list-page/staff-list-page.component.ts — full replacement
-import { Component, OnInit, inject, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ApiException } from '@doublestar/shared';
+import { ApiException, ConfirmService, CurrentUserStore, ToastService } from '@doublestar/shared';
 import { StaffApiService } from '../staff-api.service';
 import { StaffMember } from '../models/staff.model';
 
@@ -11,12 +10,17 @@ type StaffRole = 'Admin' | 'Manager' | 'Cashier' | 'Technician';
 @Component({
   selector: 'app-staff-list-page',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [FormsModule],
   templateUrl: './staff-list-page.component.html',
   styleUrl: './staff-list-page.component.scss',
 })
 export class StaffListPageComponent implements OnInit {
   private readonly staffApi = inject(StaffApiService);
+  private readonly currentUserStore = inject(CurrentUserStore);
+  private readonly confirmService = inject(ConfirmService);
+  private readonly toastService = inject(ToastService);
+
+  protected readonly currentUserId = computed(() => this.currentUserStore.currentUser()?.userId ?? null);
 
   protected readonly staff = signal<StaffMember[]>([]);
   protected readonly isLoading = signal(true);
@@ -60,6 +64,7 @@ export class StaffListPageComponent implements OnInit {
       .subscribe({
         next: () => {
           this.isCreating.set(false);
+          this.toastService.success(`${this.firstName()} ${this.lastName()} added as ${this.role()}.`);
           this.firstName.set(''); this.lastName.set(''); this.email.set(''); this.password.set('');
           this.load();
         },
@@ -68,6 +73,8 @@ export class StaffListPageComponent implements OnInit {
   }
 
   protected toggleExpand(member: StaffMember): void {
+    if (member.id === this.currentUserId()) return; // no self-editing here — see /profile instead
+
     if (this.expandedStaffId() === member.id) {
       this.expandedStaffId.set(null);
       return;
@@ -89,16 +96,30 @@ export class StaffListPageComponent implements OnInit {
     this.staffApi
       .update(member.id, { firstName: this.editFirstName(), lastName: this.editLastName(), role: this.editRole() })
       .subscribe({
-        next: () => { this.isSaving.set(false); this.expandedStaffId.set(null); this.load(); },
+        next: () => {
+          this.isSaving.set(false);
+          this.toastService.success('Staff member updated.');
+          this.expandedStaffId.set(null);
+          this.load();
+        },
         error: (error: unknown) => { this.isSaving.set(false); this.editError.set(error instanceof ApiException ? error.message : 'Something went wrong.'); },
       });
   }
 
-  protected deactivate(member: StaffMember): void {
-    this.staffApi.deactivate(member.id).subscribe(() => this.load());
+  protected async deactivate(member: StaffMember): Promise<void> {
+    const confirmed = await this.confirmService.confirm(`Deactivate ${member.firstName} ${member.lastName}? They'll immediately lose access.`, 'Deactivate');
+    if (!confirmed) return;
+
+    this.staffApi.deactivate(member.id).subscribe(() => {
+      this.toastService.success(`${member.firstName} deactivated.`);
+      this.load();
+    });
   }
 
   protected reactivate(member: StaffMember): void {
-    this.staffApi.reactivate(member.id).subscribe(() => this.load());
+    this.staffApi.reactivate(member.id).subscribe(() => {
+      this.toastService.success(`${member.firstName} reactivated.`);
+      this.load();
+    });
   }
 }

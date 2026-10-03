@@ -1,0 +1,9 @@
+// apps/doublestar-marketing/src/app/contact-page/contact-page.component.scss
+.page { max-width: 48rem; margin: 0 auto; padding: 3rem 1.5rem; }
+.page-title { font-size: 1.75rem; font-weight: 800; color: var(--ds-color-primary); margin: 0 0 2rem; text-align: center; }
+.contact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); gap: 1.25rem; }
+.contact-card { background: var(--ds-color-surface); border: 1px solid var(--ds-color-border); border-radius: var(--ds-radius); padding: 1.25rem; }
+.contact-icon { width: 2.5rem; height: 2.5rem; border-radius: 0.625rem; background: var(--ds-color-surface-alt); color: var(--ds-color-accent-dark); display: flex; align-items: center; justify-content: center; margin-bottom: 0.75rem; }
+.contact-heading { font-size: 0.9375rem; font-weight: 600; color: var(--ds-color-primary); margin: 0 0 0.5rem; }
+.contact-text { font-size: 0.9375rem; color: var(--ds-color-text-muted); margin: 0 0 0.25rem; font-style: normal; }
+.contact-link { color: var(--ds-color-primary); text-decoration: underline; }

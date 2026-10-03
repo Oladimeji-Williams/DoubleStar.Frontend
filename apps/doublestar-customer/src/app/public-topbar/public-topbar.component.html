@@ -1,0 +1,12 @@
+<!-- apps/doublestar-customer/src/app/public-topbar/public-topbar.component.html -->
+<header class="topbar">
+  <a routerLink="/products" class="brand"><app-brand-logo [size]="24" /><app-brand-wordmark /></a>
+  <nav class="public-nav">
+    <a routerLink="/products" [class.nav-link-active]="activePath() === 'products'" class="nav-link">Products</a>
+    <a routerLink="/reviews" [class.nav-link-active]="activePath() === 'reviews'" class="nav-link">Reviews</a>
+  </nav>
+  <nav class="auth-links">
+    <a routerLink="/login" class="auth-link">Sign in</a>
+    <a routerLink="/register" class="auth-link auth-link-primary">Create account</a>
+  </nav>
+</header>

@@ -10,6 +10,21 @@
     <p class="subtitle">{{ p.sku }} · {{ p.trackingMode === 'Serialized' ? 'Serialized' : 'Bulk' }}</p>
 
     <div class="card">
+      <h2 class="card-title">Photo</h2>
+      <div class="image-row">
+        <app-product-image [imageUrl]="product()?.imageUrl ?? null" size="large" alt="Product photo" />
+        <div class="image-actions">
+          <label class="upload-button">
+            Upload photo
+            <input type="file" accept="image/jpeg,image/png,image/webp" (change)="onImageSelected($event)" hidden />
+          </label>
+          @if (product()?.imageUrl) {
+            <button (click)="removeImage()" class="remove-button">Remove photo</button>
+          }
+        </div>
+      </div>
+    </div>
+    <div class="card">
       <h2 class="card-title">Details</h2>
       <div class="field">
         <label class="label">Name</label>
@@ -50,6 +65,5 @@
     </div>
 
     @if (errorMessage()) { <p class="error">{{ errorMessage() }}</p> }
-    @if (successMessage()) { <p class="success">{{ successMessage() }}</p> }
   }
 </div>

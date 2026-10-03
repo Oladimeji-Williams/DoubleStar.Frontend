@@ -1,4 +1,4 @@
-<!-- libs/catalog/src/lib/product-list-page/product-list-page.component.html -->
+<!-- libs/catalog/src/lib/product-list-page/product-list-page.component.html — full replacement -->
 <div class="page">
   <div class="page-header">
     <h1 class="page-title">Products</h1>
@@ -9,29 +9,34 @@
     </div>
   </div>
 
+  <button (click)="toggleArchived()" class="toggle-archived">
+    {{ showArchived() ? 'Show active products' : 'Show archived products' }}
+  </button>
+
   @if (isLoading()) {
     <p>Loading...</p>
   } @else if (products().length === 0) {
-    <p class="empty-state">No products yet.</p>
+    <p class="empty-state">{{ showArchived() ? 'No archived products.' : 'No products yet.' }}</p>
   } @else {
     <table class="products-table">
       <thead>
-        <tr>
-          <th>Name</th>
-          <th>SKU</th>
-          <th>Price</th>
-          <th>Tracking</th>
-          <th></th>
-        </tr>
+        <tr><th></th><th>Name</th><th>SKU</th><th>Price</th><th>Tracking</th><th></th></tr>
       </thead>
       <tbody>
         @for (product of products(); track product.id) {
           <tr [routerLink]="['/catalog/products', product.id]" class="product-row">
+            <td><app-product-image [imageUrl]="product.imageUrl" size="thumb" [alt]="product.name" /></td>
             <td>{{ product.name }}</td>
             <td>{{ product.sku }}</td>
             <td>{{ product.unitPriceKobo | koboCurrency }}</td>
             <td>{{ product.trackingMode === 'Serialized' ? 'Serialized' : 'Bulk' }}</td>
-            <td><button (click)="archive(product); $event.stopPropagation()" class="archive-button">Archive</button></td>
+            <td>
+              @if (product.isArchived) {
+                <button (click)="unarchive(product); $event.stopPropagation()" class="unarchive-button">Unarchive</button>
+              } @else {
+                <button (click)="archive(product); $event.stopPropagation()" class="archive-button">Archive</button>
+              }
+            </td>
           </tr>
         }
       </tbody>

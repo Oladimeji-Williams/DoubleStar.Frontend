@@ -1,9 +1,9 @@
-// libs/customers/src/lib/customer-list-page/customer-list-page.component.ts
+// libs/customers/src/lib/customer-list-page/customer-list-page.component.ts — full replacement
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { Subject, catchError, debounceTime, distinctUntilChanged, of, switchMap } from 'rxjs';
+import { Subject, catchError, debounceTime, distinctUntilChanged, of, retry, switchMap } from 'rxjs';
 import { CustomersApiService } from '../customers-api.service';
 import { Customer } from '../models/customer.model';
 
@@ -30,6 +30,7 @@ export class CustomerListPageComponent implements OnInit {
         distinctUntilChanged(),
         switchMap((term) =>
           this.customersApi.search(term).pipe(
+            retry({ count: 1, delay: 400 }),
             catchError(() => {
               this.errorMessage.set('Could not load customers.');
               return of([] as Customer[]);
@@ -50,5 +51,11 @@ export class CustomerListPageComponent implements OnInit {
     this.isLoading.set(true);
     this.errorMessage.set(null);
     this.searchTerm$.next(term);
+  }
+
+  protected retryLoad(): void {
+    this.isLoading.set(true);
+    this.errorMessage.set(null);
+    this.searchTerm$.next(this.searchTerm());
   }
 }

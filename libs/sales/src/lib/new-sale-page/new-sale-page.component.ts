@@ -9,6 +9,7 @@ import { ProductsApiService, Product } from '@doublestar/catalog';
 import { CustomerSelection, CustomerSelectorComponent } from '@doublestar/customers';
 import { SalesApiService } from '../sales-api.service';
 import { Sale } from '../models/sale.model';
+import { ToastService } from '@doublestar/shared';
 
 @Component({
   selector: 'app-new-sale-page',
@@ -20,6 +21,7 @@ import { Sale } from '../models/sale.model';
 export class NewSalePageComponent {
   private readonly salesApi = inject(SalesApiService);
   private readonly productsApi = inject(ProductsApiService);
+  private readonly toastService = inject(ToastService);
 
   protected readonly sale = signal<Sale | null>(null);
   protected readonly customer = signal<CustomerSelection | null>(null);
@@ -108,6 +110,7 @@ export class NewSalePageComponent {
       });
   }
 
+// libs/sales/src/lib/new-sale-page/new-sale-page.component.ts — replace just the `completeSale()` method
   protected completeSale(): void {
     const currentSale = this.sale();
     if (!currentSale) return;
@@ -119,6 +122,7 @@ export class NewSalePageComponent {
       next: (sale) => {
         this.isBusy.set(false);
         this.sale.set(sale);
+        this.toastService.success(`Sale #${sale.id} completed.`);
       },
       error: (error: unknown) => this.handleError(error),
     });
