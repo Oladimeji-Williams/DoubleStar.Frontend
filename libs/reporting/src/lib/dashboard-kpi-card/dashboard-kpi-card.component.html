@@ -1,0 +1,21 @@
+<article class="kpi-card" [class]="tone()">
+  <div class="kpi-top">
+    <div class="kpi-icon">
+      {{ icon() }}
+    </div>
+
+    <span class="kpi-label">
+      {{ label() }}
+    </span>
+  </div>
+
+  <div class="kpi-value">
+    {{ value() }}
+  </div>
+
+  @if (description()) {
+    <div class="kpi-description">
+      {{ description() }}
+    </div>
+  }
+</article>

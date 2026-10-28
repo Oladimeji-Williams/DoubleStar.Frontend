@@ -1,0 +1,47 @@
+
+<main class="confirmation-page">
+  <section class="confirmation-card" aria-live="polite">
+    <div class="confirmation-icon" aria-hidden="true">
+      @if (isLoading()) {
+        <span class="icon-loading">...</span>
+      } @else if (isSuccess()) {
+        <span class="icon-success">✓</span>
+      } @else {
+        <span class="icon-error">!</span>
+      }
+    </div>
+
+    <h1>Confirm your email</h1>
+
+    @if (isLoading()) {
+      <p class="description">
+        We're verifying your email address. Please wait.
+      </p>
+
+      <div class="loading-track" aria-label="Verification in progress">
+        <div class="loading-bar"></div>
+      </div>
+    } @else if (isSuccess()) {
+      <p class="status-message success-message">
+        Your email address has been confirmed successfully.
+        You can now sign in to your DoubleStar account.
+      </p>
+
+      <a class="primary-button" routerLink="/login">
+        Continue to sign in
+      </a>
+    } @else {
+      <p class="status-message error-message">
+        {{ errorMessage() }}
+      </p>
+
+      <a class="primary-button" routerLink="/login">
+        Return to sign in
+      </a>
+    }
+
+    <p class="footer-text">
+      DoubleStar · Customer account security
+    </p>
+  </section>
+</main>

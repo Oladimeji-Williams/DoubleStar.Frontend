@@ -1,7 +1,7 @@
 // apps/doublestar-marketing/src/app/faq-page/faq-page.component.ts — full replacement
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { IconComponent } from '@doublestar/shared';
-import { PageSeoService } from '../../../../../libs/shared/src/lib/seo/page-seo.service';
+import { PageSeoService } from '@doublestar/shared';
 
 interface FaqItem { question: string; answer: string; }
 

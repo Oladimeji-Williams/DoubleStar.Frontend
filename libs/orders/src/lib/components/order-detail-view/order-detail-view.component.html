@@ -1,0 +1,102 @@
+<header class="head">
+  <div>
+    <h1 class="title">Order {{ order().orderNumber }}</h1>
+    <p class="muted">Placed {{ order().createdAt | date: 'medium' }}</p>
+  </div>
+  <app-order-status-badge [status]="order().status" />
+</header>
+
+@if (showAttention() && order().needsAttention) {
+  <p class="attention" role="alert">
+    <strong>Needs attention.</strong>
+    {{ order().attentionReason }}
+  </p>
+}
+
+<div class="actions">
+  <ng-content select="[orderActions]" />
+</div>
+
+<section class="card">
+  <h2 class="card-title">Items</h2>
+  <div class="table-scroll">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">Product</th>
+          <th scope="col" class="num">Qty</th>
+          <th scope="col" class="num">Price</th>
+          <th scope="col" class="num">Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (line of order().lines; track line.id) {
+          <tr>
+            <td>
+              <strong>{{ line.productName }}</strong>
+              <span class="muted block">SKU {{ line.sku }}</span>
+              @if (line.serialNumbers.length > 0) {
+                <span class="muted block">Serial: {{ line.serialNumbers.join(', ') }}</span>
+              }
+            </td>
+            <td class="num">{{ line.quantity }}</td>
+            <td class="num">{{ line.unitPriceKobo | koboCurrency }}</td>
+            <td class="num">{{ line.lineTotalKobo | koboCurrency }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <dl class="totals">
+    <div>
+      <dt>Subtotal</dt>
+      <dd>{{ order().subtotalKobo | koboCurrency }}</dd>
+    </div>
+    @if (order().deliveryFeeKobo > 0) {
+      <div>
+        <dt>Delivery</dt>
+        <dd>{{ order().deliveryFeeKobo | koboCurrency }}</dd>
+      </div>
+    }
+    <div class="grand-total">
+      <dt>Total</dt>
+      <dd>{{ order().totalKobo | koboCurrency }}</dd>
+    </div>
+  </dl>
+</section>
+
+<section class="card">
+  <h2 class="card-title">{{ isDelivery() ? 'Delivery' : 'Pickup' }}</h2>
+  <p class="line">{{ order().contactName }} · {{ order().contactPhone }}</p>
+  @if (isDelivery()) {
+    <p class="line">
+      {{ order().deliveryAddress }}, {{ order().deliveryCity }}, {{ order().deliveryState }}
+    </p>
+  }
+  @if (order().notes) {
+    <p class="line muted">Note: {{ order().notes }}</p>
+  }
+  @if (order().paidAt; as paidAt) {
+    <p class="line muted">Paid {{ paidAt | date: 'medium' }}</p>
+  } @else if (isAwaitingPayment()) {
+    <p class="line muted">Pay before {{ order().expiresAt | date: 'short' }} or the order expires.</p>
+  }
+</section>
+
+<section class="card">
+  <h2 class="card-title">Progress</h2>
+  <ol class="timeline">
+    @for (entry of order().timeline; track entry.at.getTime()) {
+      <li>
+        <span class="when">{{ entry.at | date: 'medium' }}</span>
+        <span>
+          {{ statusLabels[entry.from] }} → <strong>{{ statusLabels[entry.to] }}</strong>
+          @if (entry.note) {
+            <span class="muted"> — {{ entry.note }}</span>
+          }
+        </span>
+      </li>
+    }
+  </ol>
+</section>

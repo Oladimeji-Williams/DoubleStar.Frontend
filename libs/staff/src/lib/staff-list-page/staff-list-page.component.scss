@@ -1,5 +1,10 @@
 // libs/staff/src/lib/staff-list-page/staff-list-page.component.scss — full replacement
-.page { max-width: 44rem; }
+.page {
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+  box-sizing: border-box;
+}
 .page-title { font-size: 1.25rem; font-weight: 600; color: #0f172a; margin: 0 0 1rem; }
 .staff-table { width: 100%; border-collapse: collapse; background: white; border-radius: 0.5rem; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 1.5rem; th, td { text-align: left; padding: 0.75rem; font-size: 0.875rem; border-bottom: 1px solid #e2e8f0; } th { color: #64748b; font-weight: 500; background: #f8fafc; } }
 .staff-row { cursor: pointer; &:hover { background: #f8fafc; } }

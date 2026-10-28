@@ -8,23 +8,23 @@
 
     <div class="card">
       <div class="field">
-        <label class="label">Name</label>
-        <input [ngModel]="name()" (ngModelChange)="name.set($event)" class="input" />
+        <label for="customer-detail-page-name" class="label">Name</label>
+        <input id="customer-detail-page-name" [ngModel]="name()" (ngModelChange)="name.set($event)" class="input" />
       </div>
 
       <div class="field">
-        <label class="label">Phone</label>
-        <input [ngModel]="phone()" (ngModelChange)="phone.set($event)" class="input" />
+        <label for="customer-detail-page-phone" class="label">Phone</label>
+        <input id="customer-detail-page-phone" [ngModel]="phone()" (ngModelChange)="phone.set($event)" class="input" />
       </div>
 
       <div class="field">
-        <label class="label">Email</label>
-        <input type="email" [ngModel]="email()" (ngModelChange)="email.set($event)" class="input" />
+        <label for="customer-detail-page-email" class="label">Email</label>
+        <input id="customer-detail-page-email" type="email" [ngModel]="email()" (ngModelChange)="email.set($event)" class="input" />
       </div>
 
       <div class="field">
-        <label class="label">Address</label>
-        <input [ngModel]="address()" (ngModelChange)="address.set($event)" class="input" />
+        <label for="customer-detail-page-address" class="label">Address</label>
+        <input id="customer-detail-page-address" [ngModel]="address()" (ngModelChange)="address.set($event)" class="input" />
       </div>
 
       @if (errorMessage()) {

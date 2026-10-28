@@ -1,9 +1,40 @@
-<!-- libs/shared/src/lib/ui/pagination/pagination.component.html -->
+
 <div class="pagination">
-  <button (click)="pageChange.emit(page() - 1)" [disabled]="page() <= 1" class="page-button">←</button>
-  <span class="page-info">Page {{ page() }} of {{ totalPages() || 1 }}</span>
-  <button (click)="pageChange.emit(page() + 1)" [disabled]="page() >= totalPages()" class="page-button">→</button>
-  <select [ngModel]="pageSize()" (ngModelChange)="pageSizeChange.emit($event)" class="size-select">
-    @for (size of pageSizeOptions(); track size) { <option [ngValue]="size">{{ size }} / page</option> }
+  <button
+    type="button"
+    class="page-button"
+    aria-label="Previous page"
+    [disabled]="page() <= 1"
+    (click)="pageChange.emit(page() - 1)"
+  >
+    ←
+  </button>
+
+  <div class="page-info">
+    <span class="page-label">Page</span>
+    <strong>{{ page() }}</strong>
+    <span class="page-muted">of</span>
+    <strong>{{ totalPages() || 1 }}</strong>
+  </div>
+
+  <button
+    type="button"
+    class="page-button"
+    aria-label="Next page"
+    [disabled]="page() >= totalPages()"
+    (click)="pageChange.emit(page() + 1)"
+  >
+    →
+  </button>
+
+  <select
+    class="size-select"
+    [ngModel]="pageSize()"
+    (ngModelChange)="handlePageSizeChange($event)"
+    aria-label="Rows per page"
+  >
+    @for (size of pageSizeOptions(); track size) {
+      <option [ngValue]="size">{{ size }} / page</option>
+    }
   </select>
 </div>

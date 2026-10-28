@@ -7,3 +7,8 @@
 .product-price { font-size: 1.375rem; font-weight: 700; color: var(--ds-color-primary); margin: 0 0 1rem; }
 .product-description { font-size: 0.9375rem; color: var(--ds-color-text-muted); line-height: 1.6; margin: 0 0 1rem; }
 .product-meta { font-size: 0.8125rem; color: var(--ds-color-text-muted); }
+.order-button { display: inline-flex; justify-content: center; margin-top: 1rem; padding: 0.75rem 1rem; border: 0; border-radius: var(--ds-radius); background: var(--ds-color-primary); color: white; font: inherit; font-weight: 600; text-decoration: none; cursor: pointer; }
+.order-button:disabled { opacity: 0.55; cursor: not-allowed; }
+.cart-message, .cart-error { margin-top: 0.75rem; font-size: 0.875rem; }
+.cart-message { color: #166534; }
+.cart-error { color: #b91c1c; }

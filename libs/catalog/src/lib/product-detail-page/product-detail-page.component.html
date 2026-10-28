@@ -3,10 +3,38 @@
   @if (isLoading()) {
     <p>Loading...</p>
   } @else if (product(); as p) {
+
     <div class="page-header">
-      <h1 class="page-title">{{ p.name }}</h1>
-      <button (click)="archive()" class="archive-button">Archive product</button>
+      <div>
+        <h1 class="page-title">{{ p.name }}</h1>
+
+        <span
+          class="status-badge"
+          [class.status-archived]="p.isArchived"
+        >
+          {{ p.isArchived ? 'Archived' : 'Active' }}
+        </span>
+      </div>
+
+      @if (p.isArchived) {
+        <button
+          type="button"
+          (click)="unarchive()"
+          class="unarchive-button"
+        >
+          Unarchive product
+        </button>
+      } @else {
+        <button
+          type="button"
+          (click)="archive()"
+          class="archive-button"
+        >
+          Archive product
+        </button>
+      }
     </div>
+
     <p class="subtitle">{{ p.sku }} · {{ p.trackingMode === 'Serialized' ? 'Serialized' : 'Bulk' }}</p>
 
     <div class="card">
@@ -27,24 +55,24 @@
     <div class="card">
       <h2 class="card-title">Details</h2>
       <div class="field">
-        <label class="label">Name</label>
-        <input [ngModel]="name()" (ngModelChange)="name.set($event)" class="input" />
+        <label for="product-detail-page-name" class="label">Name</label>
+        <input id="product-detail-page-name" [ngModel]="name()" (ngModelChange)="name.set($event)" class="input" />
       </div>
       <div class="field">
-        <label class="label">Description</label>
-        <textarea [ngModel]="description()" (ngModelChange)="description.set($event)" rows="2" class="input"></textarea>
+        <label for="product-detail-page-description" class="label">Description</label>
+        <textarea id="product-detail-page-description" [ngModel]="description()" (ngModelChange)="description.set($event)" rows="2" class="input"></textarea>
       </div>
       <div class="field-row">
         <div class="field">
-          <label class="label">Category</label>
-          <select [ngModel]="categoryId()" (ngModelChange)="categoryId.set($event)" class="select">
+          <label for="product-detail-page-category" class="label">Category</label>
+          <select id="product-detail-page-category" [ngModel]="categoryId()" (ngModelChange)="categoryId.set($event)" class="select">
             <option [ngValue]="null">None</option>
             @for (category of categories(); track category.id) { <option [ngValue]="category.id">{{ category.name }}</option> }
           </select>
         </div>
         <div class="field">
-          <label class="label">Brand</label>
-          <select [ngModel]="brandId()" (ngModelChange)="brandId.set($event)" class="select">
+          <label for="product-detail-page-brand" class="label">Brand</label>
+          <select id="product-detail-page-brand" [ngModel]="brandId()" (ngModelChange)="brandId.set($event)" class="select">
             <option [ngValue]="null">None</option>
             @for (brand of brands(); track brand.id) { <option [ngValue]="brand.id">{{ brand.name }}</option> }
           </select>
@@ -57,8 +85,8 @@
       <h2 class="card-title">Price</h2>
       <div class="field-row">
         <div class="field">
-          <label class="label">Price (₦)</label>
-          <input type="number" min="0" [ngModel]="priceNaira()" (ngModelChange)="priceNaira.set($event)" class="input" />
+          <label for="product-detail-page-price" class="label">Price (₦)</label>
+          <input id="product-detail-page-price" type="number" min="0" [ngModel]="priceNaira()" (ngModelChange)="priceNaira.set($event)" class="input" />
         </div>
         <button (click)="savePrice()" [disabled]="isSaving()" class="primary-button price-button">Update price</button>
       </div>

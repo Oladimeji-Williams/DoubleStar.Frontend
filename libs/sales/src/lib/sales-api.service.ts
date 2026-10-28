@@ -1,8 +1,18 @@
-// libs/sales/src/lib/sales-api.service.ts
+
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
-import { ApiClientService } from '@doublestar/shared';
-import { Sale, SaleLine } from './models/sale.model';
+
+import {
+  ApiClientService,
+  DataTableQuery,
+  PagedResult,
+  buildDataTableQueryParams,
+} from '@doublestar/shared';
+
+import {
+  Sale,
+  SaleLine,
+} from './models/sale.model';
 
 export interface CreateSaleRequest {
   customerId: string | null;
@@ -16,12 +26,19 @@ export interface AddSaleLineRequest {
   serialNumber: string | null;
 }
 
-@Injectable({ providedIn: 'root' })
+@Injectable({
+  providedIn: 'root',
+})
 export class SalesApiService {
   private readonly api = inject(ApiClientService);
 
-  getAll(): Observable<Sale[]> {
-    return this.api.get<Sale[]>('/sales');
+  getAll(
+    query: DataTableQuery,
+  ): Observable<PagedResult<Sale>> {
+    return this.api.get<PagedResult<Sale>>(
+      '/sales',
+      buildDataTableQueryParams(query),
+    );
   }
 
   getById(id: number): Observable<Sale> {
@@ -32,19 +49,36 @@ export class SalesApiService {
     return this.api.post<Sale>('/sales', request);
   }
 
-  addLine(saleId: number, request: AddSaleLineRequest): Observable<SaleLine> {
-    return this.api.post<SaleLine>(`/sales/${saleId}/lines`, request);
+  addLine(
+    saleId: number,
+    request: AddSaleLineRequest,
+  ): Observable<SaleLine> {
+    return this.api.post<SaleLine>(
+      `/sales/${saleId}/lines`,
+      request,
+    );
   }
 
   complete(saleId: number): Observable<Sale> {
-    return this.api.post<Sale>(`/sales/${saleId}/complete`, undefined);
+    return this.api.post<Sale>(
+      `/sales/${saleId}/complete`,
+      undefined,
+    );
   }
 
   voidSale(saleId: number): Observable<void> {
-    return this.api.post<void>(`/sales/${saleId}/void`, undefined);
+    return this.api.post<void>(
+      `/sales/${saleId}/void`,
+      undefined,
+    );
   }
-    
-    getMine(): Observable<Sale[]> {
-    return this.api.get<Sale[]>('/sales/me');
-    }
+
+  getMine(
+    query: DataTableQuery,
+  ): Observable<PagedResult<Sale>> {
+    return this.api.get<PagedResult<Sale>>(
+      '/sales/me',
+      buildDataTableQueryParams(query),
+    );
+  }
 }

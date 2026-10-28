@@ -1,0 +1,50 @@
+:host {
+  display: block;
+}
+
+.health-card {
+  display: flex;
+  min-height: 6rem;
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.75rem;
+  background: #fff;
+}
+
+.status {
+  width: 0.3rem;
+  flex: 0 0 0.3rem;
+  background: #22c55e;
+}
+
+.status.warning {
+  background: #f59e0b;
+}
+
+.status.danger {
+  background: #ef4444;
+}
+
+.content {
+  padding: 0.9rem 1rem;
+}
+
+.title {
+  display: block;
+  color: #64748b;
+  font-size: 0.75rem;
+}
+
+.content strong {
+  display: block;
+  margin-top: 0.35rem;
+  color: #0f172a;
+  font-size: 1.15rem;
+}
+
+.description {
+  display: block;
+  margin-top: 0.25rem;
+  color: #94a3b8;
+  font-size: 0.7rem;
+}

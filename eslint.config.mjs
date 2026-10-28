@@ -16,10 +16,11 @@ export default [
           enforceBuildableLibDependency: true,
           allow: ['^.*/eslint(\\.base)?\\.config\\.[cm]?[jt]s$'],
           depConstraints: [
-            {
-              sourceTag: '*',
-              onlyDependOnLibsWithTags: ['*'],
-            },
+            { sourceTag: 'type:app', onlyDependOnLibsWithTags: ['type:feature', 'type:data-access', 'type:shell', 'type:shared'] },
+            { sourceTag: 'type:shell', onlyDependOnLibsWithTags: ['type:shared'] },
+            { sourceTag: 'type:feature', onlyDependOnLibsWithTags: ['type:feature', 'type:data-access', 'type:shared'] },
+            { sourceTag: 'type:data-access', onlyDependOnLibsWithTags: ['type:data-access', 'type:shared'] },
+            { sourceTag: 'type:shared', onlyDependOnLibsWithTags: ['type:shared'] },
           ],
         },
       ],

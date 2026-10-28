@@ -1,7 +1,7 @@
 // libs/catalog/src/lib/product-detail-page/product-detail-page.component.ts — full replacement
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { ApiException, ConfirmService, ToastService } from '@doublestar/shared';
 import { ProductsApiService } from '../products-api.service';
 import { CategoriesApiService } from '../categories-api.service';
@@ -20,7 +20,6 @@ import { ProductImageComponent } from '../product-image/product-image.component'
 })
 export class ProductDetailPageComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
-  private readonly router = inject(Router);
   private readonly productsApi = inject(ProductsApiService);
   private readonly categoriesApi = inject(CategoriesApiService);
   private readonly brandsApi = inject(BrandsApiService);
@@ -84,15 +83,62 @@ export class ProductDetailPageComponent implements OnInit {
   }
 
   protected async archive(): Promise<void> {
-    const confirmed = await this.confirmService.confirm('Archive this product? It will stop appearing in Sales and Repairs product searches.', 'Archive');
-    if (!confirmed) return;
+    const confirmed = await this.confirmService.confirm(
+      'Archive this product? It will stop appearing in Sales and Repairs product searches.',
+      'Archive',
+    );
 
-    this.productsApi.archive(this.productId).subscribe(() => {
-      this.toastService.success('Product archived.');
-      this.router.navigateByUrl('/catalog');
+    if (!confirmed) {
+      return;
+    }
+
+    this.productsApi.archive(this.productId).subscribe({
+      next: () => {
+        this.toastService.success('Product archived.');
+
+        const current = this.product();
+
+        if (current) {
+          this.product.set({
+            ...current,
+            isArchived: true,
+          });
+        }
+      },
+      error: () => {
+        this.toastService.error('Could not archive product.');
+      },
     });
   }
 
+  protected async unarchive(): Promise<void> {
+    const confirmed = await this.confirmService.confirm(
+      'Unarchive this product? It will become available in Sales and Repairs product searches again.',
+      'Unarchive',
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    this.productsApi.unarchive(this.productId).subscribe({
+      next: () => {
+        this.toastService.success('Product unarchived.');
+
+        const current = this.product();
+
+        if (current) {
+          this.product.set({
+            ...current,
+            isArchived: false,
+          });
+        }
+      },
+      error: () => {
+        this.toastService.error('Could not unarchive product.');
+      },
+    });
+  }
   protected onImageSelected(event: Event): void {
     const file = (event.target as HTMLInputElement).files?.[0];
     if (!file) return;

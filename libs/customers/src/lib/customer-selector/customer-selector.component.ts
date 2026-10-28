@@ -33,18 +33,37 @@ export class CustomerSelectorComponent implements OnInit {
   protected readonly selected = signal<Customer | null>(null);
 
   ngOnInit(): void {
+
     this.searchTerm$
       .pipe(
         takeUntilDestroyed(this.destroyRef),
         debounceTime(300),
         distinctUntilChanged(),
-        switchMap((term) =>
-          term.trim()
-            ? this.customersApi.search(term).pipe(catchError(() => of([] as Customer[])))
-            : of([] as Customer[]),
-        ),
+
+        switchMap(term => {
+          const trimmed = term.trim();
+
+          if (!trimmed) {
+            return of(null);
+          }
+
+          return this.customersApi.search({
+            term: trimmed,
+            page: 1,
+            pageSize: 10,
+            sortBy: 'name',
+            sortDirection: 'asc',
+          })
+          .pipe(
+            catchError(() => of(null)),
+          );
+        }),
       )
-      .subscribe((customers) => this.results.set(customers));
+      .subscribe(result => {
+        this.results.set(
+          result?.items ?? [],
+        );
+      });
   }
 
   protected setMode(mode: SelectorMode): void {

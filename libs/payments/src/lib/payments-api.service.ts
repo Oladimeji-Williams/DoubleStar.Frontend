@@ -1,34 +1,72 @@
-// libs/payments/src/lib/payments-api.service.ts
+
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
-import { ApiClientService } from '@doublestar/shared';
-import { PaymentMethod, PaymentSourceType, PaymentTransaction, RefundPaymentRequest, InitializePaystackPaymentRequest } from './models/payment.model';
 
-export interface RecordManualPaymentRequest {
-  sourceType: PaymentSourceType;
-  sourceId: number;
-  amountKobo: number;
-  method: PaymentMethod;
-}
+import {
+  ApiClientService,
+  DataTableQuery,
+  PagedResult,
+  buildDataTableQueryParams,
+} from '@doublestar/shared';
 
-@Injectable({ providedIn: 'root' })
+import {
+  InitializePaystackPaymentRequest,
+  PaymentListItem,
+  PaymentSourceType,
+  PaymentTransaction,
+  RecordManualPaymentRequest,
+  RefundPaymentRequest,
+} from './models/payment.model';
+
+@Injectable({
+  providedIn: 'root',
+})
 export class PaymentsApiService {
   private readonly api = inject(ApiClientService);
 
-  // Backend enum serializes as PascalCase strings for path params here — see note below.
-  getForSource(sourceType: PaymentSourceType, sourceId: number): Observable<PaymentTransaction[]> {
-    return this.api.get<PaymentTransaction[]>(`/payments/source/${sourceType}/${sourceId}`);
+  getPaged(
+    query: DataTableQuery,
+  ): Observable<PagedResult<PaymentListItem>> {
+    return this.api.get<PagedResult<PaymentListItem>>(
+      '/payments',
+      buildDataTableQueryParams(query),
+    );
   }
 
-  recordManual(request: RecordManualPaymentRequest): Observable<PaymentTransaction> {
-    return this.api.post<PaymentTransaction>('/payments/manual', request);
+  getForSource(
+    sourceType: PaymentSourceType,
+    sourceId: number,
+  ): Observable<PaymentTransaction[]> {
+    return this.api.get<PaymentTransaction[]>(
+      `/payments/source/${sourceType}/${sourceId}`,
+    );
   }
 
-    refund(paymentId: string, request: RefundPaymentRequest): Observable<void> {
-    return this.api.post<void>(`/payments/${paymentId}/refund`, request);
-    }
+  recordManual(
+    request: RecordManualPaymentRequest,
+  ): Observable<PaymentTransaction> {
+    return this.api.post<PaymentTransaction>(
+      '/payments/manual',
+      request,
+    );
+  }
 
-    initializePaystack(request: InitializePaystackPaymentRequest): Observable<string> {
-    return this.api.post<string>('/payments/paystack/initialize', request);
-    }
+  refund(
+    paymentId: string,
+    request: RefundPaymentRequest,
+  ): Observable<void> {
+    return this.api.post<void>(
+      `/payments/${paymentId}/refund`,
+      request,
+    );
+  }
+
+  initializePaystack(
+    request: InitializePaystackPaymentRequest,
+  ): Observable<string> {
+    return this.api.post<string>(
+      '/payments/paystack/initialize',
+      request,
+    );
+  }
 }

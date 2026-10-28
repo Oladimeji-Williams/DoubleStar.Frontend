@@ -21,13 +21,13 @@
 
   @if (mode() === 'walkin') {
     <div class="field">
-      <label class="label">Name</label>
-      <input [ngModel]="walkInName()" (ngModelChange)="onWalkInNameChange($event)" class="input" />
+      <label for="customer-selector-name" class="label">Name</label>
+      <input id="customer-selector-name" [ngModel]="walkInName()" (ngModelChange)="onWalkInNameChange($event)" class="input" />
     </div>
 
     <div class="field">
-      <label class="label">Phone (optional)</label>
-      <input [ngModel]="walkInPhone()" (ngModelChange)="onWalkInPhoneChange($event)" class="input" />
+      <label for="customer-selector-phone" class="label">Phone (optional)</label>
+      <input id="customer-selector-phone" [ngModel]="walkInPhone()" (ngModelChange)="onWalkInPhoneChange($event)" class="input" />
     </div>
   } @else {
     @if (selected(); as customer) {

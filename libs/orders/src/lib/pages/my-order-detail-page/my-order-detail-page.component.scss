@@ -1,0 +1,8 @@
+.page { width: 100%; box-sizing: border-box; }
+.back-link { display: inline-block; margin-bottom: 1rem; color: var(--ds-color-text-muted); text-decoration: none; }
+.back-link:hover { text-decoration: underline; }
+.primary-button { padding: 0.6rem 1rem; border: 0; border-radius: var(--ds-radius); background: var(--ds-color-primary); color: white; font: inherit; font-weight: 600; cursor: pointer; }
+.danger-button { padding: 0.6rem 1rem; border: 1px solid #dc2626; border-radius: var(--ds-radius); background: white; color: #dc2626; font: inherit; font-weight: 600; cursor: pointer; }
+.primary-button:disabled, .danger-button:disabled { opacity: 0.5; cursor: not-allowed; }
+.error { color: #b91c1c; }
+.retry-link { margin-left: 0.5rem; border: 0; background: none; color: inherit; text-decoration: underline; cursor: pointer; }

@@ -1,6 +1,5 @@
 <!-- apps/doublestar-customer/src/app/product-detail-page/product-detail-page.component.html -->
 <div class="page">
-  <app-public-topbar activePath="products" />
   <main class="content">
     @if (isLoading()) {
       <p>Loading...</p>
@@ -12,7 +11,35 @@
           <h1 class="product-title">{{ p.name }}</h1>
           <p class="product-price">{{ p.unitPriceKobo | koboCurrency }}</p>
           @if (p.description) { <p class="product-description">{{ p.description }}</p> }
-          <p class="product-meta">{{ p.trackingMode === 'Serialized' ? 'Serialized item' : 'In stock' }}</p>
+          <p class="product-meta">
+            @if (p.availableQuantity === null) {
+              Availability will be confirmed at checkout.
+            } @else if (p.availableQuantity > 0) {
+              {{ p.availableQuantity }} available
+            } @else {
+              Currently out of stock
+            }
+          </p>
+          @if (currentUserStore.isCustomer()) {
+            <button
+              type="button"
+              class="order-button"
+              [disabled]="isAddingToCart() || p.availableQuantity === 0"
+              (click)="orderProduct(p)"
+            >
+              {{ isAddingToCart() ? 'Adding...' : 'Add to cart' }}
+            </button>
+          } @else {
+            <a class="order-button" routerLink="/cart">
+              Sign in to order
+            </a>
+          }
+          @if (cartMessage()) {
+            <p class="cart-message" role="status">{{ cartMessage() }} <a routerLink="/cart">View cart</a></p>
+          }
+          @if (cartError()) {
+            <p class="cart-error" role="alert">{{ cartError() }}</p>
+          }
         </div>
       </div>
     }

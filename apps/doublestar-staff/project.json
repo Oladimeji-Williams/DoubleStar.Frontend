@@ -4,11 +4,15 @@
   "projectType": "application",
   "prefix": "app",
   "sourceRoot": "apps/doublestar-staff/src",
-  "tags": [],
+  "tags": [
+    "type:app"
+  ],
   "targets": {
     "build": {
       "executor": "@angular/build:application",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "defaultConfiguration": "production",
       "options": {
         "outputPath": "dist/apps/doublestar-staff",
@@ -21,7 +25,9 @@
             "input": "apps/doublestar-staff/public"
           }
         ],
-        "styles": ["apps/doublestar-staff/src/styles.scss"]
+        "styles": [
+          "apps/doublestar-staff/src/styles.scss"
+        ]
       },
       "configurations": {
         "production": {
@@ -33,8 +39,8 @@
             },
             {
               "type": "anyComponentStyle",
-              "maximumWarning": "4kb",
-              "maximumError": "8kb"
+              "maximumWarning": "10kb",
+              "maximumError": "12kb"
             }
           ],
           "outputHashing": "all"

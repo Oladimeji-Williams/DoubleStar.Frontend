@@ -1,3 +1,18 @@
-// libs/shared/src/lib/ui/watermark/watermark.component.scss
-:host { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
-.watermark-svg { position: absolute; bottom: -4rem; right: -4rem; width: 24rem; height: 24rem; fill: currentColor; color: var(--ds-color-primary, #0f172a); opacity: 0.03; }
+// libs/shared/src/lib/ui/watermark/watermark.component.scss — full replacement
+:host {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.watermark-svg {
+  position: absolute;
+  bottom: -2rem;
+  right: -2rem;
+  width: 18rem;
+  height: 18rem;
+  fill: var(--ds-color-primary, #0f172a);
+  opacity: 0.06;
+}

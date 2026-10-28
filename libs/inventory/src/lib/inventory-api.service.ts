@@ -31,4 +31,14 @@ export class InventoryApiService {
   adjust(productId: number, newQuantity: number, reason: string): Observable<void> {
     return this.api.post<void>('/stock/adjust', { productId, newQuantity, reason });
   }
+
+  getLevels(productIds: number[]): Observable<StockLevel[]> {
+    const params = productIds
+      .map(id => `productIds=${encodeURIComponent(id)}`)
+      .join('&');
+
+    return this.api.get<StockLevel[]>(
+      `/stock/by-products?${params}`,
+    );
+  }
 }

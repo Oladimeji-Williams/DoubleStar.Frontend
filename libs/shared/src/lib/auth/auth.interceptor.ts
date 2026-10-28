@@ -5,7 +5,12 @@ import { BehaviorSubject, catchError, filter, switchMap, take, throwError } from
 import { TokenStorageService } from './token-storage.service';
 import { AuthService } from './auth.service';
 
-const PUBLIC_PATHS = ['/authentication/login', '/authentication/register-customer', '/authentication/refresh'];
+const PUBLIC_PATHS = [
+  '/authentication/login',
+  '/authentication/register-customer',
+  '/authentication/refresh',
+  '/authentication/confirm-email',
+];
 
 let isRefreshing = false;
 const refreshedToken$ = new BehaviorSubject<string | null>(null);

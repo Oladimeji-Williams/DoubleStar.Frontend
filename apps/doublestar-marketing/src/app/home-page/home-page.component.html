@@ -37,22 +37,26 @@
 
 <section class="section section-alt">
   <h2 class="section-title">What customers say</h2>
-  <div class="testimonial-grid">
-    @for (t of testimonials; track t.name) {
-      <article class="testimonial-card">
-        <div class="testimonial-stars">
-          @for (s of stars; track s) {
-            <app-icon [name]="s < t.rating ? 'star' : 'star-outline'" [size]="16" />
-          }
-        </div>
-        <p class="testimonial-quote">&ldquo;{{ t.quote }}&rdquo;</p>
-        <p class="testimonial-name">{{ t.name }}</p>
-      </article>
-    }
-  </div>
-  <p class="text-link" style="text-align: center; margin-top: 1.25rem;">
-    <a [href]="customerAppUrl + '/reviews'">Read and leave more reviews →</a>
-  </p>
+
+  @if (!isLoadingReviews() && reviews().length > 0) {
+    <div class="testimonial-grid">
+      @for (r of reviews(); track r.id) {
+        <article class="testimonial-card">
+          <app-star-rating [rating]="r.rating" [size]="16" />
+          <p class="testimonial-quote">&ldquo;{{ r.comment }}&rdquo;</p>
+          <p class="testimonial-name">{{ r.reviewerName }}</p>
+        </article>
+      }
+    </div>
+    <p class="text-link" style="text-align: center; margin-top: 1.25rem;">
+      <a [href]="customerAppUrl + '/reviews'">Read and leave more reviews →</a>
+    </p>
+  } @else if (!isLoadingReviews()) {
+    <p class="section-text">No reviews yet — be the first to share yours.</p>
+    <p class="text-link" style="text-align: center;">
+      <a [href]="customerAppUrl + '/reviews'">Leave the first review →</a>
+    </p>
+  }
 </section>
 
 <section class="section cta-section">

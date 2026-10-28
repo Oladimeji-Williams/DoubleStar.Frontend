@@ -1,6 +1,17 @@
-// libs/payments/src/lib/models/payment.model.ts
-export type PaymentSourceType = 'Sale' | 'RepairJob';
-export type PaymentMethod = 'Cash' | 'Transfer' | 'Card' | 'Paystack';
+export type PaymentSourceType = 'Sale' | 'RepairJob' | 'Order'
+
+export type PaymentMethod =
+  | 'Cash'
+  | 'Transfer'
+  | 'Card'
+  | 'Paystack';
+
+export type PaymentStatus =
+  | 'Pending'
+  | 'Successful'
+  | 'Failed'
+  | 'Refunded'
+  | 'PartiallyRefunded';
 
 export interface PaymentTransaction {
   id: string;
@@ -8,9 +19,13 @@ export interface PaymentTransaction {
   sourceId: number;
   amountKobo: number;
   totalRefundedKobo: number;
-  method: string;
-  status: string;
+  method: PaymentMethod;
+  status: PaymentStatus;
   paystackReference: string | null;
+}
+
+export interface PaymentListItem extends PaymentTransaction {
+  createdAt: string;
 }
 
 export interface RefundPaymentRequest {
@@ -24,4 +39,21 @@ export interface InitializePaystackPaymentRequest {
   amountKobo: number;
   email: string;
   callbackUrl: string;
+}
+
+export interface RecordManualPaymentRequest {
+  sourceType: PaymentSourceType;
+  sourceId: number;
+  amountKobo: number;
+  method: PaymentMethod;
+}
+
+export const PAYMENT_SOURCE_LABELS: Readonly<Record<PaymentSourceType, string>> = {
+  Sale: 'Sale',
+  RepairJob: 'Repair',
+  Order: 'Online order',
+};
+
+export function isPaymentSourceType(value: string | null): value is PaymentSourceType {
+  return value === 'Sale' || value === 'RepairJob' || value === 'Order';
 }

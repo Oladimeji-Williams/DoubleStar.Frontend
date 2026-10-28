@@ -6,8 +6,8 @@
     <app-customer-selector (selectionChange)="customer.set($event)" />
 
     <div class="field">
-      <label class="label">Device</label>
-      <input
+      <label for="new-repair-ticket-page-device" class="label">Device</label>
+      <input id="new-repair-ticket-page-device"
         [ngModel]="deviceDescription()"
         (ngModelChange)="deviceDescription.set($event)"
         placeholder="e.g. iPhone 12, cracked screen"
@@ -16,13 +16,13 @@
     </div>
 
     <div class="field">
-      <label class="label">IMEI / serial (optional)</label>
-      <input [ngModel]="imeiOrSerial()" (ngModelChange)="imeiOrSerial.set($event)" class="input" />
+      <label for="new-repair-ticket-page-imei-serial" class="label">IMEI / serial (optional)</label>
+      <input id="new-repair-ticket-page-imei-serial" [ngModel]="imeiOrSerial()" (ngModelChange)="imeiOrSerial.set($event)" class="input" />
     </div>
 
     <div class="field">
-      <label class="label">Fault description</label>
-      <textarea
+      <label for="new-repair-ticket-page-fault-description" class="label">Fault description</label>
+      <textarea id="new-repair-ticket-page-fault-description"
         [ngModel]="faultDescription()"
         (ngModelChange)="faultDescription.set($event)"
         rows="3"

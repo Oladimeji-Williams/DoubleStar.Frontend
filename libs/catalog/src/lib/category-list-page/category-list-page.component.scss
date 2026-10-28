@@ -1,6 +1,9 @@
 // libs/catalog/src/lib/category-list-page/category-list-page.component.scss
 .page {
-  max-width: 28rem;
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 .page-title {

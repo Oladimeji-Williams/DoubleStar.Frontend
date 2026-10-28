@@ -1,0 +1,27 @@
+<div class="page">
+  <a routerLink="/my/orders" class="back-link">← All orders</a>
+
+  @if (isLoading()) {
+    <p role="status">Loading your order...</p>
+  } @else if (order(); as current) {
+    <app-order-detail-view [order]="current">
+      <ng-container orderActions>
+        @if (current.canPay) {
+          <button type="button" class="primary-button" [disabled]="isBusy()" (click)="pay()">
+            Complete payment
+          </button>
+        }
+        @if (current.canCancel) {
+          <button type="button" class="danger-button" [disabled]="isBusy()" (click)="cancel()">
+            Cancel order
+          </button>
+        }
+      </ng-container>
+    </app-order-detail-view>
+  } @else {
+    <p class="error" role="alert">
+      {{ errorMessage() }}
+      <button type="button" class="retry-link" (click)="load()">Try again</button>
+    </p>
+  }
+</div>

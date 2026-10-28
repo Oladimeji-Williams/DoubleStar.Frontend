@@ -2,13 +2,17 @@
   "name": "reviews",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/reviews/src",
-  "prefix": "lib",
+  "prefix": "app",
   "projectType": "library",
-  "tags": [],
+  "tags": [
+    "type:feature"
+  ],
   "targets": {
     "test": {
       "executor": "@nx/vitest:test",
-      "outputs": ["{options.reportsDirectory}"],
+      "outputs": [
+        "{options.reportsDirectory}"
+      ],
       "options": {
         "reportsDirectory": "coverage/libs/reviews"
       }

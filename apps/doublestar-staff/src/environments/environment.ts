@@ -1,5 +1,9 @@
-// apps/doublestar/src/environments/environment.ts
 export const environment = {
   production: true,
-  apiBaseUrl: 'https://api.doublestar.example.com',
+
+  apiBaseUrl:
+    'https://api.doublestar.example.com/api/v1',
+
+  turnstileSiteKey:
+    'REPLACE-WITH-YOUR-REAL-CLOUDFLARE-SITE-KEY',
 };

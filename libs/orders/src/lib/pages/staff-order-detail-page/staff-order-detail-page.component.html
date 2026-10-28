@@ -1,0 +1,34 @@
+<div class="page">
+  <a routerLink="/orders" class="back-link">← All orders</a>
+
+  @if (isLoading()) {
+    <p role="status">Loading order...</p>
+  } @else if (order(); as current) {
+    <app-order-detail-view [order]="current" [showAttention]="true">
+      <ng-container orderActions>
+        @for (next of current.nextStatuses; track next) {
+          <button type="button" class="primary-button" [disabled]="isBusy()" (click)="advance(next)">
+            Mark as {{ statusLabels[next].toLowerCase() }}
+          </button>
+        }
+        @if (current.canCancel) {
+          <button type="button" class="danger-button" [disabled]="isBusy()" (click)="cancel()">
+            Cancel order
+          </button>
+        }
+        <a
+          class="link-button"
+          routerLink="/payments"
+          [queryParams]="{ sourceType: 'Order', sourceId: current.id }"
+        >
+          View payments
+        </a>
+      </ng-container>
+    </app-order-detail-view>
+  } @else {
+    <p class="error" role="alert">
+      {{ errorMessage() }}
+      <button type="button" class="retry-link" (click)="load()">Try again</button>
+    </p>
+  }
+</div>

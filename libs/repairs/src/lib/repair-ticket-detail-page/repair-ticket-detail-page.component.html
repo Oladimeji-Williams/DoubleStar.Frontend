@@ -33,17 +33,30 @@
           <thead>
             <tr>
               <th>Product</th>
+              <th>Product ID</th>
               <th>Qty</th>
               <th>Cost</th>
             </tr>
           </thead>
+
           <tbody>
             @for (part of t.parts; track part.id) {
               <tr>
-                <td>{{ part.productName }}</td>
-                <td>Product #{{ part.productId }}</td>
-                <td>{{ part.quantity }}</td>
-                <td>{{ part.totalCostKobo | koboCurrency }}</td>
+                <td>
+                  {{ part.productName }}
+                </td>
+
+                <td>
+                  #{{ part.productId }}
+                </td>
+
+                <td>
+                  {{ part.quantity }}
+                </td>
+
+                <td>
+                  {{ part.totalCostKobo | koboCurrency }}
+                </td>
               </tr>
             }
           </tbody>
@@ -62,12 +75,12 @@
         @case ('Diagnosing') {
           <h2 class="card-title">Record diagnosis</h2>
           <div class="field">
-            <label class="label">Diagnosis notes</label>
-            <textarea [ngModel]="diagnosisNotes()" (ngModelChange)="diagnosisNotes.set($event)" rows="3" class="input"></textarea>
+            <label for="repair-ticket-detail-page-diagnosis-notes" class="label">Diagnosis notes</label>
+            <textarea id="repair-ticket-detail-page-diagnosis-notes" [ngModel]="diagnosisNotes()" (ngModelChange)="diagnosisNotes.set($event)" rows="3" class="input"></textarea>
           </div>
           <div class="field">
-            <label class="label">Quoted price (₦)</label>
-            <input type="number" min="0" [ngModel]="quotedPriceNaira()" (ngModelChange)="quotedPriceNaira.set($event)" class="input" />
+            <label for="repair-ticket-detail-page-quoted-price" class="label">Quoted price (₦)</label>
+            <input id="repair-ticket-detail-page-quoted-price" type="number" min="0" [ngModel]="quotedPriceNaira()" (ngModelChange)="quotedPriceNaira.set($event)" class="input" />
           </div>
           <button (click)="submitDiagnosis()" [disabled]="isBusy()" class="primary-button">Submit diagnosis</button>
         }
