@@ -26,7 +26,11 @@ export class RestockPageComponent implements OnInit {
   protected readonly isBusy = signal(false);
 
   ngOnInit(): void {
-    this.productsApi.getAll().subscribe((products) => this.products.set(products));
+    this.productsApi.getAll({
+      page: 1,
+      pageSize: 1000,
+      filters: [],
+    }).subscribe((result) => this.products.set(result.items));
   }
 
   protected get selectedProduct(): Product | null {

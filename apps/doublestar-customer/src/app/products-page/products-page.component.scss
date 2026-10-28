@@ -1,6 +1,13 @@
 // apps/doublestar-customer/src/app/products-page/products-page.component.scss — unchanged from before, confirm it still has these
 .page { min-height: 100vh; background: var(--ds-color-surface-alt); }
-.content { max-width: 64rem; margin: 0 auto; padding: 2rem 1.5rem; }
+.content {
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+  box-sizing: border-box;
+}
 .page-title { font-size: 1.5rem; font-weight: 700; color: var(--ds-color-primary); margin: 0 0 0.5rem; }
 .subtitle { font-size: 0.9375rem; color: var(--ds-color-text-muted); margin: 0 0 1.5rem; }
 .empty-state { color: var(--ds-color-text-muted); font-size: 0.875rem; }

@@ -1,20 +1,19 @@
-# DoubleStar.Frontend/.github/workflows/frontend.yml
-name: Frontend CI
+name: frontend
 on:
   push:
     branches: [main]
   pull_request:
+
 jobs:
-  build:
+  check:
     runs-on: ubuntu-latest
+    env:
+      NX_NO_CLOUD: "true"
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: '22'
-          cache: 'npm'
+          node-version: 22
+          cache: npm
       - run: npm ci
-      - run: npx nx test shared
-      - run: npx nx build doublestar-staff
-      - run: npx nx build doublestar-customer
-      - run: npx nx build doublestar-marketing
+      - run: npx nx run-many -t lint test build --parallel=2

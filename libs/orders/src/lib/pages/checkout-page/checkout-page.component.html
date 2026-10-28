@@ -1,0 +1,73 @@
+<section class="checkout-page">
+  <h1>Checkout</h1>
+
+  @if (isLoading()) {
+    <p>Loading checkout...</p>
+  } @else if (summary(); as checkout) {
+    @if (checkout.cart.items.length === 0) {
+      <p>Your cart is empty.</p>
+      <a routerLink="/products">Browse products</a>
+    } @else {
+      <div class="checkout-grid">
+        <form #checkoutForm="ngForm" (ngSubmit)="placeOrder()">
+          <fieldset>
+            <legend>How would you like to receive your order?</legend>
+            <label class="choice">
+              <input type="radio" name="fulfillmentMethod" [checked]="fulfillmentMethod() === 'Pickup'" (change)="selectFulfillment('Pickup')" />
+              Pick up from our store
+            </label>
+            <label class="choice">
+              <input type="radio" name="fulfillmentMethod" [checked]="fulfillmentMethod() === 'Delivery'" (change)="selectFulfillment('Delivery')" />
+              Deliver to my address
+            </label>
+            @if (fulfillmentMethod() === 'Pickup') {
+              <p class="muted">{{ checkout.pickupAddress }}</p>
+            } @else {
+              <label for="delivery-address">Address</label>
+              <input id="delivery-address" name="deliveryAddress" required maxlength="500" [ngModel]="deliveryAddress()" (ngModelChange)="deliveryAddress.set($event)" />
+              <label for="delivery-city">City</label>
+              <input id="delivery-city" name="deliveryCity" required maxlength="100" [ngModel]="deliveryCity()" (ngModelChange)="deliveryCity.set($event)" />
+              <label for="delivery-state">State</label>
+              <input id="delivery-state" name="deliveryState" required maxlength="100" [ngModel]="deliveryState()" (ngModelChange)="deliveryState.set($event)" />
+            }
+          </fieldset>
+
+          <fieldset>
+            <legend>Contact details</legend>
+            <label for="contact-name">Full name</label>
+            <input id="contact-name" name="contactName" required maxlength="200" [ngModel]="contactName()" (ngModelChange)="contactName.set($event)" />
+            <label for="contact-phone">Phone number</label>
+            <input id="contact-phone" name="contactPhone" required pattern="^\+?[0-9\s\-]{7,20}$" maxlength="20" [ngModel]="contactPhone()" (ngModelChange)="contactPhone.set($event)" />
+            <label for="order-notes">Order notes (optional)</label>
+            <textarea id="order-notes" name="notes" rows="3" maxlength="500" [ngModel]="notes()" (ngModelChange)="notes.set($event)"></textarea>
+          </fieldset>
+
+          @if (errorMessage()) {
+            <p class="error" role="alert">{{ errorMessage() }}</p>
+          }
+          <button class="primary-button" type="submit" [disabled]="checkoutForm.invalid || isSubmitting() || checkout.cart.hasIssues">
+            {{ isSubmitting() ? 'Placing order...' : 'Place order and pay' }}
+          </button>
+        </form>
+
+        <aside class="order-summary">
+          <h2>Order summary</h2>
+          @for (item of checkout.cart.items; track item.productId) {
+            <div class="summary-row">
+              <span>{{ item.name }} × {{ item.quantity }}</span>
+              <strong>{{ item.lineTotalKobo | koboCurrency }}</strong>
+            </div>
+          }
+          <div class="summary-row"><span>Subtotal</span><strong>{{ checkout.cart.subtotalKobo | koboCurrency }}</strong></div>
+          <div class="summary-row"><span>Delivery</span><strong>{{ checkout.deliveryFeeKobo | koboCurrency }}</strong></div>
+          <div class="summary-row total"><span>Total</span><strong>{{ checkout.totalKobo | koboCurrency }}</strong></div>
+          <p class="muted">Stock is reserved for {{ checkout.paymentWindowMinutes }} minutes while you complete payment.</p>
+          <a routerLink="/cart">Back to cart</a>
+        </aside>
+      </div>
+    }
+  } @else if (errorMessage()) {
+    <p class="error" role="alert">{{ errorMessage() }}</p>
+    <a routerLink="/cart">Return to cart</a>
+  }
+</section>

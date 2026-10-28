@@ -1,0 +1,13 @@
+<!-- apps/doublestar-marketing/src/app/layout/marketing-layout.component.html -->
+<!-- REPLACE the old <header class="topbar">…</header> block with <app-site-header>. KEEP your existing <footer>. -->
+<app-site-header
+  [navItems]="navItems"
+  [homeLink]="homeLink"
+  [cartLink]="cartLink"
+  [signInLink]="signInLink"
+  [registerLink]="registerLink"
+/>
+
+<main><router-outlet /></main>
+
+<!-- ⬇ paste your existing footer markup here, unchanged -->

@@ -27,7 +27,9 @@
       "@doublestar/reporting": ["./libs/reporting/src/index.ts"],
       "@doublestar/notifications": ["./libs/notifications/src/index.ts"],
       "@doublestar/staff": ["./libs/staff/src/index.ts"],
-      "@doublestar/reviews": ["./libs/reviews/src/index.ts"]
+      "@doublestar/reviews": ["./libs/reviews/src/index.ts"],
+      "@doublestar/orders": ["./libs/orders/src/index.ts"],
+      "@doublestar/orders-data-access": ["./libs/orders-data-access/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

@@ -1,0 +1,435 @@
+<div class="page">
+
+  <header class="page-header">
+
+    <div>
+      <span class="eyebrow">
+        SALES ANALYTICS
+      </span>
+
+      <h1>
+        Sales performance
+      </h1>
+
+      <p>
+        Understand revenue, transactions and daily sales activity.
+      </p>
+    </div>
+
+    <div class="actions">
+
+      <div class="period-toggle">
+
+        <button
+          type="button"
+          [class.active]="periodDays() === 7"
+          (click)="setPeriod(7)"
+        >
+          7d
+        </button>
+
+        <button
+          type="button"
+          [class.active]="periodDays() === 30"
+          (click)="setPeriod(30)"
+        >
+          30d
+        </button>
+
+        <button
+          type="button"
+          [class.active]="periodDays() === 90"
+          (click)="setPeriod(90)"
+        >
+          90d
+        </button>
+
+      </div>
+
+      <button
+        type="button"
+        class="refresh"
+        [disabled]="isLoading()"
+        (click)="refresh()"
+      >
+        Refresh
+      </button>
+
+    </div>
+
+  </header>
+
+
+  @if (hasError()) {
+
+    <section class="error-card">
+
+      <strong>
+        Sales data could not be loaded.
+      </strong>
+
+      <button
+        type="button"
+        (click)="refresh()"
+      >
+        Try again
+      </button>
+
+    </section>
+
+  }
+
+
+  @if (isLoading()) {
+
+    <section class="loading-card">
+      Loading sales analytics...
+    </section>
+
+  } @else {
+
+    <section class="metrics">
+
+      <article class="metric">
+
+        <span>
+          Revenue
+        </span>
+
+        <strong>
+          {{ totalRevenueText() }}
+        </strong>
+
+        <small
+          [class.negative]="changePercent() < 0"
+        >
+          {{ changeText() }}
+          vs previous period
+        </small>
+
+      </article>
+
+
+      <article class="metric">
+
+        <span>
+          Transactions
+        </span>
+
+        <strong>
+          {{ salesCountText() }}
+        </strong>
+
+        <small>
+          Completed sales
+        </small>
+
+      </article>
+
+
+      <article class="metric">
+
+        <span>
+          Average sale
+        </span>
+
+        <strong>
+          {{ averageSaleText() }}
+        </strong>
+
+        <small>
+          Average transaction value
+        </small>
+
+      </article>
+
+
+      <article class="metric">
+
+        <span>
+          Daily average
+        </span>
+
+        <strong>
+          {{ averageDailyRevenue() }}
+        </strong>
+
+        <small>
+          Average revenue per active day
+        </small>
+
+      </article>
+
+    </section>
+
+
+    <section class="chart-card">
+
+      <header class="chart-header">
+
+        <div>
+          <h2>
+            Sales trend
+          </h2>
+
+          <p>
+            Daily performance for the selected period.
+          </p>
+        </div>
+
+        <div class="chart-toggle">
+
+          <button
+            type="button"
+            [class.active]="chartMode() === 'revenue'"
+            (click)="setChartMode('revenue')"
+          >
+            Revenue
+          </button>
+
+          <button
+            type="button"
+            [class.active]="chartMode() === 'sales'"
+            (click)="setChartMode('sales')"
+          >
+            Sales
+          </button>
+
+        </div>
+
+      </header>
+
+
+      @if (revenueByDay().length === 0) {
+
+        <div class="empty">
+          No sales activity for this period.
+        </div>
+
+      } @else {
+
+        <div class="chart">
+
+          @for (
+            item of revenueByDay();
+            track item.date
+          ) {
+
+            <div
+              class="bar-column"
+              [title]="
+                dateLabel(item.date)
+                + ': '
+                + chartDisplayValue(item)
+              "
+            >
+
+              <div class="bar-area">
+
+                <div
+                  class="bar"
+                  [style.height.%]="
+                    chartHeight(item)
+                  "
+                ></div>
+
+              </div>
+
+              <span>
+                {{ dateLabel(item.date) }}
+              </span>
+
+            </div>
+
+          }
+
+        </div>
+
+      }
+
+    </section>
+
+    <section class="analytics-card top-products-card">
+      <div class="card-header">
+        <div>
+          <h2>Top Selling Products</h2>
+          <p>Products generating the most sales during this period.</p>
+        </div>
+
+        <span class="card-period">
+          Last {{ periodDays() }} days
+        </span>
+      </div>
+
+      @if (topSellingProducts().length > 0) {
+        <div class="top-products-table">
+          <div class="top-products-row top-products-header">
+            <span>#</span>
+            <span>Product</span>
+            <span>Units Sold</span>
+            <span>Revenue</span>
+          </div>
+
+          @for (
+            product of topSellingProducts();
+            track product.productId;
+            let i = $index
+          ) {
+            <div class="top-products-row">
+              <span class="product-rank">
+                {{ i + 1 }}
+              </span>
+
+              <div class="product-name">
+                <strong>{{ product.productName }}</strong>
+                <small>Product #{{ product.productId }}</small>
+              </div>
+
+              <span>
+                {{ product.quantitySold | number }}
+              </span>
+
+              <strong>
+                {{ revenueText(product.revenueKobo) }}
+              </strong>
+            </div>
+          }
+        </div>
+      } @else if (!isLoading()) {
+        <div class="empty-state">
+          <span class="empty-icon">📊</span>
+          <strong>No product sales yet</strong>
+          <p>
+            There are no completed product sales for this period.
+          </p>
+        </div>
+      }
+    </section>
+
+    <section class="analytics-card payment-methods-card">
+      <div class="card-header">
+        <div>
+          <h2>Payment Methods</h2>
+          <p>
+            How customers paid during this period.
+          </p>
+        </div>
+      </div>
+
+      @if (paymentMethodSummary().length > 0) {
+        <div class="payment-method-list">
+          @for (
+            payment of paymentMethodSummary();
+            track payment.paymentMethod
+          ) {
+            <div class="payment-method-row">
+              <div class="payment-method-info">
+                <strong>
+                  {{ paymentMethodLabel(payment.paymentMethod) }}
+                </strong>
+
+                <span>
+                  {{ payment.transactionCount }}
+                  transaction{{
+                    payment.transactionCount === 1
+                      ? ''
+                      : 's'
+                  }}
+                </span>
+              </div>
+
+              <strong>
+                {{ revenueText(payment.amountKobo) }}
+              </strong>
+            </div>
+          }
+        </div>
+      } @else if (!isLoading()) {
+        <div class="empty-state">
+          <span class="empty-icon">💳</span>
+
+          <strong>No payment data</strong>
+
+          <p>
+            There are no successful payments for this period.
+          </p>
+        </div>
+      }
+    </section>
+    <section class="insights">
+
+      <article>
+
+        <span>
+          Best sales day
+        </span>
+
+        @if (bestDay(); as day) {
+
+          <strong>
+            {{ dateLabel(day.date) }}
+          </strong>
+
+          <small>
+            {{ revenueText(day.revenueKobo) }}
+          </small>
+
+        } @else {
+
+          <strong>
+            No data
+          </strong>
+
+        }
+
+      </article>
+
+
+      <article>
+
+        <span>
+          Lowest sales day
+        </span>
+
+        @if (worstDay(); as day) {
+
+          <strong>
+            {{ dateLabel(day.date) }}
+          </strong>
+
+          <small>
+            {{ revenueText(day.revenueKobo) }}
+          </small>
+
+        } @else {
+
+          <strong>
+            No data
+          </strong>
+
+        }
+
+      </article>
+
+
+      <article>
+
+        <span>
+          Active sales days
+        </span>
+
+        <strong>
+          {{ revenueByDay().length }}
+        </strong>
+
+        <small>
+          Days with recorded sales
+        </small>
+
+      </article>
+
+    </section>
+
+  }
+
+</div>

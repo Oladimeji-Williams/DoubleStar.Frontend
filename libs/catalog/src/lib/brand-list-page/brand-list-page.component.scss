@@ -1,6 +1,9 @@
 // libs/catalog/src/lib/brand-list-page/brand-list-page.component.scss — identical to category-list-page.component.scss
 .page {
-  max-width: 28rem;
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 .page-title {

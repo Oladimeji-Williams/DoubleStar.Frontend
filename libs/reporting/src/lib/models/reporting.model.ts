@@ -21,3 +21,16 @@ export interface RepairTurnaround {
   completedCount: number;
   averageTurnaroundHours: number;
 }
+
+export interface TopSellingProduct {
+  productId: number;
+  productName: string;
+  quantitySold: number;
+  revenueKobo: number;
+}
+
+export interface PaymentMethodSummary {
+  paymentMethod: string;
+  transactionCount: number;
+  amountKobo: number;
+}

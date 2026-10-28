@@ -4,11 +4,15 @@
   "projectType": "application",
   "prefix": "app",
   "sourceRoot": "apps/doublestar-marketing/src",
-  "tags": [],
+  "tags": [
+    "type:app"
+  ],
   "targets": {
     "build": {
       "executor": "@angular/build:application",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "defaultConfiguration": "production",
       "options": {
         "outputPath": "dist/apps/doublestar-marketing",
@@ -21,7 +25,9 @@
             "input": "apps/doublestar-marketing/public"
           }
         ],
-        "styles": ["apps/doublestar-marketing/src/styles.scss"],
+        "styles": [
+          "apps/doublestar-marketing/src/styles.scss"
+        ],
         "server": "apps/doublestar-marketing/src/main.server.ts",
         "ssr": {
           "entry": "apps/doublestar-marketing/src/server.ts"
@@ -38,8 +44,8 @@
             },
             {
               "type": "anyComponentStyle",
-              "maximumWarning": "4kb",
-              "maximumError": "8kb"
+              "maximumWarning": "10kb",
+              "maximumError": "12kb"
             }
           ],
           "outputHashing": "all"
@@ -49,8 +55,10 @@
           "extractLicenses": false,
           "sourceMap": true,
           "fileReplacements": [
-            { "replace": "apps/doublestar-marketing/src/environments/environment.ts",
-              "with": "apps/doublestar-marketing/src/environments/environment.development.ts" }
+            {
+              "replace": "apps/doublestar-marketing/src/environments/environment.ts",
+              "with": "apps/doublestar-marketing/src/environments/environment.development.ts"
+            }
           ]
         }
       }

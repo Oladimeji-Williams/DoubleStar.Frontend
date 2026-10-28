@@ -22,8 +22,8 @@
 
       @if (sale()!.status === 'Draft') {
         <div class="field">
-          <label class="label">Search products</label>
-          <input
+          <label for="new-sale-page-search-products" class="label">Search products</label>
+          <input id="new-sale-page-search-products"
             [ngModel]="searchTerm()"
             (ngModelChange)="onSearchInput($event)"
             placeholder="Search by name or SKU"

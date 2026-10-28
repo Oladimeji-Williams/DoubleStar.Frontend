@@ -22,29 +22,29 @@
       <h2 class="card-title">Details</h2>
 
       <div class="field">
-        <label class="label">Email</label>
-        <input [value]="email()" disabled class="input input-disabled" />
+        <label for="profile-page-email" class="label">Email</label>
+        <input id="profile-page-email" [value]="email()" disabled class="input input-disabled" />
         <p class="hint">Contact an administrator to change your email.</p>
       </div>
 
       <div class="field">
-        <label class="label">Role</label>
-        <input [value]="roles().join(', ')" disabled class="input input-disabled" />
+        <label for="profile-page-role" class="label">Role</label>
+        <input id="profile-page-role" [value]="roles().join(', ')" disabled class="input input-disabled" />
       </div>
 
       <div class="field">
-        <label class="label">First name</label>
-        <input [ngModel]="firstName()" (ngModelChange)="firstName.set($event)" class="input" />
+        <label for="profile-page-first-name" class="label">First name</label>
+        <input id="profile-page-first-name" [ngModel]="firstName()" (ngModelChange)="firstName.set($event)" class="input" />
       </div>
 
       <div class="field">
-        <label class="label">Last name</label>
-        <input [ngModel]="lastName()" (ngModelChange)="lastName.set($event)" class="input" />
+        <label for="profile-page-last-name" class="label">Last name</label>
+        <input id="profile-page-last-name" [ngModel]="lastName()" (ngModelChange)="lastName.set($event)" class="input" />
       </div>
 
       <div class="field">
-        <label class="label">Phone</label>
-        <input [ngModel]="phone()" (ngModelChange)="phone.set($event)" class="input" />
+        <label for="profile-page-phone" class="label">Phone</label>
+        <input id="profile-page-phone" [ngModel]="phone()" (ngModelChange)="phone.set($event)" class="input" />
       </div>
 
       @if (detailsError()) { <p class="error">{{ detailsError() }}</p> }
@@ -59,19 +59,19 @@
       <h2 class="card-title">Change password</h2>
 
       <div class="field">
-        <label class="label">Current password</label>
-        <input type="password" [ngModel]="currentPassword()" (ngModelChange)="currentPassword.set($event)" class="input" />
+        <label for="profile-page-current-password" class="label">Current password</label>
+        <input id="profile-page-current-password" type="password" [ngModel]="currentPassword()" (ngModelChange)="currentPassword.set($event)" class="input" />
       </div>
 
       <div class="field">
-        <label class="label">New password</label>
-        <input type="password" [ngModel]="newPassword()" (ngModelChange)="newPassword.set($event)" class="input" />
+        <label for="profile-page-new-password" class="label">New password</label>
+        <input id="profile-page-new-password" type="password" [ngModel]="newPassword()" (ngModelChange)="newPassword.set($event)" class="input" />
         <p class="hint">At least 12 characters, with upper/lowercase, a number and a symbol.</p>
       </div>
 
       <div class="field">
-        <label class="label">Confirm new password</label>
-        <input type="password" [ngModel]="confirmNewPassword()" (ngModelChange)="confirmNewPassword.set($event)" class="input" />
+        <label for="profile-page-confirm-new-password" class="label">Confirm new password</label>
+        <input id="profile-page-confirm-new-password" type="password" [ngModel]="confirmNewPassword()" (ngModelChange)="confirmNewPassword.set($event)" class="input" />
       </div>
 
       @if (passwordError()) { <p class="error">{{ passwordError() }}</p> }

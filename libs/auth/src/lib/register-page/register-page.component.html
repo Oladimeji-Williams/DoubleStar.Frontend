@@ -1,26 +1,105 @@
-<!-- libs/auth/src/lib/register-page/register-page.component.html — full replacement -->
+
 <div class="auth-page">
-  <div class="hero"><app-auth-marketing-panel heading="Join Double Star" subtitle="Create a free account to request repairs, track their status, and shop phones & accessories online." /></div>
+  <div class="hero">
+    <app-auth-marketing-panel
+      heading="Join Double Star"
+      subtitle="Create a free account to request repairs, track their status, and shop phones & accessories online."
+    />
+  </div>
 
   <div class="card" [attr.data-position]="cardPosition">
     <app-brand-wordmark size="sm" />
+
     <h2 class="card-title">Create an account</h2>
 
     <div class="field">
       <app-icon name="mail" [size]="16" class="field-icon" />
-      <input type="email" placeholder="Email" [ngModel]="email()" (ngModelChange)="email.set($event)" class="input" />
+      <input
+        type="email"
+        name="email"
+        autocomplete="email"
+        placeholder="Email"
+        aria-label="Email"
+        [ngModel]="email()"
+        (ngModelChange)="email.set($event)"
+        class="input"
+      />
     </div>
+
     <div class="field">
       <app-icon name="lock" [size]="16" class="field-icon" />
-      <input type="password" placeholder="Password (12+ characters)" [ngModel]="password()" (ngModelChange)="password.set($event)" class="input" />
+      <input
+        type="password"
+        name="password"
+        autocomplete="new-password"
+        placeholder="Password (12+ characters)"
+        aria-label="Password"
+        [ngModel]="password()"
+        (ngModelChange)="password.set($event)"
+        class="input"
+      />
     </div>
+
     <app-turnstile-widget
       (verified)="turnstileToken.set($event)"
     />
 
-    @if (errorMessage()) { <p class="error">{{ errorMessage() }}</p> }
-    <button (click)="submit()" [disabled]="isSubmitting() || !canSubmit()" class="submit-button">{{ isSubmitting() ? 'Creating account...' : 'Create account' }}</button>
-    <p class="footer-text">Already have an account? <a routerLink="/login" class="footer-link">Sign in</a></p>
-    <p class="hint">You can add your name and other details after signing in.</p>
+    @if (errorMessage()) {
+      <p class="error" role="alert">
+        {{ errorMessage() }}
+      </p>
+    }
+
+    <button
+      type="button"
+      (click)="submit()"
+      [disabled]="isSubmitting() || !canSubmit()"
+      class="submit-button"
+    >
+      {{
+        isSubmitting()
+          ? 'Creating account...'
+          : 'Create account'
+      }}
+    </button>
+
+    @if (canResendConfirmation()) {
+      <div class="resend-section">
+        <p class="resend-description">
+          Already registered with this email but haven't
+          confirmed your account?
+        </p>
+
+        <button
+          type="button"
+          class="toggle-link"
+          (click)="resendConfirmationEmail()"
+          [disabled]="isResendingConfirmation()"
+        >
+          {{
+            isResendingConfirmation()
+              ? 'Sending confirmation email...'
+              : 'Resend confirmation email'
+          }}
+        </button>
+      </div>
+    }
+
+    @if (resendMessage()) {
+      <p class="resend-message" aria-live="polite">
+        {{ resendMessage() }}
+      </p>
+    }
+
+    <p class="footer-text">
+      Already have an account?
+      <a routerLink="/login" class="footer-link">
+        Sign in
+      </a>
+    </p>
+
+    <p class="hint">
+      You can add your name and other details after signing in.
+    </p>
   </div>
 </div>

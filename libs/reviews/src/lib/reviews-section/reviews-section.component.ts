@@ -1,6 +1,6 @@
-// libs/reviews/src/lib/reviews-section/reviews-section.component.ts
+// libs/reviews/src/lib/reviews-section/reviews-section.component.ts — full replacement
 import { Component, OnInit, inject, signal } from '@angular/core';
-import { ConfirmService, ToastService } from '@doublestar/shared';
+import { ApiException, ConfirmService, ToastService } from '@doublestar/shared';
 import { ReviewsApiService } from '../reviews-api.service';
 import { StarRatingComponent } from '../star-rating/star-rating.component';
 import { Review } from '../models/review.model';
@@ -19,10 +19,10 @@ export class ReviewsSectionComponent implements OnInit {
 
   protected readonly reviews = signal<Review[]>([]);
   protected readonly isLoading = signal(true);
-
   protected readonly draftRating = signal(0);
   protected readonly draftComment = signal('');
   protected readonly isSubmitting = signal(false);
+  protected readonly deletingIds = signal<Set<string>>(new Set());
 
   ngOnInit(): void {
     this.load();
@@ -39,7 +39,6 @@ export class ReviewsSectionComponent implements OnInit {
 
   protected submit(): void {
     if (!this.canSubmit()) return;
-
     this.isSubmitting.set(true);
     this.reviewsApi.submit(this.draftRating(), this.draftComment()).subscribe({
       next: () => {
@@ -48,20 +47,32 @@ export class ReviewsSectionComponent implements OnInit {
         this.draftComment.set('');
         this.toastService.success('Thanks! Your review will appear once it\u2019s approved.');
       },
-      error: () => {
+      error: (error: unknown) => {
         this.isSubmitting.set(false);
-        this.toastService.error('Could not submit your review. Please try again.');
+        this.toastService.error(error instanceof ApiException ? error.message : 'Could not submit your review. Please try again.');
       },
     });
+  }
+
+  protected isDeleting(id: string): boolean {
+    return this.deletingIds().has(id);
   }
 
   protected async deleteReview(review: Review): Promise<void> {
     const confirmed = await this.confirmService.confirm('Delete this review? This cannot be undone.', 'Delete');
     if (!confirmed) return;
 
-    this.reviewsApi.delete(review.id).subscribe(() => {
-      this.toastService.success('Review deleted.');
-      this.load();
+    this.deletingIds.update((set) => new Set(set).add(review.id));
+    this.reviewsApi.delete(review.id).subscribe({
+      next: () => {
+        this.deletingIds.update((set) => { const next = new Set(set); next.delete(review.id); return next; });
+        this.toastService.success('Review deleted.');
+        this.load();
+      },
+      error: (error: unknown) => {
+        this.deletingIds.update((set) => { const next = new Set(set); next.delete(review.id); return next; });
+        this.toastService.error(error instanceof ApiException ? error.message : 'Could not delete the review — you may not have permission.');
+      },
     });
   }
 }

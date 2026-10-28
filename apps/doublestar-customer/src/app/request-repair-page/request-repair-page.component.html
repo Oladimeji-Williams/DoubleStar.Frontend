@@ -5,16 +5,16 @@
 
   <div class="card">
     <div class="field">
-      <label class="label">Device</label>
-      <input [ngModel]="deviceDescription()" (ngModelChange)="deviceDescription.set($event)" placeholder="e.g. iPhone 12, cracked screen" class="input" />
+      <label class="label" for="device-description">Device</label>
+      <input id="device-description" [ngModel]="deviceDescription()" (ngModelChange)="deviceDescription.set($event)" placeholder="e.g. iPhone 12, cracked screen" class="input" />
     </div>
     <div class="field">
-      <label class="label">IMEI / serial (optional)</label>
-      <input [ngModel]="imeiOrSerial()" (ngModelChange)="imeiOrSerial.set($event)" class="input" />
+      <label class="label" for="imei-or-serial">IMEI / serial (optional)</label>
+      <input id="imei-or-serial" [ngModel]="imeiOrSerial()" (ngModelChange)="imeiOrSerial.set($event)" class="input" />
     </div>
     <div class="field">
-      <label class="label">What's wrong?</label>
-      <textarea [ngModel]="faultDescription()" (ngModelChange)="faultDescription.set($event)" rows="4" class="input"></textarea>
+      <label class="label" for="fault-description">What's wrong?</label>
+      <textarea id="fault-description" [ngModel]="faultDescription()" (ngModelChange)="faultDescription.set($event)" rows="4" class="input"></textarea>
     </div>
 
     @if (errorMessage()) { <p class="error">{{ errorMessage() }}</p> }

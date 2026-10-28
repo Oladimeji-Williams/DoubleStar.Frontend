@@ -4,8 +4,8 @@
 
   <div class="card">
     <div class="field">
-      <label class="label">Product</label>
-      <select [ngModel]="selectedProductId()" (ngModelChange)="selectedProductId.set($event)" class="select">
+      <label for="restock-page-product" class="label">Product</label>
+      <select id="restock-page-product" [ngModel]="selectedProductId()" (ngModelChange)="selectedProductId.set($event)" class="select">
         <option [ngValue]="null">Select a product</option>
         @for (product of products(); track product.id) {
           <option [ngValue]="product.id">{{ product.name }} ({{ product.sku }})</option>
@@ -16,13 +16,13 @@
     @if (selectedProduct; as product) {
       @if (product.trackingMode === 'Serialized') {
         <div class="field">
-          <label class="label">Serial number</label>
-          <input [ngModel]="serialNumber()" (ngModelChange)="serialNumber.set($event)" class="input" />
+          <label for="restock-page-serial-number" class="label">Serial number</label>
+          <input id="restock-page-serial-number" [ngModel]="serialNumber()" (ngModelChange)="serialNumber.set($event)" class="input" />
         </div>
       } @else {
         <div class="field">
-          <label class="label">Quantity to add</label>
-          <input
+          <label for="restock-page-quantity-to-add" class="label">Quantity to add</label>
+          <input id="restock-page-quantity-to-add"
             type="number"
             min="1"
             [ngModel]="quantity()"

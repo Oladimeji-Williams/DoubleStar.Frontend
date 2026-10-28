@@ -9,8 +9,8 @@
       <p class="instructions">Add this key to Google Authenticator, Authy, or any TOTP app, then enter the 6-digit code it generates.</p>
       <div class="key-box">{{ s.sharedKey }}</div>
       <div class="field">
-        <label class="label">6-digit code</label>
-        <input [ngModel]="confirmCode()" (ngModelChange)="confirmCode.set($event)" inputmode="numeric" maxlength="6" class="input" />
+        <label for="security-settings-page-6-digit-code" class="label">6-digit code</label>
+        <input id="security-settings-page-6-digit-code" [ngModel]="confirmCode()" (ngModelChange)="confirmCode.set($event)" inputmode="numeric" maxlength="6" class="input" />
       </div>
       @if (errorMessage()) { <p class="error">{{ errorMessage() }}</p> }
       <button (click)="confirmSetup()" [disabled]="isBusy()" class="primary-button">Confirm & enable</button>
@@ -21,8 +21,8 @@
       <div class="disable-section">
         <h3 class="disable-title">Already have it enabled and want to turn it off?</h3>
         <div class="field">
-          <label class="label">Current password</label>
-          <input type="password" [ngModel]="disablePassword()" (ngModelChange)="disablePassword.set($event)" class="input" />
+          <label for="security-settings-page-current-password" class="label">Current password</label>
+          <input id="security-settings-page-current-password" type="password" [ngModel]="disablePassword()" (ngModelChange)="disablePassword.set($event)" class="input" />
         </div>
         <button (click)="disable()" [disabled]="isBusy() || !disablePassword().trim()" class="danger-button">Disable</button>
       </div>

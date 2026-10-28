@@ -1,53 +1,277 @@
-<!-- libs/reporting/src/lib/dashboard-page/dashboard-page.component.html -->
 <div class="page">
-  <h1 class="page-title">Dashboard</h1>
-  <p class="subtitle">Last 30 days</p>
 
-  @if (isLoading()) {
-    <p>Loading...</p>
-  } @else {
-    <div class="stat-grid">
-      <div class="stat-card">
-        <p class="stat-label">Revenue</p>
-        <p class="stat-value">{{ salesSummary()?.totalRevenueKobo | koboCurrency }}</p>
+  <header class="dashboard-header">
+    <div>
+      <div class="eyebrow">
+        BUSINESS OVERVIEW
       </div>
-      <div class="stat-card">
-        <p class="stat-label">Sales</p>
-        <p class="stat-value">{{ salesSummary()?.salesCount }}</p>
-      </div>
-      <div class="stat-card">
-        <p class="stat-label">Avg. sale</p>
-        <p class="stat-value">{{ salesSummary()?.averageSaleKobo | koboCurrency }}</p>
-      </div>
-      <div class="stat-card">
-        <p class="stat-label">Inventory value</p>
-        <p class="stat-value">{{ inventoryValuation()?.totalValueKobo | koboCurrency }}</p>
-      </div>
-      <div class="stat-card" [class.warning]="(inventoryValuation()?.lowStockCount ?? 0) > 0">
-        <p class="stat-label">Low stock items</p>
-        <p class="stat-value">{{ inventoryValuation()?.lowStockCount }}</p>
-      </div>
-      <div class="stat-card">
-        <p class="stat-label">Repairs completed</p>
-        <p class="stat-value">{{ repairTurnaround()?.completedCount }}</p>
-      </div>
-      <div class="stat-card">
-        <p class="stat-label">Avg. turnaround</p>
-        <p class="stat-value">{{ repairTurnaround()?.averageTurnaroundHours }}h</p>
-      </div>
+
+      <h1>
+        Dashboard
+      </h1>
+
+      <p>
+        Monitor sales, repairs and inventory performance.
+      </p>
     </div>
 
-    @if (revenueByDay().length > 0) {
-      <div class="card">
-        <h2 class="card-title">Revenue by day</h2>
-        <div class="bar-chart">
-          @for (day of revenueByDay(); track day.date) {
-            <div class="bar-column" [title]="day.date + ': ' + (day.revenueKobo / 100 | number: '1.0-0')">
-              <div class="bar" [style.height.%]="barHeightPercent(day.revenueKobo)"></div>
-            </div>
-          }
+    <div class="header-actions">
+
+      <div class="period-toggle">
+        <button
+          type="button"
+          [class.active]="periodDays() === 7"
+          (click)="setPeriod(7)"
+        >
+          7 days
+        </button>
+
+        <button
+          type="button"
+          [class.active]="periodDays() === 30"
+          (click)="setPeriod(30)"
+        >
+          30 days
+        </button>
+
+        <button
+          type="button"
+          [class.active]="periodDays() === 90"
+          (click)="setPeriod(90)"
+        >
+          90 days
+        </button>
+      </div>
+
+      <button
+        type="button"
+        class="refresh-button"
+        [disabled]="isLoading()"
+        (click)="refresh()"
+      >
+        {{ isLoading() ? 'Loading...' : 'Refresh' }}
+      </button>
+
+    </div>
+  </header>
+
+
+  @if (hasError()) {
+    <section class="error-card">
+      <strong>
+        Dashboard data could not be loaded.
+      </strong>
+
+      <button
+        type="button"
+        (click)="refresh()"
+      >
+        Try again
+      </button>
+    </section>
+  }
+
+
+  @if (isLoading()) {
+    <section class="loading-card">
+      <div class="loading-line"></div>
+      <div class="loading-grid">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    </section>
+  }
+
+
+  @if (!isLoading()) {
+    <section class="kpi-grid">
+
+      <app-dashboard-kpi-card
+        label="Revenue"
+        [value]="revenueText()"
+        [description]="salesChangeText()"
+        icon="₦"
+        [tone]="
+          salesChangePercent() >= 0
+            ? 'success'
+            : 'warning'
+        "
+      />
+
+      <app-dashboard-kpi-card
+        label="Sales"
+        [value]="salesCountText()"
+        description="Completed transactions"
+        icon="#"
+      />
+
+      <app-dashboard-kpi-card
+        label="Average sale"
+        [value]="averageSaleText()"
+        description="Average transaction value"
+        icon="↗"
+      />
+
+      <app-dashboard-kpi-card
+        label="Inventory value"
+        [value]="inventoryValueText()"
+        [description]="
+          (inventoryValuation()?.productCount ?? 0)
+            + ' products tracked'
+        "
+        icon="▣"
+      />
+
+      <app-dashboard-kpi-card
+        label="Low stock"
+        [value]="lowStockText()"
+        description="Items requiring attention"
+        icon="!"
+        [tone]="
+          (inventoryValuation()?.lowStockCount ?? 0) > 0
+            ? 'warning'
+            : 'success'
+        "
+      />
+
+      <app-dashboard-kpi-card
+        label="Repairs completed"
+        [value]="completedRepairsText()"
+        description="Completed in selected period"
+        icon="✓"
+        tone="success"
+      />
+
+      <app-dashboard-kpi-card
+        label="Avg. turnaround"
+        [value]="turnaroundText()"
+        [description]="repairChangeText()"
+        icon="◷"
+        [tone]="
+          repairTone() === 'good'
+            ? 'success'
+            : repairTone() === 'warning'
+              ? 'warning'
+              : 'danger'
+        "
+      />
+
+    </section>
+
+
+    <section class="main-grid">
+
+      <div class="primary-column">
+
+        <app-dashboard-revenue-chart
+          [data]="revenueByDay()"
+          [currency]="revenueCurrency"
+        />
+
+      </div>
+
+
+      <aside class="secondary-column">
+
+        <div class="section-heading">
+          <div>
+            <h2>Business health</h2>
+            <p>Areas requiring attention.</p>
+          </div>
+        </div>
+
+        <app-dashboard-health-card
+          title="Inventory"
+          [value]="
+            lowStockText() + ' low-stock items'
+          "
+          [description]="
+            inventoryValuation()?.lowStockCount
+              ? 'Review stock levels soon.'
+              : 'Inventory levels look healthy.'
+          "
+          [tone]="inventoryTone()"
+        />
+
+        <app-dashboard-health-card
+          title="Repairs"
+          [value]="turnaroundText()"
+          description="Average turnaround in hours."
+          [tone]="repairTone()"
+        />
+        <app-dashboard-health-card
+          title="Sales"
+          [value]="salesCountText()"
+          description="Completed transactions."
+          tone="good"
+        />
+
+      </aside>
+
+    </section>
+
+
+    <section class="quick-actions">
+
+      <div class="section-heading">
+        <div>
+          <h2>Quick actions</h2>
+          <p>Jump directly into common operations.</p>
         </div>
       </div>
+
+      <div class="action-grid">
+
+        <a routerLink="/sales/new">
+          <strong>New sale</strong>
+          <span>Record a customer purchase</span>
+        </a>
+
+        <a routerLink="/repairs/new">
+          <strong>New repair</strong>
+          <span>Create a repair ticket</span>
+        </a>
+
+        <a routerLink="/inventory">
+          <strong>Inventory</strong>
+          <span>Manage stock and products</span>
+        </a>
+
+        <a routerLink="/customers">
+          <strong>Customers</strong>
+          <span>View customer records</span>
+        </a>
+
+        <a routerLink="/reviews">
+          <strong>Reviews</strong>
+          <span>Manage customer feedback</span>
+        </a>
+
+        <a routerLink="/payments">
+          <strong>Payments</strong>
+          <span>Review payment activity</span>
+        </a>
+
+        <a routerLink="/reports/sales">
+          <strong>Sales analytics</strong>
+          <span>
+            Explore revenue and sales performance
+          </span>
+        </a>
+      </div>
+
+    </section>
+
+
+    @if (lastUpdated()) {
+      <footer class="dashboard-footer">
+        Last updated
+        {{ lastUpdated() | date:'mediumTime' }}
+      </footer>
     }
+
   }
+
 </div>

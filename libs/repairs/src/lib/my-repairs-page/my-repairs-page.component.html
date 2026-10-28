@@ -1,25 +1,34 @@
-<!-- libs/repairs/src/lib/my-repairs-page/my-repairs-page.component.html -->
 <div class="page">
-  <h1 class="page-title">My repairs</h1>
+  <div class="page-header">
+    <h1 class="page-title">
+      My repairs
+    </h1>
+  </div>
 
-  @if (isLoading()) {
-    <p>Loading...</p>
-  } @else if (tickets().length === 0) {
-    <p class="empty-state">You don't have any repair tickets yet.</p>
-  } @else {
-    <div class="ticket-list">
-      @for (ticket of tickets(); track ticket.id) {
-        <div class="ticket-card">
-          <div class="ticket-header">
-            <span class="ticket-device">{{ ticket.deviceDescription }}</span>
-            <span class="status-badge" [attr.data-status]="ticket.status">{{ ticket.status }}</span>
-          </div>
-          <p class="ticket-fault">{{ ticket.faultDescription }}</p>
-          @if (ticket.diagnosisNotes) {
-            <p class="ticket-diagnosis">{{ ticket.diagnosisNotes }}</p>
-          }
-        </div>
-      }
-    </div>
+  @if (errorMessage()) {
+    <p class="error">
+      {{ errorMessage() }}
+
+      <button
+        type="button"
+        class="retry-link"
+        (click)="retryLoad()">
+        Try again
+      </button>
+    </p>
   }
+
+  <app-data-table
+    [columns]="columns"
+    [rows]="tickets()"
+    [totalCount]="totalCount()"
+    [page]="page()"
+    [pageSize]="pageSize()"
+    [sortBy]="sortBy()"
+    [sortDirection]="sortDirection()"
+    [filters]="filters()"
+    [rowLink]="rowLink"
+    [loading]="isLoading()"
+    emptyMessage="You don't have any repair tickets yet."
+    (queryChange)="onTableQuery($event)" />
 </div>

@@ -1,74 +1,315 @@
-<!-- libs/payments/src/lib/payment-lookup-page/payment-lookup-page.component.html — full replacement -->
 <div class="page">
-  <h1 class="page-title">Payments</h1>
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Payments</h1>
+      <p class="page-subtitle">
+        View, filter, record and manage payments.
+      </p>
+    </div>
+  </div>
+
+  @if (errorMessage()) {
+    <div class="error">
+      {{ errorMessage() }}
+    </div>
+  }
 
   <div class="card">
-    <h2 class="card-title">Look up a source</h2>
+    <h2 class="card-title">Payment lookup</h2>
+
     <div class="lookup-row">
-      <select [ngModel]="sourceType()" (ngModelChange)="sourceType.set($event)" class="select">
-        <option value="Sale">Sale</option>
-        <option value="RepairJob">Repair</option>
+      <select
+        [ngModel]="sourceType()"
+        (ngModelChange)="sourceType.set($event)"
+        class="select"
+      >
+        <option value="Sale">
+          Sale
+        </option>
+
+        <option value="RepairJob">
+          Repair
+        </option>
+
+        <option value="Order">
+          Online order
+        </option>
+
       </select>
-      <input type="number" placeholder="ID" [ngModel]="sourceId()" (ngModelChange)="sourceId.set($event)" class="input small" />
-      <button (click)="lookup()" [disabled]="isLoading() || sourceId() === null" class="primary-button">
+
+      <input
+        type="number"
+        placeholder="Source ID"
+        [ngModel]="sourceId()"
+        (ngModelChange)="sourceId.set($event)"
+        class="input small"
+      />
+
+      <button
+        type="button"
+        (click)="lookup()"
+        [disabled]="
+          isLoading() ||
+          sourceId() === null
+        "
+        class="primary-button"
+      >
         {{ isLoading() ? 'Looking up...' : 'Look up' }}
       </button>
     </div>
+  </div>
 
-    @if (errorMessage()) { <p class="error">{{ errorMessage() }}</p> }
+  @if (sourceType() === 'Order') {
+    <div class="card">
+      <h2 class="card-title">
+        Online order payments
+      </h2>
 
-    @if (payments(); as list) {
-      @if (list.length === 0) {
-        <p class="empty-state">No payments recorded for this source yet.</p>
-      } @else {
-        <table class="payments-table">
-          <thead><tr><th>Method</th><th>Status</th><th>Amount</th><th>Refunded</th></tr></thead>
-          <tbody>
-            @for (payment of list; track payment.id) {
-              <tr (click)="toggleExpand(payment)" class="payment-row">
-                <td>{{ payment.method }}</td>
-                <td>{{ payment.status }}</td>
-                <td>{{ payment.amountKobo | koboCurrency }}</td>
-                <td>{{ payment.totalRefundedKobo | koboCurrency }}</td>
-              </tr>
-              @if (expandedPaymentId() === payment.id) {
-                <tr class="detail-row">
-                  <td colspan="4">
-                    @if (canRefund(payment)) {
-                      <div class="refund-row">
-                        <input type="number" min="0" placeholder="Refund amount (₦)" [ngModel]="refundAmountNaira()" (ngModelChange)="refundAmountNaira.set($event)" class="input small" />
-                        <input placeholder="Reason" [ngModel]="refundReason()" (ngModelChange)="refundReason.set($event)" class="input" />
-                        <button (click)="submitRefund(payment)" [disabled]="isRefunding()" class="refund-button">
-                          {{ isRefunding() ? 'Refunding...' : 'Issue refund' }}
-                        </button>
-                      </div>
-                    } @else {
-                      <p class="muted">This payment can't be refunded in its current state.</p>
-                    }
-                  </td>
-                </tr>
-              }
-            }
-          </tbody>
-        </table>
+      <p class="muted">
+        Customers pay online orders at checkout, so payments can't be recorded
+        here. You can look them up above and refund them below.
+      </p>
+    </div>
+  } @else {
+  <div class="card">
+    <h2 class="card-title">
+      Record a payment
+    </h2>
+
+    <div class="record-grid">
+      <input
+        type="number"
+        min="0"
+        placeholder="Amount (₦)"
+        [ngModel]="amountNaira()"
+        (ngModelChange)="amountNaira.set($event)"
+        class="input"
+      />
+
+      <select
+        [ngModel]="method()"
+        (ngModelChange)="method.set($event)"
+        class="select"
+      >
+        <option value="Cash">
+          Cash
+        </option>
+
+        <option value="Transfer">
+          Transfer
+        </option>
+
+        <option value="Card">
+          Card
+        </option>
+
+        <option value="Paystack">
+          Paystack
+        </option>
+      </select>
+
+      @if (method() === 'Paystack') {
+        <input
+          type="email"
+          placeholder="Payer email"
+          [ngModel]="payerEmail()"
+          (ngModelChange)="payerEmail.set($event)"
+          class="input"
+        />
       }
 
-      <h2 class="card-title">Record a payment</h2>
-      <div class="record-row">
-        <input type="number" placeholder="Amount (₦)" [ngModel]="amountNaira()" (ngModelChange)="amountNaira.set($event)" class="input small" />
-        <select [ngModel]="method()" (ngModelChange)="method.set($event)" class="select">
-          <option value="Cash">Cash</option>
-          <option value="Transfer">Transfer</option>
-          <option value="Card">Card</option>
-          <option value="Paystack">Paystack</option>
-        </select>
-        @if (method() === 'Paystack') {
-          <input type="email" placeholder="Payer email" [ngModel]="payerEmail()" (ngModelChange)="payerEmail.set($event)" class="input" />
-        }
-        <button (click)="recordPayment()" [disabled]="isRecording()" class="add-button">
-          {{ isRecording() ? 'Processing...' : (method() === 'Paystack' ? 'Pay with Paystack' : 'Record payment') }}
+      <button
+        type="button"
+        (click)="recordPayment()"
+        [disabled]="
+          isRecording() ||
+          sourceId() === null ||
+          amountNaira() === null ||
+          amountNaira()! <= 0
+        "
+        class="add-button"
+      >
+        {{
+          isRecording()
+            ? 'Processing...'
+            : method() === 'Paystack'
+              ? 'Pay with Paystack'
+              : 'Record payment'
+        }}
+      </button>
+    </div>
+  </div>
+}
+
+
+  @if (selectedPayment(); as payment) {
+    <div class="card">
+      <div class="detail-header">
+        <div>
+          <h2 class="card-title">
+            Payment details
+          </h2>
+
+          <p class="detail-reference">
+            {{ payment.id }}
+          </p>
+        </div>
+
+        <button
+          type="button"
+          class="close-button"
+          (click)="selectedPayment.set(null)"
+        >
+          Close
         </button>
       </div>
-    }
+
+      <div class="detail-grid">
+        <div>
+          <span class="detail-label">
+            Source
+          </span>
+
+          <strong>
+            {{ sourceLabels[payment.sourceType] }}
+            #{{ payment.sourceId }}
+          </strong>
+        </div>
+
+        <div>
+          <span class="detail-label">
+            Method
+          </span>
+
+          <strong>
+            {{ payment.method }}
+          </strong>
+        </div>
+
+        <div>
+          <span class="detail-label">
+            Amount
+          </span>
+
+          <strong>
+            {{ payment.amountKobo | koboCurrency }}
+          </strong>
+        </div>
+
+        <div>
+          <span class="detail-label">
+            Refunded
+          </span>
+
+          <strong>
+            {{
+              payment.totalRefundedKobo
+                | koboCurrency
+            }}
+          </strong>
+        </div>
+
+        <div>
+          <span class="detail-label">
+            Status
+          </span>
+
+          <strong>
+            {{ payment.status }}
+          </strong>
+        </div>
+
+        <div>
+          <span class="detail-label">
+            Paystack reference
+          </span>
+
+          <strong>
+            {{
+              payment.paystackReference ||
+                'N/A'
+            }}
+          </strong>
+        </div>
+      </div>
+
+      @if (canRefund(payment)) {
+        <div class="refund-section">
+          <h3>
+            Issue refund
+          </h3>
+
+          <div class="refund-row">
+            <input
+              type="number"
+              min="0"
+              placeholder="Refund amount (₦)"
+              [ngModel]="refundAmountNaira()"
+              (ngModelChange)="refundAmountNaira.set($event)"
+              class="input"
+            />
+
+            <input
+              placeholder="Reason"
+              [ngModel]="refundReason()"
+              (ngModelChange)="refundReason.set($event)"
+              class="input"
+            />
+
+            <button
+              type="button"
+              (click)="submitRefund(payment)"
+              [disabled]="
+                isRefunding() ||
+                refundAmountNaira() === null ||
+                refundAmountNaira()! <= 0 ||
+                !refundReason().trim()
+              "
+              class="refund-button"
+            >
+              {{
+                isRefunding()
+                  ? 'Refunding...'
+                  : 'Issue refund'
+              }}
+            </button>
+          </div>
+        </div>
+      } @else {
+        <p class="muted">
+          This payment can't be refunded in
+          its current state.
+        </p>
+      }
+    </div>
+  }
+
+  <div class="card table-card">
+    <div class="table-header">
+      <div>
+        <h2 class="card-title">
+          All payments
+        </h2>
+
+        <p class="table-description">
+          Search, sort and filter payments.
+        </p>
+      </div>
+    </div>
+
+    <app-data-table
+      [columns]="columns"
+      [rows]="payments()"
+      [totalCount]="totalCount()"
+      [page]="page()"
+      [pageSize]="pageSize()"
+      [sortBy]="sortBy()"
+      [sortDirection]="sortDirection()"
+      [filters]="filters()"
+      [rowActions]="rowActions"
+      [loading]="isLoading()"
+      [emptyMessage]="'No payments found.'"
+      (queryChange)="onQueryChange($event)"
+    />
   </div>
 </div>

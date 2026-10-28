@@ -1,5 +1,10 @@
 // apps/doublestar-customer/src/app/request-repair-page/request-repair-page.component.scss
-.page { max-width: 32rem; }
+.page {
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+  box-sizing: border-box;
+}
 .page-title { font-size: 1.25rem; font-weight: 600; color: #0f172a; margin: 0 0 0.25rem; }
 .subtitle { font-size: 0.875rem; color: #64748b; margin: 0 0 1rem; }
 .card { background: white; border-radius: 0.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); padding: 1.5rem; }

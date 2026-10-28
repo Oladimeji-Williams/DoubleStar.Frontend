@@ -1,12 +1,75 @@
-<!-- apps/doublestar-customer/src/app/public-topbar/public-topbar.component.html -->
+
 <header class="topbar">
-  <a routerLink="/products" class="brand"><app-brand-logo [size]="24" /><app-brand-wordmark /></a>
+  <a routerLink="/products" class="brand">
+    <app-brand-logo [size]="24" />
+    <app-brand-wordmark />
+  </a>
+
   <nav class="public-nav">
-    <a routerLink="/products" [class.nav-link-active]="activePath() === 'products'" class="nav-link">Products</a>
-    <a routerLink="/reviews" [class.nav-link-active]="activePath() === 'reviews'" class="nav-link">Reviews</a>
+    <a
+      routerLink="/products"
+      routerLinkActive="nav-link-active"
+      class="nav-link"
+    >
+      Products
+    </a>
+
+    <a
+      routerLink="/reviews"
+      routerLinkActive="nav-link-active"
+      class="nav-link"
+    >
+      Reviews
+    </a>
   </nav>
-  <nav class="auth-links">
-    <a routerLink="/login" class="auth-link">Sign in</a>
-    <a routerLink="/register" class="auth-link auth-link-primary">Create account</a>
-  </nav>
+
+  @if (currentUserStore.currentUser(); as user) {
+    <nav class="customer-nav">
+      <a routerLink="/cart" routerLinkActive="nav-link-active" class="nav-link">
+        Cart
+      </a>
+      <a routerLink="/my/orders" routerLinkActive="nav-link-active" class="nav-link">
+        My orders
+      </a>
+
+      <a routerLink="/my/sales" routerLinkActive="nav-link-active" class="nav-link">
+        In-store purchases
+      </a>
+
+      <a routerLink="/my/repairs" routerLinkActive="nav-link-active" class="nav-link">
+        My repairs
+      </a>
+
+      <a routerLink="/request-repair" routerLinkActive="nav-link-active" class="nav-link">
+        Request repair
+      </a>
+    </nav>
+
+    <div class="auth-links">
+      <a routerLink="/profile" routerLinkActive="auth-link-active" class="auth-link">
+        {{ user.displayName || 'My account' }}
+      </a>
+
+      <button
+        type="button"
+        class="auth-link logout-button"
+        (click)="logout()"
+      >
+        Sign out
+      </button>
+    </div>
+  } @else {
+    <nav class="auth-links">
+      <a routerLink="/login" class="auth-link">
+        Sign in
+      </a>
+
+      <a
+        routerLink="/register"
+        class="auth-link auth-link-primary"
+      >
+        Create account
+      </a>
+    </nav>
+  }
 </header>

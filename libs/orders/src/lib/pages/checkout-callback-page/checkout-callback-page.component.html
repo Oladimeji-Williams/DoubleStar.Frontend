@@ -1,0 +1,20 @@
+<section class="callback-page">
+  <h1>Payment status</h1>
+  @if (isLoading()) {
+    <p>Confirming your payment...</p>
+  } @else if (order(); as currentOrder) {
+    @if (isPaid()) {
+      <p class="success" role="status">Payment received. Your order {{ currentOrder.orderNumber }} is confirmed.</p>
+    } @else {
+      <p role="status">Order {{ currentOrder.orderNumber }} is currently {{ statusLabels[currentOrder.status].toLowerCase() }}. Payment may still be processing.</p>
+      <button type="button" (click)="verifyPayment()">Check payment again</button>
+    }
+    <a [routerLink]="['/my/orders', currentOrder.id]">View order</a>
+    <a routerLink="/products">Continue browsing</a>
+  } @else {
+    <p class="error" role="alert">{{ errorMessage() }}</p>
+    @if (canRetry()) {
+      <button type="button" (click)="verifyPayment()">Try again</button>
+    }
+  }
+</section>

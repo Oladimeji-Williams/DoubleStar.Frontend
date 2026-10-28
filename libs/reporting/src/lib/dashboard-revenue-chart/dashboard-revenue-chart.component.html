@@ -1,0 +1,55 @@
+<section class="chart-card">
+  <div class="chart-header">
+    <div>
+      <h2>Performance</h2>
+      <p>
+        Track revenue and sales across the selected period.
+      </p>
+    </div>
+
+    <div class="chart-toggle">
+      <button
+        type="button"
+        [class.active]="mode() === 'revenue'"
+        (click)="setMode('revenue')"
+      >
+        Revenue
+      </button>
+
+      <button
+        type="button"
+        [class.active]="mode() === 'sales'"
+        (click)="setMode('sales')"
+      >
+        Sales
+      </button>
+    </div>
+  </div>
+
+  @if (data().length === 0) {
+    <div class="empty-chart">
+      <strong>No activity yet</strong>
+      <span>No sales were recorded for this period.</span>
+    </div>
+  } @else {
+    <div class="chart">
+      @for (item of data(); track item.date) {
+        <div
+          class="bar-column"
+          [title]="label(item.date) + ': ' + displayValue(item)"
+        >
+          <div class="bar-area">
+            <div
+              class="bar"
+              [style.height.%]="height(item)"
+            ></div>
+          </div>
+
+          <span class="bar-label">
+            {{ label(item.date) }}
+          </span>
+        </div>
+      }
+    </div>
+  }
+</section>

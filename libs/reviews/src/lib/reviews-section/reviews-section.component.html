@@ -28,7 +28,9 @@
           <div class="review-footer">
             <span class="review-name">{{ review.reviewerName }}</span>
             @if (review.canDelete) {
-              <button (click)="deleteReview(review)" class="delete-link">Delete</button>
+              <button (click)="deleteReview(review)" [disabled]="isDeleting(review.id)" class="delete-link">
+                {{ isDeleting(review.id) ? 'Deleting...' : 'Delete' }}
+              </button>
             }
           </div>
         </article>

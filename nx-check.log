@@ -1,0 +1,82 @@
+
+[7m[1m[36m NX [39m[22m[27m  [36mRunning targets [1mlint[22m, [1mbuild[22m for 3 projects:[39m
+
+[2m-[22m payments
+[2m-[22m orders
+[2m-[22m doublestar-staff
+
+[2m[36m[39m[22m
+
+[2m> [22m[2mnx run[22m orders:lint
+
+
+[2m> [22m[2mnx run[22m payments:lint
+
+
+[2m> [22m[2mnx run[22m doublestar-staff:build:production
+
+payments: The `@nx/eslint:lint` executor is deprecated and will be removed in Nx v24. Run `nx g @nx/eslint:convert-to-inferred` to migrate to the `@nx/eslint/plugin` inferred targets. See https://nx.dev/docs/guides/tasks--caching/convert-to-inferred for details.
+[1m[92mpayments:[39m[22m Linting "payments"...
+orders: The `@nx/eslint:lint` executor is deprecated and will be removed in Nx v24. Run `nx g @nx/eslint:convert-to-inferred` to migrate to the `@nx/eslint/plugin` inferred targets. See https://nx.dev/docs/guides/tasks--caching/convert-to-inferred for details.
+[1m[96morders:[39m[22m Linting "orders"...
+[1m[92mpayments:[39m[22m Γ£ö All files pass linting
+
+[2m> [22m[2mnx run[22m doublestar-staff:lint
+
+[1m[96morders:[39m[22m Γ£ö All files pass linting
+doublestar-staff: The `@nx/eslint:lint` executor is deprecated and will be removed in Nx v24. Run `nx g @nx/eslint:convert-to-inferred` to migrate to the `@nx/eslint/plugin` inferred targets. See https://nx.dev/docs/guides/tasks--caching/convert-to-inferred for details.
+[1m[36mdoublestar-staff:[39m[22m Linting "doublestar-staff"...
+[1m[36mdoublestar-staff:[39m[22m Γ£ö All files pass linting
+[1m[36mdoublestar-staff:[39m[22m [33mΓ¥»[39m Building...
+[1m[36mdoublestar-staff:[39m[22m [32mΓ£ö[39m Building...
+[1m[36mdoublestar-staff:[39m[22m [37m[1mInitial chunk files[22m[2m | [22m[1mNames[22m        [2m | [22m [1mRaw size[22m[2m | [22m[1mEstimated transfer size[22m
+[1m[36mdoublestar-staff:[39m[22m [32mmain-QUB5B3CC.js[37m   [2m | [22m[2mmain[22m         [2m | [22m[36m414.32 kB[37m[2m | [22m              [36m105.36 kB[37m
+[1m[36mdoublestar-staff:[39m[22m [32mstyles-WMWDLPWW.css[37m[2m | [22m[2mstyles[22m       [2m | [22m [36m23.25 kB[37m[2m | [22m                [36m5.19 kB[37m
+[1m[36mdoublestar-staff:[39m[22m [1m [22m                  [2m | [22m[1mInitial total[22m[2m | [22m[1m437.57 kB[22m[2m | [22m              [1m110.56 kB[22m
+[1m[36mdoublestar-staff:[39m[22m [1mLazy chunk files[22m   [2m | [22m[1mNames[22m        [2m | [22m [1mRaw size[22m[2m | [22m[1mEstimated transfer size[22m
+[1m[36mdoublestar-staff:[39m[22m [32mchunk-R2sQ9V_Y.js[37m  [2m | [22m[2mindex[22m        [2m | [22m [36m80.38 kB[37m[2m | [22m               [36m17.89 kB[37m
+[1m[36mdoublestar-staff:[39m[22m [32mchunk-D657uhtR.js[37m  [2m | [22m[2mindex[22m        [2m | [22m [36m42.89 kB[37m[2m | [22m                [36m9.23 kB[37m
+[1m[36mdoublestar-staff:[39m[22m [32mchunk-64Y7dtY_.js[37m  [2m | [22m[2mindex[22m        [2m | [22m [36m42.09 kB[37m[2m | [22m                [36m7.25 kB[37m
+[1m[36mdoublestar-staff:[39m[22m [32mchunk-DYAo6zMy.js[37m  [2m | [22m[2mindex[22m        [2m | [22m [36m36.88 kB[37m[2m | [22m                [36m7.19 kB[37m
+[1m[36mdoublestar-staff:[39m[22m [32mchunk-DUe4NbgE.js[37m  [2m | [22m[2m-[22m            [2m | [22m [36m33.13 kB[37m[2m | [22m                [36m6.51 kB[37m
+[1m[36mdoublestar-staff:[39m[22m [32mchunk-DBtQdNT8.js[37m  [2m | [22m[2mindex[22m        [2m | [22m [36m19.33 kB[37m[2m | [22m                [36m4.69 kB[37m
+[1m[36mdoublestar-staff:[39m[22m [32mchunk-DBs4Noqn.js[37m  [2m | [22m[2m-[22m            [2m | [22m [36m16.99 kB[37m[2m | [22m                [36m3.96 kB[37m
+[1m[36mdoublestar-staff:[39m[22m [32mchunk-BhThGkXe.js[37m  [2m | [22m[2mindex[22m        [2m | [22m [36m15.96 kB[37m[2m | [22m                [36m4.24 kB[37m
+[1m[36mdoublestar-staff:[39m[22m [32mchunk-Co3uC9Qm.js[37m  [2m | [22m[2mindex[22m        [2m | [22m [36m13.91 kB[37m[2m | [22m                [36m3.77 kB[37m
+[1m[36mdoublestar-staff:[39m[22m [32mchunk-BB90nFoR.js[37m  [2m | [22m[2min[39m
+[1m[36mdoublestar-staff:[39m[22m [37mdex[22m        [2m | [22m [36m10.78 kB[37m[2m | [22m                [36m2.97 kB[37m
+[1m[36mdoublestar-staff:[39m[22m [32mchunk-DNUKQOBi.js[37m  [2m | [22m[2mindex[22m        [2m | [22m  [36m3.70 kB[37m[2m | [22m                [36m1.40 kB[37m
+[1m[36mdoublestar-staff:[39m[22m [32mchunk-Dg-yg-2I.js[37m  [2m | [22m[2mindex[22m        [2m | [22m[36m327 bytes[37m[2m | [22m              [36m327 bytes[37m
+[1m[36mdoublestar-staff:[39m[22m [32mchunk-BjA8ZUnd.js[37m  [2m | [22m[2mindex[22m        [2m | [22m[36m232 bytes[37m[2m | [22m              [36m232 bytes[37m
+[1m[36mdoublestar-staff:[39m[22m [32mchunk-CnFV7wNq.js[37m  [2m | [22m[2m-[22m            [2m | [22m[36m215 bytes[37m[2m | [22m              [36m215 bytes[37m
+[1m[36mdoublestar-staff:[39m[22m Application bundle generation complete. [82.560 seconds] - 2026-10-27T21:34:18.313Z
+[1m[36mdoublestar-staff:[39m[22m [39m
+doublestar-staff: Γû▓ [WARNING] Deprecation [plugin angular-sass]
+doublestar-staff:     apps/doublestar-staff/src/styles.scss:2:8:
+doublestar-staff:       2 Γöé @import "tailwindcss";
+doublestar-staff:         Γò╡         ^
+doublestar-staff:   Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+doublestar-staff:   
+doublestar-staff:   More info and automated migrator: https://sass-lang.com/d/import
+doublestar-staff:   The plugin "angular-sass" was triggered by this import
+doublestar-staff:     angular:styles/global:styles:1:8:
+doublestar-staff:       1 Γöé @import 'apps/doublestar-staff/src/styles.scss';
+doublestar-staff:         Γò╡         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+doublestar-staff: 
+[1m[36mdoublestar-staff:[39m[22m [37mOutput location: C:\Users\OladimejiWilliams\Desktop\Software Engineering\DoubleStar\DoubleStar.Frontend\dist\apps\doublestar-staff
+[1m[36mdoublestar-staff:[39m[22m [39m
+
+[2m[32m[39m[22m
+
+[7m[1m[32m NX [39m[22m[27m  [32mSuccessfully ran targets [1mlint[22m, [1mbuild[22m for 3 projects[39m
+
+
+  Run duration:      2m 40s
+  Cache:             0/4 hit (0%)
+  Critical path:     2m 40s (1 task)
+  Recoverable time:  194ms (0% of the run)
+
+  Recommendations:
+    - Drastically reduce your run duration by sharing a cache across your team and CI ΓåÆ https://cloud.nx.app/connect/Ydi2GDhQOz.
+    - Speed up or split the longest tasks on the critical path:
+        doublestar-staff:build:production    2m 40s

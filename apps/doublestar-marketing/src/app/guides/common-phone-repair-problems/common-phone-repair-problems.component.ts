@@ -1,7 +1,7 @@
 // apps/doublestar-marketing/src/app/guides/common-phone-repair-problems/common-phone-repair-problems.component.ts
 import { Component, OnInit, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { PageSeoService } from '../../../../../../libs/shared/src/lib/seo/page-seo.service';
+import { PageSeoService } from '@doublestar/shared';
 import { environment } from '../../../environments/environment';
 
 @Component({

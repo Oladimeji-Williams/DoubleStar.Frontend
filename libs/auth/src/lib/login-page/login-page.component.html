@@ -1,58 +1,229 @@
-<!-- libs/auth/src/lib/login-page/login-page.component.html — full replacement -->
 <div class="auth-page">
-  <div class="hero"><app-auth-marketing-panel heading="Welcome back to Double Star" subtitle="Sign in to track your repairs, view past orders, and shop our latest stock." /></div>
+  <div class="hero">
+    <app-auth-marketing-panel
+      heading="Welcome back to Double Star"
+      subtitle="Sign in to track your repairs, view past orders, and shop our latest stock."
+    />
+  </div>
 
-  <div class="card" [attr.data-position]="cardPosition">
+  <div
+    class="card"
+    [attr.data-position]="cardPosition"
+  >
     <app-brand-wordmark size="sm" />
 
     @if (!needsTwoFactor()) {
-      <h2 class="card-title">Sign in</h2>
+      <h2 class="card-title">
+        Sign in
+      </h2>
 
       <div class="field">
-        <app-icon name="mail" [size]="16" class="field-icon" />
+        <app-icon
+          name="mail"
+          [size]="16"
+          class="field-icon"
+        />
+
         <input
           type="text"
-          [placeholder]="mode() === 'password' ? 'Email or phone' : 'Email'"
+          [placeholder]="
+            mode() === 'password'
+              ? 'Email or phone'
+              : 'Email'
+          "
           [ngModel]="identifier()"
           (ngModelChange)="identifier.set($event)"
           class="input"
+          autocomplete="username"
         />
       </div>
 
       @if (mode() === 'password') {
         <div class="field">
-          <app-icon name="lock" [size]="16" class="field-icon" />
-          <input type="password" placeholder="Password" [ngModel]="password()" (ngModelChange)="password.set($event)" class="input" />
+          <app-icon
+            name="lock"
+            [size]="16"
+            class="field-icon"
+          />
+
+          <input
+            type="password"
+            placeholder="Password"
+            [ngModel]="password()"
+            (ngModelChange)="password.set($event)"
+            class="input"
+            autocomplete="current-password"
+          />
         </div>
-        @if (errorMessage()) { <p class="error">{{ errorMessage() }}</p> }
-        <button (click)="submitPassword()" [disabled]="isSubmitting()" class="submit-button">{{ isSubmitting() ? 'Signing in...' : 'Sign in' }}</button>
+
+        <app-turnstile-widget
+          (verified)="turnstileToken.set($event)"
+        />
+
+        @if (errorMessage()) {
+          <p class="error">
+            {{ errorMessage() }}
+          </p>
+        }
+
+        <button
+          type="button"
+          (click)="submitPassword()"
+          [disabled]="
+            isSubmitting() ||
+            !identifier().trim() ||
+            !password().trim() ||
+            !turnstileToken()
+          "
+          class="submit-button"
+        >
+          {{
+            isSubmitting()
+              ? 'Signing in...'
+              : 'Sign in'
+          }}
+        </button>
       } @else {
         @if (!codeSent()) {
-          @if (errorMessage()) { <p class="error">{{ errorMessage() }}</p> }
-          <button (click)="requestEmailCode()" [disabled]="isSubmitting()" class="submit-button">Send code</button>
+          @if (errorMessage()) {
+            <p class="error">
+              {{ errorMessage() }}
+            </p>
+          }
+
+          <button
+            type="button"
+            (click)="requestEmailCode()"
+            [disabled]="
+              isSubmitting() ||
+              !identifier().trim()
+            "
+            class="submit-button"
+          >
+            {{
+              isSubmitting()
+                ? 'Sending...'
+                : 'Send code'
+            }}
+          </button>
         } @else {
           <div class="field">
-            <app-icon name="key" [size]="16" class="field-icon" />
-            <input placeholder="6-digit code" inputmode="numeric" maxlength="6" [ngModel]="code()" (ngModelChange)="code.set($event)" class="input" />
+            <app-icon
+              name="key"
+              [size]="16"
+              class="field-icon"
+            />
+
+            <input
+              placeholder="6-digit code"
+              inputmode="numeric"
+              maxlength="6"
+              [ngModel]="code()"
+              (ngModelChange)="code.set($event)"
+              class="input"
+              autocomplete="one-time-code"
+            />
           </div>
-          @if (errorMessage()) { <p class="error">{{ errorMessage() }}</p> }
-          <button (click)="submitEmailCode()" [disabled]="isSubmitting()" class="submit-button">{{ isSubmitting() ? 'Verifying...' : 'Sign in' }}</button>
+
+          @if (errorMessage()) {
+            <p class="error">
+              {{ errorMessage() }}
+            </p>
+          }
+
+          <button
+            type="button"
+            (click)="submitEmailCode()"
+            [disabled]="
+              isSubmitting() ||
+              !code().trim()
+            "
+            class="submit-button"
+          >
+            {{
+              isSubmitting()
+                ? 'Verifying...'
+                : 'Sign in'
+            }}
+          </button>
         }
       }
 
-      <button type="button" (click)="toggleMode()" class="toggle-link">
-        {{ mode() === 'password' ? 'Sign in with an emailed code instead' : 'Use your password instead' }}
+      <button
+        type="button"
+        (click)="toggleMode()"
+        class="toggle-link"
+      >
+        {{
+          mode() === 'password'
+            ? 'Sign in with an emailed code instead'
+            : 'Use your password instead'
+        }}
       </button>
-      <a routerLink="/forgot-password" class="toggle-link">Forgot password?</a>
-      <p class="footer-text">New? <a routerLink="/register" class="footer-link">Create an account</a></p>
+
+      <a
+        routerLink="/forgot-password"
+        class="toggle-link"
+      >
+        Forgot password?
+      </a>
+
+      @if (appKind === 'customer') {
+        <p class="footer-text">
+          New?
+
+          <a
+            routerLink="/register"
+            class="footer-link"
+          >
+            Create an account
+          </a>
+        </p>
+      }
     } @else {
-      <h2 class="card-title">Enter your 2FA code</h2>
+      <h2 class="card-title">
+        Enter your 2FA code
+      </h2>
+
       <div class="field">
-        <app-icon name="key" [size]="16" class="field-icon" />
-        <input placeholder="6-digit code" inputmode="numeric" maxlength="6" [ngModel]="twoFactorCode()" (ngModelChange)="twoFactorCode.set($event)" class="input" />
+        <app-icon
+          name="key"
+          [size]="16"
+          class="field-icon"
+        />
+
+        <input
+          placeholder="6-digit code"
+          inputmode="numeric"
+          maxlength="6"
+          [ngModel]="twoFactorCode()"
+          (ngModelChange)="twoFactorCode.set($event)"
+          class="input"
+          autocomplete="one-time-code"
+        />
       </div>
-      @if (errorMessage()) { <p class="error">{{ errorMessage() }}</p> }
-      <button (click)="submitTwoFactorCode()" [disabled]="isSubmitting()" class="submit-button">{{ isSubmitting() ? 'Verifying...' : 'Verify' }}</button>
+
+      @if (errorMessage()) {
+        <p class="error">
+          {{ errorMessage() }}
+        </p>
+      }
+
+      <button
+        type="button"
+        (click)="submitTwoFactorCode()"
+        [disabled]="
+          isSubmitting() ||
+          !twoFactorCode().trim()
+        "
+        class="submit-button"
+      >
+        {{
+          isSubmitting()
+            ? 'Verifying...'
+            : 'Verify'
+        }}
+      </button>
     }
   </div>
 </div>

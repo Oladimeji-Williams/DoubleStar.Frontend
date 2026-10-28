@@ -1,0 +1,48 @@
+<section class="cart-page">
+  <h1>Your cart</h1>
+
+  @if (isLoading()) {
+    <p>Loading your cart...</p>
+  } @else if (errorMessage()) {
+    <p class="error" role="alert">{{ errorMessage() }}</p>
+    <button type="button" class="secondary-button" (click)="reload()">Try again</button>
+  } @else if (cart(); as currentCart) {
+    @if (currentCart.items.length === 0) {
+      <p>Your cart is empty.</p>
+      <a routerLink="/products" class="primary-button">Browse products</a>
+    } @else {
+      @if (currentCart.hasIssues) {
+        <p class="warning" role="status">Some items need attention before you can check out.</p>
+      }
+      <div class="cart-items">
+        @for (item of currentCart.items; track item.productId) {
+          <article class="cart-item">
+            <div class="item-info">
+              <h2>{{ item.name }}</h2>
+              <p>{{ item.sku }} · {{ item.unitPriceKobo | koboCurrency }} each</p>
+              @if (!item.isAvailable && item.issue) {
+                <p class="warning">{{ item.issue }}</p>
+              }
+            </div>
+            <div class="quantity">
+              <button type="button" aria-label="Decrease quantity" [disabled]="busyProductId() === item.productId || item.quantity <= 1" (click)="changeQuantity(item.productId, item.quantity - 1)">−</button>
+              <span>{{ item.quantity }}</span>
+              <button type="button" aria-label="Increase quantity" [disabled]="busyProductId() === item.productId || (item.availableQuantity !== null && item.quantity >= item.availableQuantity)" (click)="changeQuantity(item.productId, item.quantity + 1)">+</button>
+            </div>
+            <strong>{{ item.lineTotalKobo | koboCurrency }}</strong>
+            <button type="button" class="remove-button" [disabled]="busyProductId() === item.productId" (click)="removeItem(item.productId)">Remove</button>
+          </article>
+        }
+      </div>
+      <div class="cart-summary">
+        <span>Subtotal</span>
+        <strong>{{ currentCart.subtotalKobo | koboCurrency }}</strong>
+      </div>
+      @if (currentCart.hasIssues) {
+        <button type="button" class="primary-button" disabled>Resolve cart issues to continue</button>
+      } @else {
+        <a routerLink="/checkout" class="primary-button">Continue to checkout</a>
+      }
+    }
+  }
+</section>

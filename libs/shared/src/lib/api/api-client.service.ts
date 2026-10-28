@@ -3,6 +3,7 @@ import {
   HttpClient,
   HttpErrorResponse,
   HttpParams,
+  HttpResponse,
 } from '@angular/common/http';
 import {
   Observable,
@@ -65,41 +66,108 @@ export class ApiClientService {
       .request<ApiResponse<T>>(method, url, {
         body,
         params: httpParams,
+        observe: 'response',
       })
       .pipe(
-        map((response) => {
-          if (!response || !response.success) {
-            const errors = response?.errors ?? [
-              {
-                code: 'EmptyResponse',
-                message:
-                  'The server returned an unexpected empty response.',
-                type: 'Failure',
-              },
-            ];
+        map((httpResponse: HttpResponse<ApiResponse<T>>) => {
+          /*
+           * 204 No Content is a successful response.
+           *
+           * This is used by endpoints such as:
+           * - approve review
+           * - reject review
+           * - delete review
+           */
+          if (httpResponse.status === 204) {
+            return undefined as T;
+          }
 
-            throw new ApiException(errors, 200);
+          const response = httpResponse.body;
+
+          if (!response) {
+            throw new ApiException(
+              [
+                {
+                  code: 'EmptyResponse',
+                  message:
+                    'The server returned an empty response.',
+                  type: 'Failure',
+                },
+              ],
+              httpResponse.status,
+            );
+          }
+
+          if (!response.success) {
+            throw new ApiException(
+              response.errors ?? [
+                {
+                  code: 'Unknown',
+                  message:
+                    'The server returned an unsuccessful response.',
+                  type: 'Failure',
+                },
+              ],
+              httpResponse.status,
+            );
           }
 
           return response.data as T;
         }),
 
-        catchError((error: HttpErrorResponse) => {
-          const body =
-            error.error as ApiResponse<unknown> | null;
+        catchError((error: unknown) => {
+          /*
+           * Preserve ApiException instances created above.
+           */
+          if (error instanceof ApiException) {
+            return throwError(() => error);
+          }
 
-          const apiErrors = body?.errors ?? [
-            {
-              code: 'Unknown',
-              message:
-                error.message ||
-                'An unexpected error occurred.',
-              type: 'Failure',
-            },
-          ];
+          /*
+           * Handle actual HTTP errors such as 400, 401, 403,
+           * 404, 409, 500, etc.
+           */
+          if (error instanceof HttpErrorResponse) {
+            const body =
+              error.error as ApiResponse<unknown> | null;
 
+            const apiErrors = body?.errors ?? [
+              {
+                code: 'Unknown',
+                message:
+                  error.message ||
+                  'An unexpected error occurred.',
+                type: 'Failure',
+              },
+            ];
+
+            return throwError(
+              () =>
+                new ApiException(
+                  apiErrors,
+                  error.status,
+                ),
+            );
+          }
+
+          /*
+           * Handle any other unexpected error.
+           */
           return throwError(
-            () => new ApiException(apiErrors, error.status),
+            () =>
+              new ApiException(
+                [
+                  {
+                    code: 'Unknown',
+                    message:
+                      error instanceof Error
+                        ? error.message
+                        : 'An unexpected error occurred.',
+                    type: 'Failure',
+                  },
+                ],
+                0,
+              ),
           );
         }),
       );

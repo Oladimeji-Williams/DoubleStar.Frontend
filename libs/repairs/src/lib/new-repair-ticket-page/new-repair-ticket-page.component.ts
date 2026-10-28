@@ -30,27 +30,27 @@ export class NewRepairTicketPageComponent {
     this.faultDescription().trim().length > 0;
 
   protected submit(): void {
-    const selection = this.customer();
-    if (!selection || !this.canSubmit()) return;
+    if (!this.canSubmit()) return;
 
     this.isBusy.set(true);
     this.errorMessage.set(null);
 
     this.repairsApi
-      .open({
-        ...selection,
-        deviceDescription: this.deviceDescription(),
-        imeiOrSerial: this.imeiOrSerial() || null,
-        faultDescription: this.faultDescription(),
+      .requestMyRepair({
+        deviceDescription: this.deviceDescription().trim(),
+        imeiOrSerial: this.imeiOrSerial().trim() || null,
+        faultDescription: this.faultDescription().trim(),
       })
       .subscribe({
-        next: (ticket) => this.router.navigate(['/repairs', ticket.id]),
+        next: (ticket) => {
+          void this.router.navigate(['/repairs', ticket.id]);
+        },
         error: (error: unknown) => {
           this.isBusy.set(false);
           this.errorMessage.set(
             error instanceof ApiException
               ? error.message
-              : 'Something went wrong.'
+              : 'Something went wrong.',
           );
         },
       });

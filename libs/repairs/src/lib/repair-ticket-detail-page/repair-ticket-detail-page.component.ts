@@ -1,8 +1,7 @@
 // libs/repairs/src/lib/repair-ticket-detail-page/repair-ticket-detail-page.component.ts — full replacement
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ApiException, ConfirmService, KoboCurrencyPipe, ToastService } from '@doublestar/shared';
 import { ProductSearchInputComponent } from '@doublestar/catalog';
 import { RepairsApiService } from '../repairs-api.service';
@@ -40,10 +39,26 @@ export class RepairTicketDetailPageComponent implements OnInit {
 
   private load(): void {
     this.isLoading.set(true);
-    this.repairsApi.getById(this.ticketId).subscribe((ticket) => {
-      this.ticket.set(ticket);
-      this.isLoading.set(false);
-    });
+    this.errorMessage.set(null);
+
+    this.repairsApi
+      .getById(this.ticketId)
+      .subscribe({
+        next: ticket => {
+          this.ticket.set(ticket);
+          this.isLoading.set(false);
+        },
+
+        error: (error: unknown) => {
+          this.isLoading.set(false);
+
+          this.errorMessage.set(
+            error instanceof ApiException
+              ? error.message
+              : 'Could not load the repair ticket.',
+          );
+        },
+      });
   }
 
   protected startDiagnosis(): void {

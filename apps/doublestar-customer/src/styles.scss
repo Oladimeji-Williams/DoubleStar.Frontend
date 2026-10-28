@@ -1,6 +1,4 @@
-// apps/doublestar-marketing/src/styles.scss
-// apps/doublestar-customer/src/styles.scss
-// apps/doublestar-staff/src/styles.scss
+
 @import "tailwindcss";
 
 :root {
@@ -13,6 +11,8 @@
 
   --ds-color-success: #16a34a;
   --ds-color-danger: #dc2626;
+  --ds-color-warning: #d97706;
+  --ds-color-info: #0284c7;
 
   --ds-color-surface: #ffffff;
   --ds-color-surface-alt: #f8fafc;
@@ -22,8 +22,99 @@
   --ds-color-text-muted: #64748b;
 
   --ds-radius: 0.5rem;
-  --ds-shadow-card: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --ds-radius-card: 0.75rem;
+  --ds-shadow-card: 0 1px 3px rgb(0 0 0 / 10%);
+
+  --ds-page-max-width: 1600px;
+  --ds-page-gutter: clamp(1rem, 2vw, 2rem);
+
+  --primary-color: var(--ds-color-primary);
+  --text-primary: var(--ds-color-text);
+  --text-secondary: var(--ds-color-text-muted);
+  --surface-color: var(--ds-color-surface);
+  --surface-muted: var(--ds-color-surface-alt);
+  --border-color: var(--ds-color-border);
+  --table-header-background: #f8fafc;
+  --table-row-hover: #f8fafc;
 }
 
-* { box-sizing: border-box; }
-html, body { margin: 0; padding: 0; height: 100%; font-family: system-ui, -apple-system, "Segoe UI", sans-serif; }
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  min-height: 100%;
+  margin: 0;
+  scroll-behavior: smooth;
+  scrollbar-gutter: stable;
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  overflow-x: clip;
+  background: var(--ds-color-surface-alt);
+  color: var(--ds-color-text);
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+app-root {
+  display: block;
+  min-height: 100vh;
+  width: 100%;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+img,
+svg,
+video,
+canvas {
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+}
+
+:focus-visible {
+  outline-color: var(--ds-color-accent-dark);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}

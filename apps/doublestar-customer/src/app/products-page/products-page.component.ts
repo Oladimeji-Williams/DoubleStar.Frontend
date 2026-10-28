@@ -1,14 +1,29 @@
-// apps/doublestar-customer/src/app/products-page/products-page.component.ts — full replacement
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { KoboCurrencyPipe, PagedResult, PaginationComponent } from '@doublestar/shared';
-import { Product, ProductImageComponent, ProductsApiService } from '@doublestar/catalog';
-import { PublicTopbarComponent } from '../public-topbar/public-topbar.component';
+
+import {
+  DataTableQuery,
+  KoboCurrencyPipe,
+  PagedResult,
+  PaginationComponent,
+} from '@doublestar/shared';
+
+import {
+  Product,
+  ProductImageComponent,
+  ProductsApiService,
+} from '@doublestar/catalog';
+
 
 @Component({
   selector: 'app-products-page',
   standalone: true,
-  imports: [RouterLink, KoboCurrencyPipe, ProductImageComponent, PublicTopbarComponent, PaginationComponent],
+  imports: [
+    RouterLink,
+    KoboCurrencyPipe,
+    ProductImageComponent,
+    PaginationComponent,
+  ],
   templateUrl: './products-page.component.html',
   styleUrl: './products-page.component.scss',
 })
@@ -26,12 +41,35 @@ export class ProductsPageComponent implements OnInit {
 
   private load(): void {
     this.isLoading.set(true);
-    this.productsApi.getPaged(this.page(), this.pageSize()).subscribe({
-      next: (result) => { this.result.set(result); this.isLoading.set(false); },
-      error: () => this.isLoading.set(false),
+
+    const query: DataTableQuery = {
+      page: this.page(),
+      pageSize: this.pageSize(),
+      sortBy: 'name',
+      sortDirection: 'asc',
+      filters: [],
+    };
+
+    this.productsApi.getAll(query, false).subscribe({
+      next: (result: PagedResult<Product>) => {
+        this.result.set(result);
+        this.isLoading.set(false);
+      },
+      error: () => {
+        this.result.set(null);
+        this.isLoading.set(false);
+      },
     });
   }
 
-  protected onPageChange(page: number): void { this.page.set(page); this.load(); }
-  protected onPageSizeChange(pageSize: number): void { this.pageSize.set(pageSize); this.page.set(1); this.load(); }
+  protected onPageChange(page: number): void {
+    this.page.set(page);
+    this.load();
+  }
+
+  protected onPageSizeChange(pageSize: number): void {
+    this.pageSize.set(pageSize);
+    this.page.set(1);
+    this.load();
+  }
 }

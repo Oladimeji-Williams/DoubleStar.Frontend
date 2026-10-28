@@ -1,7 +1,7 @@
 // apps/doublestar-marketing/src/app/contact-page/contact-page.component.ts — full replacement
 import { Component, OnInit, inject } from '@angular/core';
 import { IconComponent } from '@doublestar/shared';
-import { PageSeoService } from '../../../../../libs/shared/src/lib/seo/page-seo.service';
+import { PageSeoService } from '@doublestar/shared';
 
 @Component({
   selector: 'app-contact-page',

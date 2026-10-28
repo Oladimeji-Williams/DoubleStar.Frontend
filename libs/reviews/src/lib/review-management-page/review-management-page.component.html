@@ -1,0 +1,71 @@
+<section class="review-management-page">
+  <header class="page-header">
+    <div>
+      <h1>Review Management</h1>
+      <p>
+        Review customer feedback, approve or reject pending
+        reviews, and manage the complete review history.
+      </p>
+    </div>
+  </header>
+
+  <section class="review-section">
+    <div class="section-header">
+      <div>
+        <h2>Pending Reviews</h2>
+        <p>
+          Reviews waiting for moderation.
+        </p>
+      </div>
+
+      <span class="count-badge">
+        {{ pendingTotalCount() }}
+      </span>
+    </div>
+
+    <app-data-table
+      [columns]="pendingColumns"
+      [rows]="pending()"
+      [loading]="pendingLoading()"
+      [totalCount]="pendingTotalCount()"
+      [page]="pendingPage()"
+      [pageSize]="pendingPageSize()"
+      [sortBy]="pendingSortBy()"
+      [sortDirection]="pendingSortDirection()"
+      [filters]="pendingFilters()"
+      [rowActions]="rowActions"
+      [emptyMessage]="'No pending reviews found.'"
+      (queryChange)="onPendingQuery($event)"
+    />
+  </section>
+
+  <section class="review-section">
+    <div class="section-header">
+      <div>
+        <h2>All Reviews</h2>
+        <p>
+          Complete review history, including deleted reviews.
+        </p>
+      </div>
+
+      <span class="count-badge">
+        {{ allTotalCount() }}
+      </span>
+    </div>
+
+    <app-data-table
+      [columns]="allColumns"
+      [rows]="allReviews()"
+      [loading]="allLoading()"
+      [totalCount]="allTotalCount()"
+      [page]="allPage()"
+      [pageSize]="allPageSize()"
+      [sortBy]="allSortBy()"
+      [sortDirection]="allSortDirection()"
+      [filters]="allFilters()"
+      [rowActions]="rowActions"
+      [emptyMessage]="'No reviews found.'"
+      (queryChange)="onAllQuery($event)"
+    />
+  </section>
+</section>

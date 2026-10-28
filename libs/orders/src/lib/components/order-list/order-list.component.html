@@ -1,0 +1,21 @@
+@if (errorMessage()) {
+  <p class="error" role="alert">
+    {{ errorMessage() }}
+    <button type="button" class="retry-link" (click)="load()">Try again</button>
+  </p>
+}
+
+<app-data-table
+  [columns]="columns()"
+  [rows]="orders()"
+  [totalCount]="totalCount()"
+  [page]="page()"
+  [pageSize]="pageSize()"
+  [sortBy]="sortBy()"
+  [sortDirection]="sortDirection()"
+  [filters]="filters()"
+  [loading]="isLoading()"
+  [emptyMessage]="emptyMessage()"
+  [rowLink]="rowLink"
+  (queryChange)="onTableQuery($event)"
+/>

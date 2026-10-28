@@ -2,13 +2,17 @@
   "name": "shell",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/shell/src",
-  "prefix": "lib",
+  "prefix": "app",
   "projectType": "library",
-  "tags": [],
+  "tags": [
+    "type:shell"
+  ],
   "targets": {
     "test": {
       "executor": "@nx/vitest:test",
-      "outputs": ["{options.reportsDirectory}"],
+      "outputs": [
+        "{options.reportsDirectory}"
+      ],
       "options": {
         "reportsDirectory": "coverage/libs/shell"
       }

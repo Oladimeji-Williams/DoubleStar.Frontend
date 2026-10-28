@@ -1,0 +1,139 @@
+<!-- libs/shared/src/lib/ui/site-header/site-header.component.html -->
+<ng-template #navLink let-item>
+  @if (item.external) {
+    <a class="nav-link" [href]="item.path" (click)="closeMenus()">{{ item.label }}</a>
+  } @else {
+    <a
+      class="nav-link"
+      [routerLink]="item.path"
+      routerLinkActive="is-active"
+      [routerLinkActiveOptions]="{ exact: !!item.exact }"
+      (click)="closeMenus()"
+    >{{ item.label }}</a>
+  }
+</ng-template>
+
+<ng-template #authLink let-item let-primary="primary">
+  @if (item.external) {
+    <a class="auth-link" [class.auth-link-primary]="primary" [href]="item.path">{{ item.label }}</a>
+  } @else {
+    <a class="auth-link" [class.auth-link-primary]="primary" [routerLink]="item.path" (click)="closeMenus()">{{ item.label }}</a>
+  }
+</ng-template>
+
+<header class="site-header">
+  <div class="bar">
+    <button
+      type="button"
+      class="menu-toggle"
+      aria-label="Toggle navigation menu"
+      [attr.aria-expanded]="menuOpen()"
+      (click)="toggleMenu()"
+    >
+      <app-icon [name]="menuOpen() ? 'close' : 'menu'" [size]="22" />
+    </button>
+
+    @if (homeLink().external) {
+      <a class="brand" [href]="homeLink().path" aria-label="Double Star home">
+        <app-brand-logo [size]="24" />
+        <app-brand-wordmark />
+      </a>
+    } @else {
+      <a class="brand" [routerLink]="homeLink().path" aria-label="Double Star home" (click)="closeMenus()">
+        <app-brand-logo [size]="24" />
+        <app-brand-wordmark />
+      </a>
+    }
+
+    <nav class="nav" aria-label="Main">
+      @for (item of navItems(); track item.path) {
+        <ng-container [ngTemplateOutlet]="navLink" [ngTemplateOutletContext]="{ $implicit: item }" />
+      }
+    </nav>
+
+    <div class="actions">
+      @if (cartLink(); as cart) {
+        @if (cart.external) {
+          <a class="cart-link" [href]="cart.path" [attr.aria-label]="'Cart' + (cartBadge() ? ', ' + cartBadge() + ' items' : '')">
+            <app-icon name="cart" [size]="22" />
+            @if (cartBadge(); as badge) { <span class="badge">{{ badge }}</span> }
+          </a>
+        } @else {
+          <a
+            class="cart-link"
+            [routerLink]="cart.path"
+            [attr.aria-label]="'Cart' + (cartBadge() ? ', ' + cartBadge() + ' items' : '')"
+            (click)="closeMenus()"
+          >
+            <app-icon name="cart" [size]="22" />
+            @if (cartBadge(); as badge) { <span class="badge">{{ badge }}</span> }
+          </a>
+        }
+      }
+
+      @if (currentUserStore.currentUser(); as user) {
+        <div class="account">
+          <button
+            type="button"
+            class="account-button"
+            [attr.aria-expanded]="accountOpen()"
+            aria-haspopup="menu"
+            (click)="toggleAccount()"
+          >
+            <app-avatar [avatarUrl]="user.avatarUrl" [size]="26" />
+            <span class="account-name">{{ user.displayName || 'My account' }}</span>
+            <app-icon name="chevron-down" [size]="14" />
+          </button>
+
+          @if (accountOpen()) {
+            <div class="dropdown" role="menu">
+              @for (link of accountLinks(); track link.path) {
+                <ng-container [ngTemplateOutlet]="navLink" [ngTemplateOutletContext]="{ $implicit: link }" />
+              }
+              <button type="button" class="dropdown-signout" role="menuitem" (click)="signOutClicked()">
+                <app-icon name="logout" [size]="14" /> Sign out
+              </button>
+            </div>
+          }
+        </div>
+      } @else {
+        <div class="auth">
+          @if (signInLink(); as signIn) {
+            <ng-container [ngTemplateOutlet]="authLink" [ngTemplateOutletContext]="{ $implicit: signIn, primary: false }" />
+          }
+          @if (registerLink(); as register) {
+            <ng-container [ngTemplateOutlet]="authLink" [ngTemplateOutletContext]="{ $implicit: register, primary: true }" />
+          }
+        </div>
+      }
+    </div>
+  </div>
+
+  @if (menuOpen()) {
+    <div class="mobile-panel">
+      @for (item of navItems(); track item.path) {
+        <ng-container [ngTemplateOutlet]="navLink" [ngTemplateOutletContext]="{ $implicit: item }" />
+      }
+
+      @if (currentUserStore.currentUser()) {
+        <hr class="divider" />
+        @for (link of accountLinks(); track link.path) {
+          <ng-container [ngTemplateOutlet]="navLink" [ngTemplateOutletContext]="{ $implicit: link }" />
+        }
+        <button type="button" class="dropdown-signout" (click)="signOutClicked()">
+          <app-icon name="logout" [size]="14" /> Sign out
+        </button>
+      } @else {
+        <hr class="divider" />
+        <div class="mobile-auth">
+          @if (signInLink(); as signIn) {
+            <ng-container [ngTemplateOutlet]="authLink" [ngTemplateOutletContext]="{ $implicit: signIn, primary: false }" />
+          }
+          @if (registerLink(); as register) {
+            <ng-container [ngTemplateOutlet]="authLink" [ngTemplateOutletContext]="{ $implicit: register, primary: true }" />
+          }
+        </div>
+      }
+    </div>
+  }
+</header>

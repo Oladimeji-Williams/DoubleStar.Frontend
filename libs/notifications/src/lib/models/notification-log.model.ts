@@ -1,10 +1,17 @@
-// libs/notifications/src/lib/models/notification-log.model.ts
+export type NotificationChannel =
+  | 'Email'
+  | 'Sms';
+
+export type NotificationStatus =
+  | 'Sent'
+  | 'Failed';
+
 export interface NotificationLogEntry {
   id: number;
-  channel: string;
+  channel: NotificationChannel;
   recipient: string;
   templateName: string;
-  status: string;
+  status: NotificationStatus;
   errorMessage: string | null;
   createdAt: string;
 }

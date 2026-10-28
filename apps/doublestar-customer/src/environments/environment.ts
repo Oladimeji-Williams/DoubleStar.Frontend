@@ -1,10 +1,15 @@
 export const environment = {
   production: true,
 
-  apiBaseUrl: 'https://YOUR-API-DOMAIN/api/v1',
+  apiBaseUrl:
+    'https://api.doublestar.example.com/api/v1',
 
-  siteUrl: 'https://YOUR-MARKETING-DOMAIN',
+  siteUrl:
+    'https://www.doublestar.example.com',
 
-  customerAppUrl: 'https://YOUR-CUSTOMER-DOMAIN',
-  turnstileSiteKey: '1x00000000000000000000AA',
+  customerAppUrl:
+    'https://app.doublestar.example.com',
+
+  turnstileSiteKey:
+    'REPLACE-WITH-YOUR-REAL-CLOUDFLARE-SITE-KEY',
 };

@@ -1,64 +1,116 @@
-<!-- libs/sales/src/lib/sale-list-page/sale-list-page.component.html -->
 <div class="page">
   <div class="page-header">
     <h1 class="page-title">Sales</h1>
-    <a routerLink="/sales/new" class="primary-button">New sale</a>
+
+    <a
+      routerLink="/sales/new"
+      class="primary-button"
+    >
+      New sale
+    </a>
   </div>
 
-  @if (isLoading()) {
-    <p>Loading...</p>
-  } @else if (errorMessage()) {
-    <p class="error">{{ errorMessage() }}</p>
-  } @else if (sales().length === 0) {
-    <p class="empty-state">No sales yet.</p>
-  } @else {
-    <table class="sales-table">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Status</th>
-          <th>Total</th>
-        </tr>
-      </thead>
-      <tbody>
-        @for (sale of sales(); track sale.id) {
-          <tr (click)="toggleExpand(sale.id)" class="sale-row">
-            <td>{{ sale.id }}</td>
-            <td>{{ sale.status }}</td>
-            <td>{{ sale.totalKobo | koboCurrency }}</td>
-          </tr>
-          @if (expandedSaleId() === sale.id) {
-            <tr class="detail-row">
-              <td colspan="3">
-                <table class="lines-table">
-                  <thead>
-                    <tr>
-                      <th>Product</th>
-                      <th>Qty</th>
-                      <th>Unit price</th>
-                      <th>Line total</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    @for (line of sale.lines; track line.id) {
-                      <tr>
-                        <td>{{ line.productName }}{{ line.serialNumber ? ' — ' + line.serialNumber : '' }}</td>
-                        <td>{{ line.serialNumber ?? ('Product #' + line.productId) }}</td>
-                        <td>{{ line.quantity }}</td>
-                        <td>{{ line.unitPriceKobo | koboCurrency }}</td>
-                        <td>{{ line.lineTotalKobo | koboCurrency }}</td>
-                      </tr>
-                    }
-                  </tbody>
-                </table>
-                <a [routerLink]="['/payments']" [queryParams]="{ sourceType: 'Sale', sourceId: sale.id }" class="payments-link">
-                  View payments for this sale
-                </a>
-              </td>
-            </tr>
-          }
+  @if (errorMessage()) {
+    <p class="error">
+      {{ errorMessage() }}
+
+      <button
+        type="button"
+        class="retry-link"
+        (click)="retryLoad()"
+      >
+        Try again
+      </button>
+    </p>
+  }
+
+  <app-data-table
+    [columns]="columns"
+    [rows]="sales()"
+    [totalCount]="totalCount()"
+    [page]="page()"
+    [pageSize]="pageSize()"
+    [sortBy]="sortBy()"
+    [sortDirection]="sortDirection()"
+    [filters]="filters()"
+    [loading]="isLoading()"
+    [emptyMessage]="'No sales yet.'"
+    (queryChange)="onTableQuery($event)"
+    (rowClick)="onSaleSelected($event)"
+  />
+
+  @if (selectedSale(); as sale) {
+    <section class="sale-details">
+      <div class="sale-details-header">
+        <div>
+          <h2>Sale #{{ sale.id }}</h2>
+          <p>{{ sale.status }}</p>
+        </div>
+
+        <button
+          type="button"
+          class="close-button"
+          (click)="closeSaleDetails()"
+        >
+          Close
+        </button>
+      </div>
+
+      <div class="sale-lines">
+        @for (
+          line of sale.lines;
+          track line.id
+        ) {
+          <div class="sale-line">
+            <div class="sale-line-product">
+              <strong>
+                {{ line.productName }}
+              </strong>
+
+              @if (line.serialNumber) {
+                <span>
+                  Serial:
+                  {{ line.serialNumber }}
+                </span>
+              }
+            </div>
+
+            <div class="sale-line-quantity">
+              Qty:
+              {{ line.quantity }}
+            </div>
+
+            <div class="sale-line-price">
+              {{ line.unitPriceKobo / 100
+              | currency:'NGN' }}
+            </div>
+
+            <div class="sale-line-total">
+              {{ line.lineTotalKobo / 100
+              | currency:'NGN' }}
+            </div>
+          </div>
         }
-      </tbody>
-    </table>
+      </div>
+
+      <div class="sale-details-footer">
+        <strong>
+          Total:
+          {{ sale.totalKobo / 100
+          | currency:'NGN' }}
+        </strong>
+
+        <a
+          [routerLink]="['/payments']"
+          [queryParams]="{
+            sourceType: 'Sale',
+            sourceId: sale.id
+          }"
+          class="payments-link"
+        >
+          View payments
+        </a>
+      </div>
+    </section>
   }
 </div>
